@@ -14,7 +14,7 @@ public class Player {
         this.score = 0;
         this.x = x;
         this.y = y;
-        this.speed = 5;
+        this.speed = 30;
     }
 
     // Геттеры и сеттеры для полей класса
@@ -67,22 +67,22 @@ public class Player {
         this.speed = speed;
     }
 
-
     public void moveLeft() {
-        x -= speed;
+        this.x -= speed;
     }
 
     public void moveRight() {
-        x += speed;
+        this.x += speed;
     }
 
     public void moveUp() {
-        y -= speed;
+        this.y -= speed;
     }
 
     public void moveDown() {
-        y += speed;
+        this.y += speed;
     }
+
 
     public void jump() {
         // Реализация прыжка
@@ -91,6 +91,8 @@ public class Player {
     public void attack() {
         // Реализация атаки
     }
+
+
 
     public void takeDamage(int damage) {
         health -= damage; // Вычитаем у игрока здоровье

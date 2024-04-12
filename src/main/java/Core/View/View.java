@@ -11,13 +11,18 @@ public class View {
     public View(Player player) {
         frame = new JFrame("Ninja Nexus");
         panel = new Panel(player);
+        ImageIcon icon = new ImageIcon("assets/icon.png");
+        frame.setIconImage(icon.getImage());
 
         frame.add(panel);
-        frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.pack();
         frame.setVisible(true);
         panel.requestFocusInWindow();
+
     }
+
 
     public Panel getPanel() {
         return panel;

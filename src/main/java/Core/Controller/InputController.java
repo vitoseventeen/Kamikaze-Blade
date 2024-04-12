@@ -46,6 +46,7 @@ public class InputController implements KeyListener {
             default:
                 break;
         }
+
         panel.repaint();
     }
 
@@ -53,4 +54,6 @@ public class InputController implements KeyListener {
     public void keyReleased(KeyEvent e) {
 
     }
+
+
 }
