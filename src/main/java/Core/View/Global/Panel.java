@@ -1,8 +1,9 @@
-package Core.View;
+package Core.View.Global;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import Core.Model.Player;
+import Core.Model.characters.Player;
+import Core.Model.level.BufferedImageLoader;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,15 +20,32 @@ public class Panel extends JPanel {
     private int animationSpeed = 3;
     private Player player;
 
+    private BufferedImage levelImage;
+
 
     public Panel(Player player) {
         this.player = player;
         Dimension size = new Dimension(1280, 800);
+
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);
         importPlayerImage();
+        importLevelImage();
         animatePlayer();
+    }
+
+    private void importLevelImage() {
+        String path = "/level.png";
+        try { InputStream is = getClass().getResourceAsStream(path);
+            if (is != null) {
+                levelImage = ImageIO.read(is);
+            } else {
+                System.err.println("Unable to load level image");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void animatePlayer() {
@@ -56,11 +74,16 @@ public class Panel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         updateAnimation();
+
+        if (levelImage != null) {
+            g.drawImage(levelImage, 0, 0, getWidth(), getHeight(), null);
+        }
+
         BufferedImage currentAnimation = idleAnimations[animationInd];
-        g.drawImage(currentAnimation, player.getX(), player.getY(), 64, 64, null);
+        g.drawImage(currentAnimation, player.getX(), player.getY(), 64, 64, null); // zvetseni modelu hraca
     }
 
-    private void updateAnimation() {
+    private void updateAnimation() { // aktualizace animace
         animationTick++;
         if (animationTick >= animationSpeed) {
             animationTick = 0;

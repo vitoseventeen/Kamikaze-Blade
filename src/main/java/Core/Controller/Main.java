@@ -1,13 +1,18 @@
 package Core.Controller;
 
-import Core.Model.Player;
-import Core.View.View;
+import Core.Model.characters.Player;
+import Core.Model.level.BufferedImageLoader;
+import Core.View.Global.View;
+
+import java.awt.image.BufferedImage;
 
 public class Main implements Runnable {
     private static final int TARGET_FPS = 60;
     private boolean running = false;
     private final Player player;
     private final View view;
+
+    private BufferedImage levelSprite = null;
 
     public Main() {
         player = new Player("Ninja", 100, 100);
@@ -17,7 +22,7 @@ public class Main implements Runnable {
 
     public void start() {
         running = true;
-        new Thread(this).start(); // Запускаем игровой цикл в новом потоке
+        new Thread(this).start();
     }
 
     public void stop() {
@@ -30,8 +35,7 @@ public class Main implements Runnable {
         double nsPerTick = 1000000000.0 / TARGET_FPS;
         double delta = 0;
         long timer = System.currentTimeMillis();
-        int frames = 0;
-        int ticks = 0;
+
 
         while (running) {
             long now = System.nanoTime();
@@ -40,22 +44,17 @@ public class Main implements Runnable {
             boolean shouldRender = false;
 
             while (delta >= 1) {
-                ticks++;
                 update();
                 delta--;
                 shouldRender = true;
             }
 
             if (shouldRender) {
-                frames++;
                 render();
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println("FPS: " + frames + ", Ticks: " + ticks);
-                frames = 0;
-                ticks = 0;
             }
         }
     }
