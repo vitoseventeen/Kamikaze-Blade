@@ -12,30 +12,24 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Panel extends JPanel {
-
-
     private BufferedImage playerImage;
     private BufferedImage[] idleAnimations;
     private int animationTick;
     private int animationInd;
     private int animationSpeed = 3;
     private Player player;
-
     private LevelManager levelManager;
 
     public Panel(Player player) {
         this.player = player;
         Dimension size = new Dimension(1280, 800);
-
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);
-
         levelManager = new LevelManager();
         importPlayerImage();
         animatePlayer();
     }
-
 
 
     private void animatePlayer() {
@@ -65,7 +59,7 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         updateAnimation();
 
-        Level currentLevel = levelManager.getLevel(0); // napr prvni level
+        Level currentLevel = levelManager.getLevel(2); // napr prvni level = 0
         if (currentLevel != null) {
             BufferedImage levelImage = currentLevel.getLevelImage();
             g.drawImage(levelImage, 0, 0, getWidth(), getHeight(), null);

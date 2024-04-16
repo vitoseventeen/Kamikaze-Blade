@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Level {
-    // Добавьте поля и методы, связанные с отдельным уровнем
     private BufferedImage levelImage;
 
     public Level(String imagePath) {

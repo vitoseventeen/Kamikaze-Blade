@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LevelManager {
-    // Добавьте методы и данные, связанные с управлением уровнями
     private List<Level> levels;
 
     public LevelManager() {
         levels = new ArrayList<>();
         addLevel("/level1.png");
+        addLevel("/level2.png");
+        addLevel("/level3.png");
 
     }
 
