@@ -1,7 +1,6 @@
 package Core.Controller;
 
 import Core.Model.characters.Player;
-import Core.Model.level.BufferedImageLoader;
 import Core.View.Global.View;
 
 import java.awt.image.BufferedImage;
@@ -12,7 +11,6 @@ public class Main implements Runnable {
     private final Player player;
     private final View view;
 
-    private BufferedImage levelSprite = null;
 
     public Main() {
         player = new Player("Ninja", 100, 100);
