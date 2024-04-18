@@ -1,6 +1,9 @@
 package Core.Model;
 
-public class Player extends Entity {
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class Player extends Character {
 
     /* Trida hrac dedi tridu Entity a ma svoje vlastnosti, metody*/
     private String name;
@@ -8,12 +11,13 @@ public class Player extends Entity {
     private int score;
     private int speed;
 
-    public Player(String name,int x, int y) {
-        super(x,y);
+    public Player(String name,int x, int y, int height, int width) {
+        super(x,y,height,width);
         this.name = name;
         this.health = 100;
         this.score = 0;
         this.speed = 11;
+
     }
 
 
@@ -60,6 +64,26 @@ public class Player extends Entity {
             die();
         }
     }
+
+    public Rectangle getPlayerBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+
+//    public boolean checkCollisionWithLevel() {
+//
+//    }
+
+    public boolean checkCollisionWithEnemy(Enemy enemy) { // TODO: create enemy
+        if (this.x < enemy.getX() + enemy.getWidth() &&
+                this.x + this.getWidth() > enemy.getX() &&
+                this.y < enemy.getY() + enemy.getHeight() &&
+                this.y + this.getHeight() > enemy.getY()) {
+            // collision
+            return true;
+        }
+        return false;
+    }
+
 
     public void collectCoin(int value) {
         this.score += value;

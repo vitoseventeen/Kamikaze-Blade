@@ -11,7 +11,7 @@ public class LevelManager {
         addLevel("/level1.png");
         addLevel("/level2.png");
         addLevel("/level3.png");
-
+        addLevel("/level4.png");
     }
 
     private void addLevel(String imagePath) {

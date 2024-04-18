@@ -1,6 +1,7 @@
 package Core;
 
 import Core.Controller.InputController;
+import Core.Model.Enemy;
 import Core.Model.Player;
 import Core.View.View;
 
@@ -12,7 +13,7 @@ public class Main implements Runnable {
 
 
     public Main() {
-        player = new Player("Ninja", 100, 100);
+        player = new Player("Ninja", 100, 100,32,32);
         view = new View(player);
         InputController inputController = new InputController(player, view);
     }
@@ -57,8 +58,12 @@ public class Main implements Runnable {
     }
 
     private void update() {
-        // Обновление игры
-        // player.update();
+        // check collision
+//        for (Enemy enemy : enemies) {
+//            if (player.checkCollisionWithEnemy(enemy)) {
+//                player.takeDamage(enemy.getDamage());
+//            }
+//        }
     }
 
     private void render() {

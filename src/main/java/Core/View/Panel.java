@@ -59,7 +59,7 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         updateAnimation();
 
-        Level currentLevel = levelManager.getLevel(0); // napr prvni level = 0
+        Level currentLevel = levelManager.getLevel(3); // n-1
         if (currentLevel != null) {
             BufferedImage levelImage = currentLevel.getLevelImage();
             g.drawImage(levelImage, 0, 0, getWidth(), getHeight(), null);

@@ -1,6 +1,7 @@
 package Core.Model;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,10 @@ public class Level {
 
     public Level(String imagePath) {
         importLevelImage(imagePath);
+    }
+
+    public Rectangle getLevelBounds() {
+        return new Rectangle(0, 0, levelImage.getWidth(), levelImage.getHeight());
     }
 
     private void importLevelImage(String imagePath) {
