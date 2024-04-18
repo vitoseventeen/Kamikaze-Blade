@@ -1,4 +1,4 @@
-package Core.Model.characters;
+package Core.Model;
 
 public abstract class Entity {
     /* abstraktní třída zděděná hráčem a nepřítelem */

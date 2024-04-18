@@ -1,4 +1,4 @@
-package Core.Model.characters;
+package Core.Model;
 
 public class Enemy extends Entity {
     public Enemy(int x, int y) {

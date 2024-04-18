@@ -1,6 +1,6 @@
-package Core.View.Global;
+package Core.View;
 
-import Core.Model.characters.Player;
+import Core.Model.Player;
 
 import javax.swing.*;
 

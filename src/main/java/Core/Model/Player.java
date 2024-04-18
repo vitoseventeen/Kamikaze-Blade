@@ -1,4 +1,4 @@
-package Core.Model.characters;
+package Core.Model;
 
 public class Player extends Entity {
 

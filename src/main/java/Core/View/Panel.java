@@ -1,10 +1,10 @@
-package Core.View.Global;
+package Core.View;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import Core.Model.characters.Player;
-import Core.Model.level.Level;
-import Core.Model.level.LevelManager;
+import Core.Model.Player;
+import Core.Model.Level;
+import Core.Model.LevelManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -59,7 +59,7 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         updateAnimation();
 
-        Level currentLevel = levelManager.getLevel(2); // napr prvni level = 0
+        Level currentLevel = levelManager.getLevel(0); // napr prvni level = 0
         if (currentLevel != null) {
             BufferedImage levelImage = currentLevel.getLevelImage();
             g.drawImage(levelImage, 0, 0, getWidth(), getHeight(), null);

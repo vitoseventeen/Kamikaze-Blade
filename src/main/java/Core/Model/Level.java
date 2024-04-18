@@ -1,4 +1,4 @@
-package Core.Model.level;
+package Core.Model;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

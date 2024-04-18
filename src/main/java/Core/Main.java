@@ -1,9 +1,8 @@
-package Core.Controller;
+package Core;
 
-import Core.Model.characters.Player;
-import Core.View.Global.View;
-
-import java.awt.image.BufferedImage;
+import Core.Controller.InputController;
+import Core.Model.Player;
+import Core.View.View;
 
 public class Main implements Runnable {
     private static final int TARGET_FPS = 60;

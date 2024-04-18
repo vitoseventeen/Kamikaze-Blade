@@ -1,8 +1,8 @@
 package Core.Controller;
 
-import Core.Model.characters.Player;
-import Core.View.Global.Panel;
-import Core.View.Global.View;
+import Core.Model.Player;
+import Core.View.Panel;
+import Core.View.View;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

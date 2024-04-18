@@ -1,4 +1,4 @@
-package Core.Model.level;
+package Core.Model;
 
 import java.util.ArrayList;
 import java.util.List;
