@@ -17,7 +17,8 @@ public class InputHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        switch (keyCode) {case KeyEvent.VK_LEFT:
+        switch (keyCode) {
+            case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
                 controller.moveLeft();
                 break;

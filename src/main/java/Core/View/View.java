@@ -7,7 +7,8 @@ import Core.Model.LevelManager;
 import Core.Model.Player;
 
 import javax.swing.*;
-import java.awt.*;
+
+import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 
 public class View {
     private JFrame frame;
@@ -27,7 +28,7 @@ public class View {
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         panel.addKeyListener(inputHandler);
-        frame.setPreferredSize(new Dimension(1280, 1024));
+        frame.setPreferredSize(SCREEN_SIZE_DIMENSION);
 
         ImageIcon icon = new ImageIcon("assets/icon.png");
         frame.setIconImage(icon.getImage());

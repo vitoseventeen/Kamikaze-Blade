@@ -13,8 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static Core.Util.Constants.SCREEN_SIZE;
-import static Core.Util.Constants.TILE_SIZE;
+import static Core.Util.Constants.*;
 
 public class Panel extends JPanel {
     private BufferedImage playerImage;
@@ -28,9 +27,9 @@ public class Panel extends JPanel {
 
     public Panel(Player player) {
         this.player = player;
-        setMinimumSize(SCREEN_SIZE);
-        setPreferredSize(SCREEN_SIZE);
-        setMaximumSize(SCREEN_SIZE);
+        setMinimumSize(SCREEN_SIZE_DIMENSION);
+        setPreferredSize(SCREEN_SIZE_DIMENSION);
+        setMaximumSize(SCREEN_SIZE_DIMENSION);
         levelManager = new LevelManager();
         level = levelManager.getCurrentLevel();
         importPlayerImage();
