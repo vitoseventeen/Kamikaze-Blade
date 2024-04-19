@@ -33,12 +33,15 @@ public class Panel extends JPanel {
 
 
     private void animatePlayer() {
-        idleAnimations = new BufferedImage[11];
+        if (playerImage != null) {
+            idleAnimations = new BufferedImage[11];
 
-        for (int i = 0; i < idleAnimations.length; i++) {
-            idleAnimations[i] = playerImage.getSubimage(i * 32, 0, 32, 32);
+            for (int i = 0; i < idleAnimations.length; i++) {
+                idleAnimations[i] = playerImage.getSubimage(i * 32, 0, 32, 32);
+            }
+        } else {
+            System.err.println("Player image is null, unable to animate player.");
         }
-
     }
 
     private void importPlayerImage() {
