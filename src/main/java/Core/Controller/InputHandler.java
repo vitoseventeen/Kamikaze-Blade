@@ -12,14 +12,12 @@ public class InputHandler implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // Не используется в данном случае
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.VK_LEFT:
+        switch (keyCode) {case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
                 controller.moveLeft();
                 break;
@@ -42,7 +40,6 @@ public class InputHandler implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // Не используется в данном случае
     }
 }
 

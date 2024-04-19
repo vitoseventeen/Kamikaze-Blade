@@ -6,8 +6,8 @@ public abstract class Character {
     public Character(int x, int y, int height, int width) {
         this.x = x;
         this.y = y;
-        this.height = 32;
-        this.width = 32;
+        this.height = 128;
+        this.width = 128;
     }
 
     public int getX() {

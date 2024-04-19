@@ -9,12 +9,12 @@ public class LevelManager {
 
     public LevelManager() {
         levels = new ArrayList<>();
-        addLevel("/level6_view.png","/level6_raw.png");
+        addLevel();
         currentLevelIndex = 0;
     }
 
-    private void addLevel(String imagePath, String maskPath) {
-        Level level = new Level(imagePath,maskPath);
+    private void addLevel() {
+        Level level = LevelFactory.createLevel();
         levels.add(level);
     }
 
@@ -24,8 +24,9 @@ public class LevelManager {
         }
         return null;
     }
+
     public Level getCurrentLevel() {
-        return levels.get(currentLevelIndex);
+        return getLevel(currentLevelIndex);
     }
 
     public void nextLevel() {

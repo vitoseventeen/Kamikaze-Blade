@@ -3,66 +3,73 @@ package Core.Controller;
 import Core.Model.Level;
 import Core.Model.LevelManager;
 import Core.Model.Player;
+import Core.Model.Tile;
 import Core.View.Panel;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+
+import static Core.Util.Constants.TILE_SIZE;
 
 public class Controller {
     private Player player;
     private Panel panel;
     private LevelManager levelManager;
+    private Level level;
 
-    public Controller(Player player, Panel panel, LevelManager levelManager) {
+    public Controller(Player player, Panel panel, LevelManager levelManager, Level level) {
         this.player = player;
         this.panel = panel;
         this.levelManager = levelManager;
+        this.level = level;
     }
-    private boolean isCollision(int x, int y) {
-        Level currentLevel = levelManager.getCurrentLevel();
-        BufferedImage levelMask = currentLevel.getLevelMask();
 
-        if (x < 0 || x >= levelMask.getWidth() || y < 0 || y >= levelMask.getHeight()) {
-            return true;
+    private boolean isCollision(int x, int y, int width, int height) {
+        int tileX = x / TILE_SIZE;
+        int tileY = y / TILE_SIZE;
+        int tileWidth = (x + width) / TILE_SIZE;
+        int tileHeight = (y + height) / TILE_SIZE;
+
+        for (int i = tileX; i <= tileWidth; i++) {
+            for (int j = tileY; j <= tileHeight; j++) {
+                Tile tile = level.getTile(i, j);
+                if (tile.hasCollision()) {
+                    return true;
+                }
+            }
         }
 
-        int rgb = levelMask.getRGB(x, y);
-        Color color = new Color(rgb);
-        return color.equals(Color.BLACK);
+        return false;
     }
 
 
     public void moveLeft() {
         int newX = player.getX() - player.getSpeed();
-        if (!isCollision(newX, player.getY())) {
+        if (!isCollision(newX, player.getY(), player.getWidth(), player.getHeight())) {
             player.setX(newX);
-            panel.repaint();
         }
+        panel.repaint();
     }
 
     public void moveRight() {
         int newX = player.getX() + player.getSpeed();
-        if (!isCollision(newX, player.getY())) {
+        if (!isCollision(newX, player.getY(), player.getWidth(), player.getHeight())) {
             player.setX(newX);
-            panel.repaint();
         }
+        panel.repaint();
     }
 
     public void moveUp() {
         int newY = player.getY() - player.getSpeed();
-        if (!isCollision(player.getX(), newY)) {
+        if (!isCollision(player.getX(), newY, player.getWidth(), player.getHeight())) {
             player.setY(newY);
-            panel.repaint();
         }
+        panel.repaint();
     }
 
     public void moveDown() {
         int newY = player.getY() + player.getSpeed();
-        if (!isCollision(player.getX(), newY)) {
+        if (!isCollision(player.getX(), newY, player.getWidth(), player.getHeight())) {
             player.setY(newY);
-            panel.repaint();
         }
+        panel.repaint();
     }
-
-
 }

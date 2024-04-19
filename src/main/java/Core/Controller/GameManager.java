@@ -1,24 +1,31 @@
 package Core.Controller;
 
+import Core.Model.Level;
+import Core.Model.LevelFactory;
+import Core.Model.LevelManager;
 import Core.Model.Player;
 import Core.View.Panel;
 import Core.View.View;
 
+import static Core.Util.Constants.TARGET_FPS;
+
 public class GameManager implements Runnable {
-    private static final int TARGET_FPS = 60;
-    private boolean running = false;
+    private volatile boolean running = false;
+    private Thread gameThread;
     private final Player player;
     private final View view;
+    private Level level;
+    private InputHandler inputHandler;
     private final Controller controller;
-
-    private final InputHandler inputHandler;
-    private Thread gameThread;
+    private LevelManager levelManager;
 
     public GameManager() {
+        this.level = LevelFactory.createLevel();
         player = new Player("Ninja", 100, 100, 32, 32);
         view = new View(player);
         Panel panel = view.getPanel();
-        controller = new Controller(player, panel, panel.getLevelManager());
+        levelManager = new LevelManager();
+        controller = new Controller(player, panel, levelManager, level);
         inputHandler = new InputHandler(controller);
     }
 
@@ -27,6 +34,9 @@ public class GameManager implements Runnable {
             running = true;
             gameThread = new Thread(this);
             gameThread.start();
+
+            new GameUpdateThread(this).start();
+            new GameRenderThread(this).start();
         }
     }
 
@@ -41,45 +51,32 @@ public class GameManager implements Runnable {
         }
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
     @Override
     public void run() {
         long lastTime = System.nanoTime();
         double nsPerTick = 1000000000.0 / TARGET_FPS;
         double delta = 0;
-        long timer = System.currentTimeMillis();
 
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
-            boolean shouldRender = false;
-
             while (delta >= 1) {
                 update();
                 delta--;
-                shouldRender = true;
             }
-
-            if (shouldRender) {
-                render();
-            }
-
-            if (System.currentTimeMillis() - timer > 1000) {
-                timer += 1000;
-            }
+            render();
         }
     }
 
-    private void update() {
-        // check collision
-//        for (Enemy enemy : enemies) {
-//            if (player.checkCollisionWithEnemy(enemy)) {
-//                player.takeDamage(enemy.getDamage());
-//            }
-//        }
+    void update() {
     }
 
-    private void render() {
+    void render() {
         view.getPanel().repaint();
     }
 }
