@@ -1,6 +1,7 @@
 package Core.Controller;
 
 import Core.Model.Player;
+import Core.View.Panel;
 import Core.View.View;
 
 public class GameManager implements Runnable {
@@ -8,12 +9,16 @@ public class GameManager implements Runnable {
     private boolean running = false;
     private final Player player;
     private final View view;
+    private final Controller controller;
+    private final InputHandler inputHandler;
     private Thread gameThread;
 
     public GameManager() {
-        player = new Player("Ninja", 100, 100,32,32);
+        player = new Player("Ninja", 100, 100, 32, 32);
         view = new View(player);
-        InputController inputController = new InputController(player, view);
+        Panel panel = view.getPanel();
+        controller = new Controller(player, panel);
+        inputHandler = new InputHandler(controller);
     }
 
     public void start() {

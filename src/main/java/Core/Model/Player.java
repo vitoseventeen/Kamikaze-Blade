@@ -1,61 +1,23 @@
 package Core.Model;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
 public class Player extends Character {
-
-    /* Trida hrac dedi tridu Entity a ma svoje vlastnosti, metody*/
     private String name;
     private int health;
     private int score;
     private int speed;
 
-    public Player(String name,int x, int y, int height, int width) {
-        super(x,y,height,width);
+    public Player(String name, int x, int y, int height, int width) {
+        super(x, y, height, width);
         this.name = name;
         this.health = 100;
         this.score = 0;
         this.speed = 11;
-
     }
 
 
 
-    public int getX() {
-        return x;
-    }
-
-
-    public int getY() {
-        return y;
-    }
-
-
-    public void moveLeft() {
-        this.x -= speed;
-    }
-
-    public void moveRight() {
-        this.x += speed;
-    }
-
-    public void moveUp() {
-        this.y -= speed;
-    }
-
-    public void moveDown() {
-        this.y += speed;
-    }
-    public void jump() {
-
-    }
-
-    public void attack() {
-    }
-
-    public void die() {
-
+    public int getSpeed() {
+        return speed;
     }
 
     public void takeDamage(int damage) {
@@ -65,25 +27,18 @@ public class Player extends Character {
         }
     }
 
-    public Rectangle getPlayerBounds() {
-        return new Rectangle(x, y, width, height);
+    private void die() {
     }
 
-//    public boolean checkCollisionWithLevel() {
-//
-//    }
-
-    public boolean checkCollisionWithEnemy(Enemy enemy) { // TODO: create enemy
+    public boolean checkCollisionWithEnemy(Enemy enemy) {
         if (this.x < enemy.getX() + enemy.getWidth() &&
                 this.x + this.getWidth() > enemy.getX() &&
                 this.y < enemy.getY() + enemy.getHeight() &&
                 this.y + this.getHeight() > enemy.getY()) {
-            // collision
             return true;
         }
         return false;
     }
-
 
     public void collectCoin(int value) {
         this.score += value;

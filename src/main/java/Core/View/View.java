@@ -1,5 +1,7 @@
 package Core.View;
 
+import Core.Controller.Controller;
+import Core.Controller.InputHandler;
 import Core.Model.Player;
 
 import javax.swing.*;
@@ -11,20 +13,23 @@ public class View {
     public View(Player player) {
         frame = new JFrame("Ninja Nexus");
         panel = new Panel(player);
+
+        Controller controller = new Controller(player, panel);
+        InputHandler inputHandler = new InputHandler(controller);
+        panel.setFocusable(true);
+        panel.requestFocusInWindow();
+        panel.addKeyListener(inputHandler);
+
         ImageIcon icon = new ImageIcon("assets/icon.png");
         frame.setIconImage(icon.getImage());
 
         frame.add(panel);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false); // Změna velikosti obrazovky pro správné zobrazení animace je zakázána
+        frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
-        panel.requestFocusInWindow();
-
-
     }
-
 
     public Panel getPanel() {
         return panel;
