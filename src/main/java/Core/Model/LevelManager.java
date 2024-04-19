@@ -5,17 +5,16 @@ import java.util.List;
 
 public class LevelManager {
     private List<Level> levels;
+    private int currentLevelIndex;
 
     public LevelManager() {
         levels = new ArrayList<>();
-        addLevel("/level1.png");
-        addLevel("/level2.png");
-        addLevel("/level3.png");
-        addLevel("/level4.png");
+        addLevel("/level6_view.png","/level6_raw.png");
+        currentLevelIndex = 0;
     }
 
-    private void addLevel(String imagePath) {
-        Level level = new Level(imagePath);
+    private void addLevel(String imagePath, String maskPath) {
+        Level level = new Level(imagePath,maskPath);
         levels.add(level);
     }
 
@@ -24,6 +23,21 @@ public class LevelManager {
             return levels.get(index);
         }
         return null;
+    }
+    public Level getCurrentLevel() {
+        return levels.get(currentLevelIndex);
+    }
+
+    public void nextLevel() {
+        if (currentLevelIndex < levels.size() - 1) {
+            currentLevelIndex++;
+        }
+    }
+
+    public void previousLevel() {
+        if (currentLevelIndex > 0) {
+            currentLevelIndex--;
+        }
     }
 
     public int getNumLevels() {

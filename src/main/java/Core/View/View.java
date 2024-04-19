@@ -5,6 +5,7 @@ import Core.Controller.InputHandler;
 import Core.Model.Player;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class View {
     private JFrame frame;
@@ -14,11 +15,12 @@ public class View {
         frame = new JFrame("Ninja Nexus");
         panel = new Panel(player);
 
-        Controller controller = new Controller(player, panel);
+        Controller controller = new Controller(player, panel,panel.getLevelManager());
         InputHandler inputHandler = new InputHandler(controller);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         panel.addKeyListener(inputHandler);
+        frame.setPreferredSize(new Dimension(1280, 1024));
 
         ImageIcon icon = new ImageIcon("assets/icon.png");
         frame.setIconImage(icon.getImage());
@@ -34,4 +36,5 @@ public class View {
     public Panel getPanel() {
         return panel;
     }
+
 }

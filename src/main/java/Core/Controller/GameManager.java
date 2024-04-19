@@ -10,6 +10,7 @@ public class GameManager implements Runnable {
     private final Player player;
     private final View view;
     private final Controller controller;
+
     private final InputHandler inputHandler;
     private Thread gameThread;
 
@@ -17,7 +18,7 @@ public class GameManager implements Runnable {
         player = new Player("Ninja", 100, 100, 32, 32);
         view = new View(player);
         Panel panel = view.getPanel();
-        controller = new Controller(player, panel);
+        controller = new Controller(player, panel, panel.getLevelManager());
         inputHandler = new InputHandler(controller);
     }
 

@@ -62,7 +62,7 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         updateAnimation();
 
-        Level currentLevel = levelManager.getLevel(3); // n-1
+        Level currentLevel = levelManager.getCurrentLevel();
         if (currentLevel != null) {
             BufferedImage levelImage = currentLevel.getLevelImage();
             g.drawImage(levelImage, 0, 0, getWidth(), getHeight(), null);
@@ -81,6 +81,13 @@ public class Panel extends JPanel {
                 animationInd = 0;
             }
         }
+    }
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(1280, 1024);
+    }
+    public LevelManager getLevelManager() {
+        return levelManager;
     }
 
 }

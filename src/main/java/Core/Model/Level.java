@@ -8,14 +8,13 @@ import java.io.InputStream;
 
 public class Level {
     private BufferedImage levelImage;
+    private BufferedImage levelMask;
 
-    public Level(String imagePath) {
+    public Level(String imagePath, String maskPath) {
         importLevelImage(imagePath);
+        importLevelMask(maskPath);
     }
 
-    public Rectangle getLevelBounds() {
-        return new Rectangle(0, 0, levelImage.getWidth(), levelImage.getHeight());
-    }
 
     private void importLevelImage(String imagePath) {
         try (InputStream is = getClass().getResourceAsStream(imagePath)) {
@@ -28,8 +27,23 @@ public class Level {
             e.printStackTrace();
         }
     }
+    private void importLevelMask(String maskPath) {
+        try (InputStream is = getClass().getResourceAsStream(maskPath)) {
+            if (is != null) {
+                levelMask = ImageIO.read(is);
+            } else {
+                System.err.println("Unable to load level mask");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public BufferedImage getLevelImage() {
         return levelImage;
     }
+    public BufferedImage getLevelMask() {
+        return levelMask;
+    }
+
 }
