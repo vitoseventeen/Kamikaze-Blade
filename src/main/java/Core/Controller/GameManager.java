@@ -35,7 +35,6 @@ public class GameManager implements Runnable {
             gameThread = new Thread(this);
             gameThread.start();
 
-            new GameUpdateThread(this).start();
             new GameRenderThread(this).start();
         }
     }
@@ -66,15 +65,13 @@ public class GameManager implements Runnable {
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
             while (delta >= 1) {
-                update();
+                render();
                 delta--;
             }
             render();
         }
     }
 
-    void update() {
-    }
 
     void render() {
         view.getPanel().repaint();

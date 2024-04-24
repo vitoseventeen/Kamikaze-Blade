@@ -27,6 +27,17 @@ public class Player extends Character {
         }
     }
 
+    public int getHealth() {
+        return health;
+    }
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHight() {
+        return height;
+    }
+
     private void die() {
     }
 
