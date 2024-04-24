@@ -75,13 +75,17 @@ public class Panel extends JPanel {
             }
         }
 
-        // Отрисовка игрока
         if (playerImage != null) {
-            g.drawImage(idleAnimations[animationInd], player.getX(), player.getY(), null);
+            int playerX = player.getX();
+            int playerY = player.getY();
+            playerX = Math.max(0, Math.min(playerX, getWidth() - 32));
+            playerY = Math.max(0, Math.min(playerY, getHeight() - 32));
+            g.drawImage(idleAnimations[animationInd], playerX, playerY, null);
         }
 
         updateAnimation();
     }
+
 
     private void drawTile(Graphics g, Tile tile, int x, int y) {
         BufferedImage image = getImageForSurfaceType(tile.getSurfaceType());

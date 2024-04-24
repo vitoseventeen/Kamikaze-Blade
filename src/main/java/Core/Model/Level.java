@@ -13,7 +13,6 @@ public class Level {
         if (x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length) {
             return tiles[x][y];
         } else {
-            // Если координаты находятся за пределами карты, возвращаем пустой тайл
             return new Tile(SurfaceType.EMPTY);
         }
     }

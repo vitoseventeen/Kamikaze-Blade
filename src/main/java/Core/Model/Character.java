@@ -1,7 +1,6 @@
 package Core.Model;
 
 public abstract class Character {
-    /* abstraktní třída zděděná hráčem a nepřítelem */
     protected int x,y,height,width;
     public Character(int x, int y, int height, int width) {
         this.x = x;
