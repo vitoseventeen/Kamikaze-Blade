@@ -12,14 +12,9 @@ public class Tile {
     }
 
     public boolean hasCollision() {
-        switch (surfaceType) {
-            case WALL:
-            case EMPTY:
-                return true;
-            case GRASS:
-                return false;
-            default:
-                return false;
-        }
+        return switch (surfaceType) {
+            case WALL, EMPTY -> true;
+            default -> false;
+        };
     }
 }

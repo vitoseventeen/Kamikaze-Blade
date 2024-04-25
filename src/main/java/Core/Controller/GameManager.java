@@ -29,6 +29,10 @@ public class GameManager implements Runnable {
         inputHandler = new InputHandler(controller);
     }
 
+    public void update() {
+
+    }
+
     public void start() {
         if (!running) {
             running = true;
@@ -65,7 +69,6 @@ public class GameManager implements Runnable {
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
             while (delta >= 1) {
-                render();
                 delta--;
             }
             render();

@@ -6,7 +6,6 @@ import Core.Model.Player;
 import Core.Model.Tile;
 import Core.View.Panel;
 
-
 import static Core.Util.Constants.TILE_SIZE;
 
 public class Controller {
@@ -40,36 +39,34 @@ public class Controller {
         return false;
     }
 
+    public void movePlayer(int deltaX, int deltaY) {
+        int newX = player.getX() + deltaX;
+        int newY = player.getY() + deltaY;
+
+        if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
+            player.setX(newX);
+            player.setY(newY);
+            panel.repaint();
+        }
+    }
 
     public void moveLeft() {
-        int newX = player.getX() - player.getSpeed();
-        if (!isCollision(newX, player.getY(), player.getWidth(), player.getHeight())) {
-            player.setX(newX);
-        }
-        panel.repaint();
+        movePlayer(-player.getSpeed(), 0);
     }
 
     public void moveRight() {
-        int newX = player.getX() + player.getSpeed();
-        if (!isCollision(newX, player.getY(), player.getWidth(), player.getHeight())) {
-            player.setX(newX);
-        }
-        panel.repaint();
+        movePlayer(player.getSpeed(), 0);
     }
 
     public void moveUp() {
-        int newY = player.getY() - player.getSpeed();
-        if (!isCollision(player.getX(), newY, player.getWidth(), player.getHeight())) {
-            player.setY(newY);
-        }
-        panel.repaint();
+        movePlayer(0, -player.getSpeed());
     }
 
     public void moveDown() {
-        int newY = player.getY() + player.getSpeed();
-        if (!isCollision(player.getX(), newY, player.getWidth(), player.getHeight())) {
-            player.setY(newY);
-        }
-        panel.repaint();
+        movePlayer(0, player.getSpeed());
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
