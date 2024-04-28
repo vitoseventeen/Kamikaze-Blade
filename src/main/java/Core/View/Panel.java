@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import Core.Model.Player;
 import Core.Model.Level;
-import Core.Model.LevelManager;
 import Core.Model.Tile;
 import Core.Model.SurfaceType;
 
@@ -22,16 +21,14 @@ public class Panel extends JPanel {
     private int animationInd;
     private int animationSpeed = 3;
     private Player player;
-    private LevelManager levelManager;
     private Level level;
 
-    public Panel(Player player) {
+    public Panel(Player player, Level level) {
         this.player = player;
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
-        levelManager = new LevelManager();
-        level = levelManager.getCurrentLevel();
+        this.level = Level.loadLevelFromJson("level.json");
         importPlayerImage();
         animatePlayer();
     }

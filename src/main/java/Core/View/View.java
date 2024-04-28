@@ -3,7 +3,6 @@ package Core.View;
 import Core.Controller.Controller;
 import Core.Controller.InputHandler;
 import Core.Model.Level;
-import Core.Model.LevelManager;
 import Core.Model.Player;
 
 import javax.swing.*;
@@ -13,17 +12,13 @@ import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 public class View {
     private JFrame frame;
     private Panel panel;
-    private LevelManager levelManager;
-    private Level level;
+    private final Level level;
 
-    public View(Player player) {
+    public View(Player player, Level level) {
         frame = new JFrame("Ninja Nexus");
-        panel = new Panel(player);
-
-        levelManager = new LevelManager();
-        level = levelManager.getCurrentLevel();
-
-        Controller controller = new Controller(player, panel, levelManager, level);
+        panel = new Panel(player, level);
+        this.level = level;
+        Controller controller = new Controller(player, panel, level);
         InputHandler inputHandler = new InputHandler(controller);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
@@ -35,7 +30,6 @@ public class View {
 
         frame.add(panel);
 
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.pack();
@@ -45,5 +39,4 @@ public class View {
     public Panel getPanel() {
         return panel;
     }
-
 }

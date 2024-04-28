@@ -1,9 +1,8 @@
 package Core.Controller;
 
 import Core.Model.Level;
-import Core.Model.LevelFactory;
-import Core.Model.LevelManager;
 import Core.Model.Player;
+import Core.Model.Tile;
 import Core.View.Panel;
 import Core.View.View;
 
@@ -14,24 +13,19 @@ public class GameManager implements Runnable {
     private Thread gameThread;
     private final Player player;
     private final View view;
-    private Level level;
+    private final Level level;
     private InputHandler inputHandler;
     private final Controller controller;
-    private LevelManager levelManager;
 
     public GameManager() {
-        this.level = LevelFactory.createLevel();
         player = new Player("Ninja", 100, 100, 32, 32);
-        view = new View(player);
+        level = Level.loadLevelFromJson("level.json");
+        view = new View(player, level);
         Panel panel = view.getPanel();
-        levelManager = new LevelManager();
-        controller = new Controller(player, panel, levelManager, level);
+        controller = new Controller(player, panel, level);
         inputHandler = new InputHandler(controller);
     }
 
-    public void update() {
-
-    }
 
     public void start() {
         if (!running) {
@@ -73,6 +67,7 @@ public class GameManager implements Runnable {
             }
             render();
         }
+        stop();
     }
 
 

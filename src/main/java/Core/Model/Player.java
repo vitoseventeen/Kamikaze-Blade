@@ -11,7 +11,7 @@ public class Player extends Character {
         this.name = name;
         this.health = 100;
         this.score = 0;
-        this.speed = 5;
+        this.speed = 2;
     }
 
 

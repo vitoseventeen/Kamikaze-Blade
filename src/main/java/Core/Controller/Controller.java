@@ -1,7 +1,6 @@
 package Core.Controller;
 
 import Core.Model.Level;
-import Core.Model.LevelManager;
 import Core.Model.Player;
 import Core.Model.Tile;
 import Core.View.Panel;
@@ -11,13 +10,11 @@ import static Core.Util.Constants.TILE_SIZE;
 public class Controller {
     private Player player;
     private Panel panel;
-    private LevelManager levelManager;
     private Level level;
 
-    public Controller(Player player, Panel panel, LevelManager levelManager, Level level) {
+    public Controller(Player player, Panel panel, Level level) {
         this.player = player;
         this.panel = panel;
-        this.levelManager = levelManager;
         this.level = level;
     }
 
