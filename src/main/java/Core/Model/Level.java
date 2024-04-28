@@ -41,7 +41,6 @@ public class Level {
                         case 1:
                             surfaceType = SurfaceType.WALL;
                             break;
-                        // Add more cases for other types if needed
                         default:
                             surfaceType = SurfaceType.EMPTY;
                             break;

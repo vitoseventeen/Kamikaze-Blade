@@ -2,18 +2,15 @@ package Core.Controller;
 
 import Core.Model.Level;
 import Core.Model.Player;
-import Core.Model.Tile;
+import Core.Util.Constants;
 import Core.View.Panel;
 import Core.View.View;
-
-import static Core.Util.Constants.TARGET_FPS;
-
 public class GameManager implements Runnable {
     private volatile boolean running = false;
     private Thread gameThread;
     private final Player player;
-    private final View view;
-    private final Level level;
+    private View view;
+    private Level level;
     private InputHandler inputHandler;
     private final Controller controller;
 
@@ -24,7 +21,10 @@ public class GameManager implements Runnable {
         Panel panel = view.getPanel();
         controller = new Controller(player, panel, level);
         inputHandler = new InputHandler(controller);
+
     }
+
+
 
 
     public void start() {
@@ -33,7 +33,16 @@ public class GameManager implements Runnable {
             gameThread = new Thread(this);
             gameThread.start();
 
-            new GameRenderThread(this).start();
+            new Thread(() -> {
+                while (running) {
+                    view.getPanel().repaint();
+                    try {
+                        Thread.sleep(1000 / Constants.TARGET_FPS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 
@@ -55,7 +64,7 @@ public class GameManager implements Runnable {
     @Override
     public void run() {
         long lastTime = System.nanoTime();
-        double nsPerTick = 1000000000.0 / TARGET_FPS;
+        double nsPerTick = 1000000000.0 / Constants.TARGET_FPS;
         double delta = 0;
 
         while (running) {
@@ -63,15 +72,14 @@ public class GameManager implements Runnable {
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
             while (delta >= 1) {
+                updateGame();
                 delta--;
             }
-            render();
         }
         stop();
     }
 
-
-    void render() {
+    private void updateGame() {
         view.getPanel().repaint();
     }
 }

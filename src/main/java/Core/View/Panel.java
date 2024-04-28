@@ -1,64 +1,41 @@
 package Core.View;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import Core.Model.Player;
+import Core.Controller.Controller;
 import Core.Model.Level;
+import Core.Model.Player;
 import Core.Model.Tile;
 import Core.Model.SurfaceType;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import static Core.Util.Constants.*;
+import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
+import static Core.Util.Constants.TILE_SIZE;
 
 public class Panel extends JPanel {
-    private BufferedImage playerImage;
-    private BufferedImage[] idleAnimations;
-    private int animationTick;
-    private int animationInd;
-    private int animationSpeed = 3;
     private Player player;
     private Level level;
+    private AnimationManager animationManager = new AnimationManager();
+    private Map<String, BufferedImage> imageCache = new HashMap<>();
 
     public Panel(Player player, Level level) {
         this.player = player;
+        this.level = level;
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
-        this.level = Level.loadLevelFromJson("level.json");
-        importPlayerImage();
-        animatePlayer();
+        initializeAnimationManager();
     }
 
-
-    private void animatePlayer() {
-        if (playerImage != null) {
-            idleAnimations = new BufferedImage[11];
-
-            for (int i = 0; i < idleAnimations.length; i++) {
-                idleAnimations[i] = playerImage.getSubimage(i * 32, 0, 32, 32);
-            }
-        } else {
-            System.err.println("Player image is null, unable to animate player.");
-        }
+    private void initializeAnimationManager() {
+        animationManager.addAnimation("player_idle", "/Idle.png", 32, 32, 11);
     }
-
-    private void importPlayerImage() {
-        String imagePath = "/Idle.png";
-        try (InputStream is = getClass().getResourceAsStream(imagePath)) {
-            if (is != null) {
-                playerImage = ImageIO.read(is);
-            } else {
-                System.err.println("Unable to load player image");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -72,17 +49,15 @@ public class Panel extends JPanel {
             }
         }
 
-        if (playerImage != null) {
+        BufferedImage playerFrame = animationManager.getFrame("player_idle");
+        if (playerFrame != null) {
             int playerX = player.getX();
             int playerY = player.getY();
             playerX = Math.max(0, Math.min(playerX, getWidth() - 32));
             playerY = Math.max(0, Math.min(playerY, getHeight() - 32));
-            g.drawImage(idleAnimations[animationInd], playerX, playerY, null);
+            g.drawImage(playerFrame, playerX, playerY, null);
         }
-
-        updateAnimation();
     }
-
 
     private void drawTile(Graphics g, Tile tile, int x, int y) {
         BufferedImage image = getImageForSurfaceType(tile.getSurfaceType());
@@ -95,26 +70,25 @@ public class Panel extends JPanel {
 
     private BufferedImage getImageForSurfaceType(SurfaceType surfaceType) {
         String imagePath = surfaceType.getTexturePath();
-        try (InputStream is = getClass().getResourceAsStream(imagePath)) {
-            if (is != null) {
-                return ImageIO.read(is);
-            } else {
-                System.err.println("Unable to load image for surface type: " + surfaceType);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getImageFromCache(imagePath);
     }
 
-
-    private void updateAnimation() { // aktualizace animace
-        animationTick++;
-        if (animationTick >= animationSpeed) {
-            animationTick = 0;
-            animationInd++;
-            if (animationInd >= idleAnimations.length) {
-                animationInd = 0;
+    private BufferedImage getImageFromCache(String path) {
+        if (imageCache.containsKey(path)) {
+            return imageCache.get(path);
+        } else {
+            try (InputStream is = getClass().getResourceAsStream(path)) {
+                if (is != null) {
+                    BufferedImage image = ImageIO.read(is);
+                    imageCache.put(path, image);
+                    return image;
+                } else {
+                    System.err.println("Unable to load image: " + path);
+                    return null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
             }
         }
     }
