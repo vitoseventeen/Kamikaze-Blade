@@ -19,23 +19,21 @@ public class GameManager implements Runnable {
     private final Controller controller;
 
     public GameManager() {
-        player = new Player("Ninja", 100, 100, PLAYER_HEIGHT, PLAYER_WIDTH);
+        player = new Player("Ninja", 30, 30, PLAYER_HEIGHT, PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level.json");
         view = new View(player, level);
-        Panel panel = view.getPanel();
-        controller = new Controller(player, panel, level);
+        controller = new Controller(player, view.getPanel(), level);
         inputHandler = new InputHandler(controller);
-
     }
-
-
-
 
     public void start() {
         if (!running) {
             running = true;
             gameThread = new Thread(this);
             gameThread.start();
+
+            // zoom game
+            view.getPanel().setZoomFactor(3.2);
 
             new Thread(() -> {
                 while (running) {
@@ -48,6 +46,10 @@ public class GameManager implements Runnable {
                 }
             }).start();
         }
+    }
+
+    public void setZoom(double zoomFactor) {
+        view.getPanel().setZoomFactor(zoomFactor);
     }
 
     public void stop() {

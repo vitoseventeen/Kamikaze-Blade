@@ -52,6 +52,9 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_S:
                 downPressed = true;
                 break;
+            case KeyEvent.VK_ENTER:
+                controller.attack();
+                break;
             default:
                 break;
         }

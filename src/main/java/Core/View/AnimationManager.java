@@ -9,9 +9,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Core.Util.Constants.PLAYER_HEIGHT;
-import static Core.Util.Constants.PLAYER_WIDTH;
-
 public class AnimationManager {
     private Map<String, BufferedImage[][]> animations = new HashMap<>();
     private Map<String, Integer> animationTicks = new HashMap<>();
@@ -19,12 +16,12 @@ public class AnimationManager {
     private Map<String, Integer> animationSpeeds = new HashMap<>();
 
     public AnimationManager() {
-        addAnimations("idle", "/idle.png", PLAYER_WIDTH, PLAYER_HEIGHT, 1, 4);
-        addAnimations("walk", "/walk.png", PLAYER_WIDTH, PLAYER_HEIGHT, 4, 4);
-        addAnimations("attack", "/attack.png", PLAYER_WIDTH, PLAYER_HEIGHT, 1, 4);
+        addAnimations("idle", "/idle.png", 16, 16, 1, 4);
+        addAnimations("walk", "/walk.png", 16, 16, 4, 4);
+        addAnimations("attack", "/attack.png", 16, 16, 1, 4);
 
-        setAnimationSpeed("walk", 60);
-
+        setAnimationSpeed("walk", 20);
+        setAnimationSpeed("attack", 60);
     }
 
     private void addAnimations(String name, String imagePath, int frameWidth, int frameHeight, int animationCount, int directionCount) {
@@ -49,7 +46,12 @@ public class AnimationManager {
     }
 
     public BufferedImage getFrame(String name, Player.Direction direction, Player.AnimationType animationType) {
-        int row = animationType.ordinal();
+        int row;
+        if (animationType == Player.AnimationType.ATTACK || animationType == Player.AnimationType.IDLE) {
+            row = 0;
+        } else {
+            row = animationType.ordinal();
+        }
         int col = direction.ordinal();
 
         BufferedImage[][] frames = animations.get(name);
@@ -76,5 +78,3 @@ public class AnimationManager {
         animationSpeeds.put(name, speed);
     }
 }
-
-

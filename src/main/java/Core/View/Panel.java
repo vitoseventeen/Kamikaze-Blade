@@ -15,14 +15,21 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Core.Util.Constants.*;
+import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
+import static Core.Util.Constants.TILE_SIZE;
 
 public class Panel extends JPanel {
     private Player player;
     private Level level;
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
+    private final int frameWidth = 16;
+    private final int frameHeight = 16;
 
+    private double zoomFactor = 2.0;
+
+    private int offsetX;
+    private int offsetY;
 
     public Panel(Player player, Level level) {
         this.player = player;
@@ -31,10 +38,31 @@ public class Panel extends JPanel {
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
     }
+    public void setZoomFactor(double zoomFactor) {
+        this.zoomFactor = zoomFactor;
+        repaint();
+    }
+
+    public double getZoomFactor() {
+        return zoomFactor;
+    }
+
+
+    private void centerCameraOnPlayer(Graphics2D g2d) {
+        offsetX = (int)((getWidth() / (2 * zoomFactor)) - player.getX() - (frameWidth / 2));
+        offsetY = (int)((getHeight() / (2 * zoomFactor)) - player.getY() - (frameHeight / 2));
+        g2d.translate(offsetX, offsetY);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.scale(zoomFactor, zoomFactor);
+
+        centerCameraOnPlayer(g2d);
+
         if (level != null) {
             for (int x = 0; x < level.getWidth(); x++) {
                 for (int y = 0; y < level.getHeight(); y++) {
@@ -44,15 +72,26 @@ public class Panel extends JPanel {
             }
         }
 
-        animationManager.updateAnimation("walk");
-        BufferedImage playerFrame = animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
+        BufferedImage playerFrame;
+        if (player.getAnimationType() == Player.AnimationType.WALK) {
+            animationManager.updateAnimation("walk");
+            playerFrame = animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
+        } else if (player.getAnimationType() == Player.AnimationType.ATTACK) {
+            animationManager.updateAnimation("attack");
+            playerFrame = animationManager.getFrame("attack", player.getDirection(), player.getAnimationType());
+        } else {
+            playerFrame = animationManager.getFrame("idle", player.getDirection(), player.getAnimationType());
+        }
+
         if (playerFrame != null) {
             int playerX = player.getX();
             int playerY = player.getY();
-            playerX = Math.max(0, Math.min(playerX, getWidth() - PLAYER_WIDTH));
-            playerY = Math.max(0, Math.min(playerY, getHeight() - PLAYER_HEIGHT));
+            playerX = Math.max(0, Math.min(playerX, getWidth() - frameWidth));
+            playerY = Math.max(0, Math.min(playerY, getHeight() - frameHeight));
             g.drawImage(playerFrame, playerX, playerY, null);
         }
+
+        g.translate(-offsetX, -offsetY);
     }
 
     private void drawTile(Graphics g, Tile tile, int x, int y) {
