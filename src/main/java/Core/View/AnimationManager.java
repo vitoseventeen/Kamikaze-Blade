@@ -1,5 +1,6 @@
 package Core.View;
 
+import Core.Model.Player;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,19 +10,22 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AnimationManager {
-    private Map<String, BufferedImage[]> animations = new HashMap<>();
+    private Map<String, BufferedImage[][]> animations = new HashMap<>();
     private Map<String, Integer> animationTicks = new HashMap<>();
     private Map<String, Integer> animationIndices = new HashMap<>();
     private int animationSpeed = 3;
 
-    public void addAnimation(String name, String imagePath, int frameWidth, int frameHeight, int frameCount) {
-        BufferedImage[] frames = new BufferedImage[frameCount];
+    public void addAnimations(String name, String imagePath, int frameWidth, int frameHeight, int animationCount, int directionCount) {
+        BufferedImage[][] frames = new BufferedImage[animationCount][directionCount];
         try (InputStream is = getClass().getResourceAsStream(imagePath)) {
             if (is != null) {
                 BufferedImage image = ImageIO.read(is);
-                for (int i = 0; i < frameCount; i++) {
-                    frames[i] = image.getSubimage(i * frameWidth, 0, frameWidth, frameHeight);
+                for (int i = 0; i < animationCount; i++) {
+                    for (int j = 0; j < directionCount; j++) {
+                        frames[i][j] = image.getSubimage(j * frameWidth, i * frameHeight, frameWidth, frameHeight);
+                    }
                 }
                 animations.put(name, frames);
                 animationTicks.put(name, 0);
@@ -34,25 +38,15 @@ public class AnimationManager {
         }
     }
 
-    public BufferedImage getFrame(String name) {
-        BufferedImage[] frames = animations.get(name);
-        if (frames != null) {
-            int tick = animationTicks.getOrDefault(name, 0);
-            int index = animationIndices.getOrDefault(name, 0);
-            tick++;
-            if (tick >= animationSpeed) {
-                tick = 0;
-                index++;
-                if (index >= frames.length) {
-                    index = 0;
-                }
-            }
-            animationTicks.put(name, tick);
-            animationIndices.put(name, index);
-            return frames[index];
+    public BufferedImage getFrame(String name, Player.Direction direction, Player.AnimationType animationType) {
+        int row = animationType.ordinal();
+        int col = direction.ordinal();
+
+        BufferedImage[][] frames = animations.get(name);
+        if (frames != null && row < frames.length && col < frames[row].length) {
+            return frames[row][col];
         } else {
             return null;
         }
     }
 }
-

@@ -5,6 +5,20 @@ public class Player extends Character {
     private int health;
     private int score;
     private int speed;
+    private Direction direction;
+    private AnimationType animationType;
+
+    public enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
+    public enum AnimationType {
+        IDLE,
+        WALK,
+        ATTACK
+    }
 
     public Player(String name, int x, int y, int height, int width) {
         super(x, y, height, width);
@@ -12,8 +26,9 @@ public class Player extends Character {
         this.health = 100;
         this.score = 0;
         this.speed = 2;
+        this.direction = Direction.DOWN;
+        this.animationType = AnimationType.IDLE;
     }
-
 
 
     public int getSpeed() {
@@ -54,5 +69,21 @@ public class Player extends Character {
 
     public void collectCoin(int value) {
         this.score += value;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public AnimationType getAnimationType() {
+        return animationType;
+    }
+
+    public void setAnimationType(AnimationType animationType) {
+        this.animationType = animationType;
     }
 }

@@ -23,6 +23,8 @@ public class Panel extends JPanel {
     private Level level;
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
+    private final int frameWidth = 16;
+    private final int frameHeight = 16;
 
     public Panel(Player player, Level level) {
         this.player = player;
@@ -34,7 +36,7 @@ public class Panel extends JPanel {
     }
 
     private void initializeAnimationManager() {
-        animationManager.addAnimation("player_idle", "/Idle.png", 32, 32, 11);
+        animationManager.addAnimations("player", "/SpriteSheet.png", 16, 16, 7, 4);
     }
 
     @Override
@@ -49,12 +51,12 @@ public class Panel extends JPanel {
             }
         }
 
-        BufferedImage playerFrame = animationManager.getFrame("player_idle");
+        BufferedImage playerFrame = animationManager.getFrame("player", player.getDirection(), player.getAnimationType());
         if (playerFrame != null) {
             int playerX = player.getX();
             int playerY = player.getY();
-            playerX = Math.max(0, Math.min(playerX, getWidth() - 32));
-            playerY = Math.max(0, Math.min(playerY, getHeight() - 32));
+            playerX = Math.max(0, Math.min(playerX, getWidth() - frameWidth));
+            playerY = Math.max(0, Math.min(playerY, getHeight() - frameHeight));
             g.drawImage(playerFrame, playerX, playerY, null);
         }
     }

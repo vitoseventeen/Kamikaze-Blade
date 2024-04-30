@@ -43,25 +43,24 @@ public class Controller {
         if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
             player.setX(newX);
             player.setY(newY);
+
+            if (deltaX < 0) {
+                player.setDirection(Player.Direction.LEFT);
+            } else if (deltaX > 0) {
+                player.setDirection(Player.Direction.RIGHT);
+            } else if (deltaY < 0) {
+                player.setDirection(Player.Direction.DOWN);
+            } else if (deltaY > 0) {
+                player.setDirection(Player.Direction.UP);
+            }
+
+            player.setAnimationType(Player.AnimationType.WALK);
+
             panel.repaint();
         }
     }
 
-    public void moveLeft() {
-        movePlayer(-player.getSpeed(), 0);
-    }
 
-    public void moveRight() {
-        movePlayer(player.getSpeed(), 0);
-    }
-
-    public void moveUp() {
-        movePlayer(0, -player.getSpeed());
-    }
-
-    public void moveDown() {
-        movePlayer(0, player.getSpeed());
-    }
 
     public Player getPlayer() {
         return player;
