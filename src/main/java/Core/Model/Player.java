@@ -86,4 +86,6 @@ public class Player extends Character {
     public void setAnimationType(AnimationType animationType) {
         this.animationType = animationType;
     }
+
+
 }

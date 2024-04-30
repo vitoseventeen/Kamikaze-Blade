@@ -57,10 +57,33 @@ public class Controller {
             player.setAnimationType(Player.AnimationType.WALK);
 
             panel.repaint();
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                    player.setAnimationType(Player.AnimationType.IDLE);
+                    panel.repaint();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 
+    public void attack() {
+        player.setAnimationType(Player.AnimationType.ATTACK);
+        panel.repaint();
 
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+                player.setAnimationType(Player.AnimationType.IDLE);
+                panel.repaint();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 
     public Player getPlayer() {
         return player;
