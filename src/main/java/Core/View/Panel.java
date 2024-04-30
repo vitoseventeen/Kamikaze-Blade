@@ -32,11 +32,6 @@ public class Panel extends JPanel {
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
-        initializeAnimationManager();
-    }
-
-    private void initializeAnimationManager() {
-        animationManager.addAnimations("player", "/SpriteSheet.png", 16, 16, 7, 4);
     }
 
     @Override
@@ -51,7 +46,8 @@ public class Panel extends JPanel {
             }
         }
 
-        BufferedImage playerFrame = animationManager.getFrame("player", player.getDirection(), player.getAnimationType());
+        animationManager.updateAnimation("walk");
+        BufferedImage playerFrame = animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
         if (playerFrame != null) {
             int playerX = player.getX();
             int playerY = player.getY();
