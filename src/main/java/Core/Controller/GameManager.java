@@ -5,6 +5,10 @@ import Core.Model.Player;
 import Core.Util.Constants;
 import Core.View.Panel;
 import Core.View.View;
+
+import static Core.Util.Constants.PLAYER_HEIGHT;
+import static Core.Util.Constants.PLAYER_WIDTH;
+
 public class GameManager implements Runnable {
     private volatile boolean running = false;
     private Thread gameThread;
@@ -15,7 +19,7 @@ public class GameManager implements Runnable {
     private final Controller controller;
 
     public GameManager() {
-        player = new Player("Ninja", 100, 100, 32, 32);
+        player = new Player("Ninja", 100, 100, PLAYER_HEIGHT, PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level.json");
         view = new View(player, level);
         Panel panel = view.getPanel();

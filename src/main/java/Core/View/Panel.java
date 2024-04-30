@@ -15,16 +15,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
-import static Core.Util.Constants.TILE_SIZE;
+import static Core.Util.Constants.*;
 
 public class Panel extends JPanel {
     private Player player;
     private Level level;
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
-    private final int frameWidth = 16;
-    private final int frameHeight = 16;
+
 
     public Panel(Player player, Level level) {
         this.player = player;
@@ -51,8 +49,8 @@ public class Panel extends JPanel {
         if (playerFrame != null) {
             int playerX = player.getX();
             int playerY = player.getY();
-            playerX = Math.max(0, Math.min(playerX, getWidth() - frameWidth));
-            playerY = Math.max(0, Math.min(playerY, getHeight() - frameHeight));
+            playerX = Math.max(0, Math.min(playerX, getWidth() - PLAYER_WIDTH));
+            playerY = Math.max(0, Math.min(playerY, getHeight() - PLAYER_HEIGHT));
             g.drawImage(playerFrame, playerX, playerY, null);
         }
     }

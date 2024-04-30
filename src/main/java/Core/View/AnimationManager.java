@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static Core.Util.Constants.PLAYER_HEIGHT;
+import static Core.Util.Constants.PLAYER_WIDTH;
+
 public class AnimationManager {
     private Map<String, BufferedImage[][]> animations = new HashMap<>();
     private Map<String, Integer> animationTicks = new HashMap<>();
@@ -16,9 +19,9 @@ public class AnimationManager {
     private Map<String, Integer> animationSpeeds = new HashMap<>();
 
     public AnimationManager() {
-        addAnimations("idle", "/idle.png", 16, 16, 1, 4);
-        addAnimations("walk", "/walk.png", 16, 16, 4, 4);
-        addAnimations("attack", "/attack.png", 16, 16, 1, 4);
+        addAnimations("idle", "/idle.png", PLAYER_WIDTH, PLAYER_HEIGHT, 1, 4);
+        addAnimations("walk", "/walk.png", PLAYER_WIDTH, PLAYER_HEIGHT, 4, 4);
+        addAnimations("attack", "/attack.png", PLAYER_WIDTH, PLAYER_HEIGHT, 1, 4);
 
         setAnimationSpeed("walk", 60);
 
