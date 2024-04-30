@@ -119,6 +119,7 @@ public class Panel extends JPanel {
                     return image;
                 } else {
                     System.err.println("Unable to load image: " + path);
+                    System.err.println("You have to make 'assets' folder as a source root in your IDE.");
                     return null;
                 }
             } catch (IOException e) {

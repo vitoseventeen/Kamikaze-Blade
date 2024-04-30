@@ -66,7 +66,7 @@ public class Controller {
 
         new Thread(() -> {
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
                 player.setAnimationType(Player.AnimationType.IDLE);
                 panel.repaint();
             } catch (InterruptedException e) {
