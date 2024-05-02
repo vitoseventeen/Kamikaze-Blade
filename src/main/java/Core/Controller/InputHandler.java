@@ -1,5 +1,7 @@
 package Core.Controller;
 
+import Core.Model.Enemy;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -102,8 +104,17 @@ public class InputHandler implements KeyListener {
             deltaY += controller.getPlayer().getSpeed();
         }
 
-        if (deltaX != 0 || deltaY != 0) {
-            controller.movePlayer(deltaX, deltaY);
+        // Check for collision with enemies
+        int newX = controller.getPlayer().getX() + deltaX;
+        int newY = controller.getPlayer().getY() + deltaY;
+        for (Enemy enemy : controller.getEnemies()) {
+            if (enemy.checkCollisionWithEnemy(newX, newY, controller.getPlayer().getWidth(), controller.getPlayer().getHeight())) {
+                return; // If a collision would occur, don't move the player
+            }
         }
+
+        // If no collision, move the player
+        controller.movePlayer(deltaX, deltaY);
     }
+
 }

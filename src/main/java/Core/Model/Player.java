@@ -28,14 +28,21 @@ public class Player {
         this.x = x;
         this.y = y;
         this.height = height;
-        this. width = width;
+        this.width = width;
         this.name = name;
         this.health = 100;
         this.score = 0;
-        this.speed = 2;
+        this.speed = 3;
         this.direction = Direction.DOWN;
         this.animationType = AnimationType.IDLE;
     }
+    public boolean checkCollisionWithEnemy(int x, int y, int width, int height) {
+        return this.x < x + width &&
+                this.x + this.width > x &&
+                this.y < y + height &&
+                this.y + this.height > y;
+    }
+
 
 
     public int getSpeed() {

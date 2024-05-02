@@ -4,7 +4,6 @@ import Core.Model.Enemy;
 import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
-import Core.View.Panel;
 import Core.View.View;
 
 import java.util.ArrayList;
@@ -112,7 +111,7 @@ public class GameManager implements Runnable {
     }
 
     private void updateGame() {
-        controller.updateGame();
+        controller.moveEnemies();
 
         // Update enemies
         for (Enemy enemy : enemies) {
