@@ -47,11 +47,4 @@ public class View {
         return panel;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
 }
