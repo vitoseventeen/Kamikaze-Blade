@@ -1,10 +1,7 @@
 package Core.View;
 
 import Core.Controller.Controller;
-import Core.Model.Level;
-import Core.Model.Player;
-import Core.Model.Tile;
-import Core.Model.SurfaceType;
+import Core.Model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,6 +18,7 @@ import static Core.Util.Constants.TILE_SIZE;
 public class Panel extends JPanel {
     private Player player;
     private Level level;
+    private Enemy enemy;
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
     private final int frameWidth = 16;
@@ -31,9 +29,10 @@ public class Panel extends JPanel {
     private int offsetX;
     private int offsetY;
 
-    public Panel(Player player, Level level) {
+    public Panel(Player player, Level level, Enemy enemy) {
         this.player = player;
         this.level = level;
+        this.enemy = enemy;
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
@@ -89,6 +88,27 @@ public class Panel extends JPanel {
             playerX = Math.max(0, Math.min(playerX, getWidth() - frameWidth));
             playerY = Math.max(0, Math.min(playerY, getHeight() - frameHeight));
             g.drawImage(playerFrame, playerX, playerY, null);
+        }
+
+        g.translate(-offsetX, -offsetY);
+
+        BufferedImage enemyFrame;
+        if (enemy.getAnimationType() == Enemy.AnimationType.WALK) {
+            animationManager.updateAnimation("enemyWalk");
+            enemyFrame = animationManager.getFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
+        } else if (enemy.getAnimationType() == Enemy.AnimationType.ATTACK) {
+            animationManager.updateAnimation("enemyAttack");
+            enemyFrame = animationManager.getFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+        } else {
+            enemyFrame = animationManager.getFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+        }
+
+        if (enemyFrame != null) {
+            int enemyX = enemy.getX();
+            int enemyY = enemy.getY();
+            enemyX = Math.max(0, Math.min(enemyX, getWidth() - frameWidth));
+            enemyY = Math.max(0, Math.min(enemyY, getHeight() - frameHeight));
+            g.drawImage(enemyFrame, enemyX, enemyY, null);
         }
 
         g.translate(-offsetX, -offsetY);

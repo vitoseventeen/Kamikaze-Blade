@@ -4,7 +4,7 @@ import Core.Controller.Controller;
 import Core.Controller.InputHandler;
 import Core.Model.Level;
 import Core.Model.Player;
-
+import Core.Model.Enemy;
 import javax.swing.*;
 
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
@@ -14,9 +14,9 @@ public class View {
     private Panel panel;
     private final Level level;
 
-    public View(Player player, Level level) {
+    public View(Player player, Level level, Enemy enemy) {
         frame = new JFrame("Ninja Nexus");
-        panel = new Panel(player, level);
+        panel = new Panel(player, level, enemy);
         this.level = level;
         Controller controller = new Controller(player, panel, level);
         InputHandler inputHandler = new InputHandler(controller);

@@ -1,6 +1,10 @@
 package Core.Model;
 
-public class Player extends Character {
+public class Player {
+    private int x;
+    private int y;
+    private int width;
+    private int height;
     private String name;
     private int health;
     private int score;
@@ -21,7 +25,10 @@ public class Player extends Character {
     }
 
     public Player(String name, int x, int y, int height, int width) {
-        super(x, y, height, width);
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this. width = width;
         this.name = name;
         this.health = 100;
         this.score = 0;
@@ -52,6 +59,31 @@ public class Player extends Character {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     private void die() {

@@ -22,6 +22,10 @@ public class AnimationManager {
 
         setAnimationSpeed("walk", 20);
         setAnimationSpeed("attack", 60);
+
+        addAnimations("enemyIdle", "/enemyIdle.png", 16, 16, 1, 4);
+        addAnimations("enemyWalk", "/enemyWalk.png", 16, 16, 4, 4);
+        addAnimations("enemyAttack", "/enemyAttack.png", 16, 16, 1,4);
     }
 
     private void addAnimations(String name, String imagePath, int frameWidth, int frameHeight, int animationCount, int directionCount) {
@@ -62,6 +66,7 @@ public class AnimationManager {
             return null;
         }
     }
+
 
     public void updateAnimation(String name) {
         int ticks = animationTicks.get(name);

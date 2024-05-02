@@ -1,5 +1,6 @@
 package Core.Controller;
 
+import Core.Model.Enemy;
 import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
@@ -13,15 +14,17 @@ public class GameManager implements Runnable {
     private volatile boolean running = false;
     private Thread gameThread;
     private final Player player;
+    private final Enemy enemy;
     private View view;
     private Level level;
     private InputHandler inputHandler;
     private final Controller controller;
 
     public GameManager() {
-        player = new Player("Ninja", 30, 30, PLAYER_HEIGHT, PLAYER_WIDTH);
+        enemy = new Enemy("Enemy", 35, 35, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
+        player = new Player("Ninja", 30, 30, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level.json");
-        view = new View(player, level);
+        view = new View(player, level, enemy);
         controller = new Controller(player, view.getPanel(), level);
         inputHandler = new InputHandler(controller);
     }
