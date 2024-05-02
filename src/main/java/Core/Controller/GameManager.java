@@ -24,7 +24,7 @@ public class GameManager implements Runnable {
     private final Controller controller;
 
     public GameManager() {
-        player = new Player("Ninja", 30, 30, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
+        player = new Player("Ninja", 11, 11, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level.json");
         enemies = new ArrayList<>();
         this.view = new View(player, level, enemies);
@@ -42,7 +42,7 @@ public class GameManager implements Runnable {
             gameThread.start();
 
             // zoom game
-            view.getPanel().setZoomFactor(1.5);
+            view.getPanel().setZoomFactor(ZOOM_FACTOR);
 
             spawnEnemies();
 
