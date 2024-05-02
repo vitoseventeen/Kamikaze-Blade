@@ -95,12 +95,12 @@ public class Panel extends JPanel {
         BufferedImage enemyFrame;
         if (enemy.getAnimationType() == Enemy.AnimationType.WALK) {
             animationManager.updateAnimation("enemyWalk");
-            enemyFrame = animationManager.getFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
+            enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
         } else if (enemy.getAnimationType() == Enemy.AnimationType.ATTACK) {
             animationManager.updateAnimation("enemyAttack");
-            enemyFrame = animationManager.getFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+            enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
         } else {
-            enemyFrame = animationManager.getFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+            enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
         }
 
         if (enemyFrame != null) {

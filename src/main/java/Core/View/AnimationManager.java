@@ -1,5 +1,6 @@
 package Core.View;
 
+import Core.Model.Enemy;
 import Core.Model.Player;
 
 import javax.imageio.ImageIO;
@@ -52,6 +53,23 @@ public class AnimationManager {
     public BufferedImage getFrame(String name, Player.Direction direction, Player.AnimationType animationType) {
         int row;
         if (animationType == Player.AnimationType.ATTACK || animationType == Player.AnimationType.IDLE) {
+            row = 0;
+        } else {
+            row = animationType.ordinal();
+        }
+        int col = direction.ordinal();
+
+        BufferedImage[][] frames = animations.get(name);
+        if (frames != null && row < frames.length && col < frames[row].length) {
+            int index = animationIndices.get(name);
+            return frames[index][col];
+        } else {
+            return null;
+        }
+    }
+    public BufferedImage getEnemyFrame(String name, Enemy.Direction direction, Enemy.AnimationType animationType) {
+        int row;
+        if (animationType == Enemy.AnimationType.ATTACK || animationType == Enemy.AnimationType.IDLE) {
             row = 0;
         } else {
             row = animationType.ordinal();
