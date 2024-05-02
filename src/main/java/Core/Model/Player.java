@@ -32,7 +32,7 @@ public class Player {
         this.name = name;
         this.health = 100;
         this.score = 0;
-        this.speed = 3;
+        this.speed = 2;
         this.direction = Direction.DOWN;
         this.animationType = AnimationType.IDLE;
     }

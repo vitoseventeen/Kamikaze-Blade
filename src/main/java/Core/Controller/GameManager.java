@@ -23,7 +23,7 @@ public class GameManager implements Runnable {
     private final Controller controller;
 
     public GameManager() {
-        player = new Player("Ninja", 11, 11, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
+        player = new Player("Ninja", 145, 145, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level.json");
         enemies = new ArrayList<>();
         this.view = new View(player, level, enemies);
@@ -49,7 +49,7 @@ public class GameManager implements Runnable {
 
             new Thread(() -> {
                 while (running) {
-                    updateGame();
+                    controller.moveEnemies();
                     view.getPanel().repaint();
                     try {
                         Thread.sleep(1000 / Constants.TARGET_FPS);
@@ -103,19 +103,12 @@ public class GameManager implements Runnable {
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
             while (delta >= 1) {
-                updateGame();
+                controller.moveEnemies();
                 delta--;
             }
         }
         stop();
     }
 
-    private void updateGame() {
-        controller.moveEnemies();
 
-        // Update enemies
-        for (Enemy enemy : enemies) {
-            // AI logic here if needed
-        }
-    }
 }

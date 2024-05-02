@@ -2,8 +2,12 @@ package Core.Controller;
 
 import Core.Model.Enemy;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.Timer;
 
 public class InputHandler implements KeyListener {
     private Controller controller;
@@ -12,22 +16,19 @@ public class InputHandler implements KeyListener {
     private boolean upPressed = false;
     private boolean downPressed = false;
 
+    private Timer inputTimer;
+
     public InputHandler(Controller controller) {
         this.controller = controller;
-        Thread inputThread = new Thread(this::listenForKeyEvents);
-        inputThread.setDaemon(true);
-        inputThread.start();
-    }
 
-    private void listenForKeyEvents() {
-        while (true) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        // Create a timer with a delay of 8 ms to handle key presses
+        inputTimer = new Timer(8, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePlayerMovement();
             }
-            updatePlayerMovement();
-        }
+        });
+        inputTimer.start();
     }
 
     @Override
@@ -87,6 +88,7 @@ public class InputHandler implements KeyListener {
         }
     }
 
+    // Update player movement based on key presses
     private void updatePlayerMovement() {
         int deltaX = 0;
         int deltaY = 0;
@@ -104,17 +106,7 @@ public class InputHandler implements KeyListener {
             deltaY += controller.getPlayer().getSpeed();
         }
 
-        // Check for collision with enemies
-        int newX = controller.getPlayer().getX() + deltaX;
-        int newY = controller.getPlayer().getY() + deltaY;
-        for (Enemy enemy : controller.getEnemies()) {
-            if (enemy.checkCollisionWithEnemy(newX, newY, controller.getPlayer().getWidth(), controller.getPlayer().getHeight())) {
-                return; // If a collision would occur, don't move the player
-            }
-        }
-
-        // If no collision, move the player
-        controller.movePlayer(deltaX, deltaY);
+        // Pass player movement information to the controller
+        controller.updatePlayerMovement(deltaX, deltaY);
     }
-
 }

@@ -1,4 +1,3 @@
-// В классе Controller
 package Core.Controller;
 
 import Core.Model.Level;
@@ -26,6 +25,7 @@ public class Controller {
         this.enemies = enemies;
     }
 
+    // Check for collision with level boundaries and tiles
     boolean isCollision(int x, int y, int width, int height) {
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
             return true;
@@ -48,6 +48,7 @@ public class Controller {
         return false;
     }
 
+    // Perform player attack action
     public void attack() {
         player.setAnimationType(Player.AnimationType.ATTACK);
         panel.repaint();
@@ -63,18 +64,20 @@ public class Controller {
         }).start();
     }
 
-    public void movePlayer(int deltaX, int deltaY) {
+    // Update player movement
+    // Update player movement
+    public void updatePlayerMovement(int deltaX, int deltaY) {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
 
-        // Check for collision with enemies
+        // Check collision with enemies
         for (Enemy enemy : enemies) {
-            if (isCollision(newX, newY, player.getWidth(), player.getHeight())) {
-                return;
+            if (enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
+                return; // If collision with an enemy, do not move the player
             }
         }
 
-        // Check for collision with level
+        // Check collision with level
         if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
             player.setX(newX);
             player.setY(newY);
@@ -93,13 +96,14 @@ public class Controller {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
-
             panel.repaint();
         }
     }
 
+
+    // Move enemies on the game board
     public void moveEnemies() {
-        // Update enemies
+        // Update enemy positions
         Random random = new Random();
         for (Enemy enemy : enemies) {
             if (random.nextInt(100) < 5) { // 5% chance to change direction
@@ -132,12 +136,12 @@ public class Controller {
             int newX = enemy.getX() + enemy.getDx();
             int newY = enemy.getY() + enemy.getDy();
 
-            // Check for collision with player
+            // Check collision with player
             if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                 continue;
             }
 
-            // Check for collision with other enemies
+            // Check collision with other enemies
             boolean collisionWithOtherEnemy = false;
             for (Enemy otherEnemy : enemies) {
                 if (otherEnemy != enemy && isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
@@ -149,13 +153,13 @@ public class Controller {
                 continue;
             }
 
-            // Check for collision with level
+            // Check collision with level
             if (!isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                 enemy.setX(newX);
                 enemy.setY(newY);
             }
 
-            // small delay
+            // Small delay
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -166,6 +170,7 @@ public class Controller {
         panel.repaint();
     }
 
+    // Get enemies within a specified range
     public List<Enemy> getNearbyEnemies(int x, int y, int width, int height) {
         List<Enemy> nearbyEnemies = new ArrayList<>();
         for (Enemy enemy : enemies) {
