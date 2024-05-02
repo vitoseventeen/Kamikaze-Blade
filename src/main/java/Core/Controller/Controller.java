@@ -2,23 +2,28 @@ package Core.Controller;
 
 import Core.Model.Level;
 import Core.Model.Player;
+import Core.Model.Enemy;
 import Core.Model.Tile;
 import Core.View.Panel;
 
 import static Core.Util.Constants.TILE_SIZE;
 
+import java.util.List;
+
 public class Controller {
     private Player player;
     private Panel panel;
     private Level level;
+    private List<Enemy> enemies;
 
-    public Controller(Player player, Panel panel, Level level) {
+    public Controller(Player player, Panel panel, Level level, List<Enemy> enemies) {
         this.player = player;
         this.panel = panel;
         this.level = level;
+        this.enemies = enemies;
     }
 
-    private boolean isCollision(int x, int y, int width, int height) {
+    boolean isCollision(int x, int y, int width, int height) {
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
         int tileWidth = (x + width) / TILE_SIZE;
@@ -73,6 +78,17 @@ public class Controller {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public void updateGame() {
+
+
+        for (Enemy enemy : enemies) {
+            // Обновить состояние врага
+            // Например, переместить врага, если это нужно
+        }
+
+        panel.repaint();
     }
 
     public Player getPlayer() {

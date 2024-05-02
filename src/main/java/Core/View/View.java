@@ -7,18 +7,24 @@ import Core.Model.Player;
 import Core.Model.Enemy;
 import javax.swing.*;
 
+import java.util.List;
+
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 
 public class View {
     private JFrame frame;
     private Panel panel;
     private final Level level;
+    private final Player player;
+    private final List<Enemy> enemies;
 
-    public View(Player player, Level level, Enemy enemy) {
+    public View(Player player, Level level, List<Enemy> enemies) {
         frame = new JFrame("Ninja Nexus");
-        panel = new Panel(player, level, enemy);
+        panel = new Panel(player, level);
         this.level = level;
-        Controller controller = new Controller(player, panel, level);
+        this.player = player;
+        this.enemies = enemies;
+        Controller controller = new Controller(player, panel, level, enemies);
         InputHandler inputHandler = new InputHandler(controller);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
@@ -39,5 +45,13 @@ public class View {
 
     public Panel getPanel() {
         return panel;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 }

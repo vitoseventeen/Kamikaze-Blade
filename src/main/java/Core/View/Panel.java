@@ -1,15 +1,19 @@
 package Core.View;
 
 import Core.Controller.Controller;
+import Core.Controller.InputHandler;
 import Core.Model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
@@ -18,7 +22,7 @@ import static Core.Util.Constants.TILE_SIZE;
 public class Panel extends JPanel {
     private Player player;
     private Level level;
-    private Enemy enemy;
+    private List<Enemy> enemies = new ArrayList<>();
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
     private final int frameWidth = 16;
@@ -29,14 +33,14 @@ public class Panel extends JPanel {
     private int offsetX;
     private int offsetY;
 
-    public Panel(Player player, Level level, Enemy enemy) {
+    public Panel(Player player, Level level) {
         this.player = player;
         this.level = level;
-        this.enemy = enemy;
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
     }
+
     public void setZoomFactor(double zoomFactor) {
         this.zoomFactor = zoomFactor;
         repaint();
@@ -46,10 +50,9 @@ public class Panel extends JPanel {
         return zoomFactor;
     }
 
-
     private void centerCameraOnPlayer(Graphics2D g2d) {
-        offsetX = (int)((getWidth() / (2 * zoomFactor)) - player.getX() - (frameWidth / 2));
-        offsetY = (int)((getHeight() / (2 * zoomFactor)) - player.getY() - (frameHeight / 2));
+        offsetX = (int) ((getWidth() / (2 * zoomFactor)) - player.getX() - (frameWidth / 2));
+        offsetY = (int) ((getHeight() / (2 * zoomFactor)) - player.getY() - (frameHeight / 2));
         g2d.translate(offsetX, offsetY);
     }
 
@@ -92,24 +95,30 @@ public class Panel extends JPanel {
 
         g.translate(-offsetX, -offsetY);
 
-        BufferedImage enemyFrame;
-        if (enemy.getAnimationType() == Enemy.AnimationType.WALK) {
-            animationManager.updateAnimation("enemyWalk");
-            enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
-        } else if (enemy.getAnimationType() == Enemy.AnimationType.ATTACK) {
-            animationManager.updateAnimation("enemyAttack");
-            enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
-        } else {
-            enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+        // Draw enemies
+        for (Enemy enemy : enemies) {
+            if (enemy.getX() + offsetX > 0 && enemy.getX() + offsetX < getWidth() &&
+                    enemy.getY() + offsetY > 0 && enemy.getY() + offsetY < getHeight()) {
+                BufferedImage enemyFrame;
+                if (enemy.getAnimationType() == Enemy.AnimationType.WALK) {
+                    animationManager.updateAnimation("enemyWalk");
+                    enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
+                } else if (enemy.getAnimationType() == Enemy.AnimationType.ATTACK) {
+                    animationManager.updateAnimation("enemyAttack");
+                    enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+                } else {
+                    enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+                }
+
+                if (enemyFrame != null) {
+                    int enemyX = enemy.getX() + offsetX;
+                    int enemyY = enemy.getY() + offsetY;
+                    g.drawImage(enemyFrame, enemyX, enemyY, null);
+                }
+            }
         }
 
-        if (enemyFrame != null) {
-            int enemyX = enemy.getX();
-            int enemyY = enemy.getY();
-            enemyX = Math.max(0, Math.min(enemyX, getWidth() - frameWidth));
-            enemyY = Math.max(0, Math.min(enemyY, getHeight() - frameHeight));
-            g.drawImage(enemyFrame, enemyX, enemyY, null);
-        }
+
 
         g.translate(-offsetX, -offsetY);
     }
@@ -147,5 +156,9 @@ public class Panel extends JPanel {
                 return null;
             }
         }
+    }
+
+    public void setEnemies(List<Enemy> enemies) {
+        this.enemies = enemies;
     }
 }

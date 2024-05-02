@@ -7,27 +7,33 @@ import Core.Util.Constants;
 import Core.View.Panel;
 import Core.View.View;
 
-import static Core.Util.Constants.PLAYER_HEIGHT;
-import static Core.Util.Constants.PLAYER_WIDTH;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static Core.Util.Constants.*;
 
 public class GameManager implements Runnable {
     private volatile boolean running = false;
     private Thread gameThread;
     private final Player player;
-    private final Enemy enemy;
+    private final List<Enemy> enemies;
     private View view;
     private Level level;
     private InputHandler inputHandler;
     private final Controller controller;
 
     public GameManager() {
-        enemy = new Enemy("Enemy", 200, 200, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         player = new Player("Ninja", 30, 30, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level.json");
-        view = new View(player, level, enemy);
-        controller = new Controller(player, view.getPanel(), level);
+        enemies = new ArrayList<>();
+        this.view = new View(player, level, enemies);
+        controller = new Controller(player, view.getPanel(), level, enemies);
         inputHandler = new InputHandler(controller);
     }
+
+
+
 
     public void start() {
         if (!running) {
@@ -36,10 +42,15 @@ public class GameManager implements Runnable {
             gameThread.start();
 
             // zoom game
-            view.getPanel().setZoomFactor(3.2);
+            view.getPanel().setZoomFactor(1.5);
+
+            spawnEnemies();
+
+            view.getPanel().setEnemies(enemies);
 
             new Thread(() -> {
                 while (running) {
+                    updateGame();
                     view.getPanel().repaint();
                     try {
                         Thread.sleep(1000 / Constants.TARGET_FPS);
@@ -51,9 +62,21 @@ public class GameManager implements Runnable {
         }
     }
 
-    public void setZoom(double zoomFactor) {
-        view.getPanel().setZoomFactor(zoomFactor);
+    private void spawnEnemies() {
+        Random random = new Random();
+        for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
+            int x, y;
+            do {
+                x = random.nextInt(level.getWidth() * Constants.TILE_SIZE);
+                y = random.nextInt(level.getHeight() * Constants.TILE_SIZE);
+            } while (controller.isCollision(x, y, PLAYER_WIDTH, PLAYER_HEIGHT));
+            Enemy enemy = new Enemy("Enemy" + i, x, y, PLAYER_HEIGHT, PLAYER_WIDTH);
+            enemies.add(enemy);
+        }
     }
+
+
+
 
     public void stop() {
         running = false;
@@ -89,6 +112,11 @@ public class GameManager implements Runnable {
     }
 
     private void updateGame() {
-        view.getPanel().repaint();
+        controller.updateGame();
+
+        // Update enemies
+        for (Enemy enemy : enemies) {
+            // AI logic here if needed
+        }
     }
 }
