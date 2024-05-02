@@ -65,7 +65,6 @@ public class Controller {
     }
 
     // Update player movement
-    // Update player movement
     public void updatePlayerMovement(int deltaX, int deltaY) {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
@@ -144,7 +143,7 @@ public class Controller {
             // Check collision with other enemies
             boolean collisionWithOtherEnemy = false;
             for (Enemy otherEnemy : enemies) {
-                if (otherEnemy != enemy && isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                     collisionWithOtherEnemy = true;
                     break;
                 }
@@ -169,6 +168,7 @@ public class Controller {
 
         panel.repaint();
     }
+
 
     // Get enemies within a specified range
     public List<Enemy> getNearbyEnemies(int x, int y, int width, int height) {
