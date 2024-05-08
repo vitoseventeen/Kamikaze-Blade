@@ -19,7 +19,7 @@ public class View {
     private final List<Enemy> enemies;
 
     public View(Player player, Level level, List<Enemy> enemies) {
-        frame = new JFrame("Ninja Nexus");
+        frame = new JFrame("Kamikaze Blade");
         panel = new Panel(player, level);
         this.level = level;
         this.player = player;

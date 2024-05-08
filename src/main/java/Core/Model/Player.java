@@ -11,7 +11,6 @@ public class Player {
     private int speed;
     private Direction direction;
     private AnimationType animationType;
-    private boolean isMoving = false;
 
     public enum Direction {
         UP,

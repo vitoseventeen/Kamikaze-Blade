@@ -16,10 +16,12 @@ public class Menu  extends JPanel implements ActionListener {
     private final JButton exitButton;
     private GameManager gameManager;
     public Menu() {
-        JFrame jFrame = new JFrame();
+        JFrame jFrame = new JFrame("Kamikaze Blade");
+        jFrame.setIconImage(new ImageIcon("assets/icon.png").getImage());
         jFrame.getContentPane().add(this);
+
         jFrame.setSize(Constants.GAME_WIDTH,Constants.GAME_HEIGHT);
-        jFrame.setLocation(0,0);
+        jFrame.setLocationRelativeTo(null);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setResizable(false);
         setBounds(0, 0, Constants.GAME_WIDTH,Constants.GAME_HEIGHT);
@@ -27,13 +29,13 @@ public class Menu  extends JPanel implements ActionListener {
 
         requestFocus();
 
-        startButton = new JButton("Start Game");
-        exitButton = new JButton("Exit Game");
+        startButton = new JButton("Start");
+        exitButton = new JButton("Exit");
 
         startButton.setIcon(new ImageIcon("assets/startDefault.png"));
-        addButton(startButton, 100,280,430,120);
+        addButton(startButton, 420,340,430,120);
         exitButton.setIcon(new ImageIcon("assets/exitDefault.png"));
-        addButton(exitButton, 100, 420, 430, 120);
+        addButton(exitButton, 420, 460, 430, 120);
         jFrame.setVisible(true);
         startButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -49,14 +51,21 @@ public class Menu  extends JPanel implements ActionListener {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                exitButton.setIcon(new ImageIcon("assets/startDefault.png"));
+                startButton.setIcon(new ImageIcon("assets/startDefault.png"));
             }
         });
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                exitButton.setIcon(new ImageIcon("assets/exitPressed.png"));
-                System.exit(0);
+                new Thread(() -> {
+                    exitButton.setIcon(new ImageIcon("assets/exitPressed.png"));
+                    try {
+                        Thread.sleep(3);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    System.exit(0);
+                }).start();
             }
 
             @Override
@@ -77,6 +86,11 @@ public class Menu  extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         // TODO
         super.paintComponent(g);
+
+        Image background = new ImageIcon("assets/background.jpg").getImage();
+        g.drawImage(background, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, null);
+
+
 
     }
     public void addButton(JButton button, int x, int y, int width, int height) {
