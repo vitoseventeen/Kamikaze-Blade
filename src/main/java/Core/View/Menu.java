@@ -46,15 +46,20 @@ public class Menu  extends JPanel implements ActionListener {
             @Override
             public void mouseReleased(MouseEvent e) {
                 startButton.setIcon(new ImageIcon("assets/startPressed.png"));
-                try {
-                    GameManager gameManager = new GameManager(); // Создаем GameManager только при нажатии на кнопку "Start"
-                    gameManager.start();
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                jFrame.dispose();
+                Timer timer = new Timer(1, e1 -> {
+                    try {
+                        GameManager gameManager = new GameManager();
+                        gameManager.start();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                    jFrame.dispose();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
+
 
             @Override
             public void mouseEntered(MouseEvent e) {
