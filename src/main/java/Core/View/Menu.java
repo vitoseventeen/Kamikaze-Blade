@@ -29,13 +29,13 @@ public class Menu  extends JPanel implements ActionListener {
 
         requestFocus();
 
-        startButton = new JButton("Start");
-        exitButton = new JButton("Exit");
+        startButton = new JButton();
+        exitButton = new JButton();
 
         startButton.setIcon(new ImageIcon("assets/startDefault.png"));
-        addButton(startButton, 420,340,430,120);
+        addButton(startButton, 453,440,430,120);
         exitButton.setIcon(new ImageIcon("assets/exitDefault.png"));
-        addButton(exitButton, 420, 460, 430, 120);
+        addButton(exitButton, 453, 580, 430, 120);
         jFrame.setVisible(true);
         startButton.addMouseListener(new MouseAdapter() {
             @Override
