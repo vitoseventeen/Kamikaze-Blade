@@ -81,22 +81,31 @@ public class Controller {
             player.setX(newX);
             player.setY(newY);
 
+
             if (deltaX < 0) {
                 player.setDirection(Player.Direction.LEFT);
+
             } else if (deltaX > 0) {
                 player.setDirection(Player.Direction.RIGHT);
+
             } else if (deltaY < 0) {
                 player.setDirection(Player.Direction.DOWN);
+
             } else if (deltaY > 0) {
                 player.setDirection(Player.Direction.UP);
+
             }
 
             if (player.getAnimationType() != Player.AnimationType.ATTACK) {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
+
+
+
             panel.repaint();
         }
+
     }
 
 

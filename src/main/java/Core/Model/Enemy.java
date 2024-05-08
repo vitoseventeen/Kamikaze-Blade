@@ -23,7 +23,6 @@ public class Enemy extends Player {
     public void setDy(int dy) {
         this.dy = dy;
     }
-    // В классе Enemy
     public boolean checkCollision(int x, int y, int width, int height) {
         return this.getX() < x + width &&
                 this.getX() + this.getWidth() > x &&

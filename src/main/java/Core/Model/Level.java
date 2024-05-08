@@ -33,18 +33,12 @@ public class Level {
                 JsonArray row = tilesArray.get(y).getAsJsonArray();
                 for (int x = 0; x < width; x++) {
                     int tileType = row.get(x).getAsInt();
-                    SurfaceType surfaceType;
-                    switch (tileType) {
-                        case 0:
-                            surfaceType = SurfaceType.GRASS;
-                            break;
-                        case 1:
-                            surfaceType = SurfaceType.WALL;
-                            break;
-                        default:
-                            surfaceType = SurfaceType.EMPTY;
-                            break;
-                    }
+                    SurfaceType surfaceType = switch (tileType) {
+                        case 0 -> SurfaceType.GRASS;
+                        case 1 -> SurfaceType.WALL;
+                        case 2 -> SurfaceType.BUSH;
+                        default -> SurfaceType.EMPTY;
+                    };
                     tiles[x][y] = new Tile(surfaceType);
                 }
             }

@@ -11,6 +11,7 @@ public class Player {
     private int speed;
     private Direction direction;
     private AnimationType animationType;
+    private boolean isMoving = false;
 
     public enum Direction {
         UP,
@@ -37,6 +38,7 @@ public class Player {
         this.animationType = AnimationType.IDLE;
     }
     public boolean checkCollisionWithEnemy(int x, int y, int width, int height) {
+
         return this.x < x + width &&
                 this.x + this.width > x &&
                 this.y < y + height &&
@@ -96,15 +98,6 @@ public class Player {
     private void die() {
     }
 
-    public boolean checkCollisionWithEnemy(Enemy enemy) {
-        if (this.x < enemy.getX() + enemy.getWidth() &&
-                this.x + this.getWidth() > enemy.getX() &&
-                this.y < enemy.getY() + enemy.getHeight() &&
-                this.y + this.getHeight() > enemy.getY()) {
-            return true;
-        }
-        return false;
-    }
 
     public void collectCoin(int value) {
         this.score += value;
