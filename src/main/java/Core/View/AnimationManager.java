@@ -19,7 +19,7 @@
         public AnimationManager() {
             addAnimations("idle", "/Idle.png", 16, 16, 1, 4);
             addAnimations("walk", "/Walk.png", 16, 16, 4, 4);
-            addAnimations("attack", "/attack.png", 16, 16, 1, 4);
+            addAnimations("attack", "/Attack.png", 16, 16, 1, 4);
 
             setAnimationSpeed("walk", 20);
             setAnimationSpeed("enemyWalk",20);

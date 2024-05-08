@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.text.ParseException;
 
 import Core.Controller.GameManager;
 import Core.Util.Constants;
@@ -14,8 +16,11 @@ import Core.Controller.GameManager;
 public class Menu  extends JPanel implements ActionListener {
     private final JButton startButton;
     private final JButton exitButton;
-    private GameManager gameManager;
+    private  GameManager gameManager;
+
     public Menu() {
+
+
         JFrame jFrame = new JFrame("Kamikaze Blade");
         jFrame.setIconImage(new ImageIcon("assets/icon.png").getImage());
         jFrame.getContentPane().add(this);
@@ -39,9 +44,16 @@ public class Menu  extends JPanel implements ActionListener {
         jFrame.setVisible(true);
         startButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 startButton.setIcon(new ImageIcon("assets/startPressed.png"));
-//                gameManager.start();
+                try {
+                    GameManager gameManager = new GameManager(); // Создаем GameManager только при нажатии на кнопку "Start"
+                    gameManager.start();
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                jFrame.dispose();
             }
 
             @Override
@@ -84,7 +96,6 @@ public class Menu  extends JPanel implements ActionListener {
     }
 
     public void paintComponent(Graphics g) {
-        // TODO
         super.paintComponent(g);
 
         Image background = new ImageIcon("assets/background.jpg").getImage();
