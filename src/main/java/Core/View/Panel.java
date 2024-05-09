@@ -92,7 +92,11 @@ public class Panel extends JPanel {
         } else if (player.getAnimationType() == Player.AnimationType.ATTACK) {
             animationManager.updateAnimation("attack");
             playerFrame = animationManager.getFrame("attack", player.getDirection(), player.getAnimationType());
-        } else {
+        } else if (player.getAnimationType() == Player.AnimationType.DEATH) {
+            animationManager.updateAnimation("death");
+            playerFrame = animationManager.getFrame("death", Player.Direction.DOWN, Player.AnimationType.DEATH);
+        }
+        else {
             playerFrame = animationManager.getFrame("idle", player.getDirection(), player.getAnimationType());
         }
 
@@ -107,7 +111,7 @@ public class Panel extends JPanel {
         g.translate(-offsetX, -offsetY);
 
         // Draw enemies
-        for (Enemy enemy : enemies) if (!enemy.isDead()) {
+        for (Enemy enemy : enemies) {
             if (enemy.getX() + offsetX > 0 && enemy.getX() + offsetX < getWidth() &&
                     enemy.getY() + offsetY > 0 && enemy.getY() + offsetY < getHeight()) {
                 BufferedImage enemyFrame;
@@ -117,15 +121,20 @@ public class Panel extends JPanel {
                 } else if (enemy.getAnimationType() == Enemy.AnimationType.ATTACK) {
                     animationManager.updateAnimation("enemyAttack");
                     enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+                } else if (enemy.getAnimationType() == Enemy.AnimationType.DEATH) {
+                    animationManager.updateAnimation("enemyDeath");
+                    enemyFrame = animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
                 } else {
                     enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
                 }
+
 
                 if (enemyFrame != null) {
                     int enemyX = enemy.getX() + offsetX;
                     int enemyY = enemy.getY() + offsetY;
                     g.drawImage(enemyFrame, enemyX, enemyY, null);
                 }
+
             }
         }
 

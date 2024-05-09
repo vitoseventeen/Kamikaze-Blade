@@ -133,6 +133,12 @@ public class Controller {
         // Update enemy positions
         Random random = new Random();
         for (Enemy enemy : enemies) {
+            if (enemy.isDead()) {
+                enemy.setAnimationType(Enemy.AnimationType.DEATH);
+                enemy.setDx(0);
+                enemy.setDy(0);
+                continue; // Skip further processing for this enemy
+            }
             if (random.nextInt(100) < 5) { // 5% chance to change direction
                 int direction = random.nextInt(4);
                 switch (direction) {

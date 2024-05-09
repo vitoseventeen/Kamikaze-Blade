@@ -1,5 +1,7 @@
 package Core.Model;
 
+import Core.Controller.Controller;
+
 public class Enemy extends Player {
     private int dx;
     private int dy;

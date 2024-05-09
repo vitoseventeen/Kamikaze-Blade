@@ -20,15 +20,19 @@
             addAnimations("idle", "/Idle.png", 16, 16, 1, 4);
             addAnimations("walk", "/Walk.png", 16, 16, 4, 4);
             addAnimations("attack", "/Attack.png", 16, 16, 1, 4);
+            addAnimations("death", "/Dead.png", 16, 16, 1, 1);
 
             setAnimationSpeed("walk", 20);
             setAnimationSpeed("enemyWalk",20);
             setAnimationSpeed("attack", 20);
-
+            setAnimationSpeed("enemyAttack",20);
+            setAnimationSpeed("death", 20);
+            setAnimationSpeed("enemyDeath",20);
 
             addAnimations("enemyIdle", "/enemyIdle.png", 16, 16, 1, 4);
             addAnimations("enemyWalk", "/enemyWalk.png", 16, 16, 4, 4);
             addAnimations("enemyAttack", "/enemyAttack.png", 16, 16, 1,4);
+            addAnimations("enemyDeath", "/enemyDead.png", 16, 16, 1, 1);
         }
 
         private void addAnimations(String name, String imagePath, int frameWidth, int frameHeight, int animationCount, int directionCount) {
@@ -54,7 +58,7 @@
 
         public BufferedImage getFrame(String name, Player.Direction direction, Player.AnimationType animationType) {
             int row;
-            if (animationType == Player.AnimationType.ATTACK || animationType == Player.AnimationType.IDLE) {
+            if (animationType == Player.AnimationType.ATTACK || animationType == Player.AnimationType.IDLE || animationType == Player.AnimationType.DEATH) {
                 row = 0;
             } else {
                 row = animationType.ordinal();
@@ -71,7 +75,7 @@
         }
         public BufferedImage getEnemyFrame(String name, Enemy.Direction direction, Enemy.AnimationType animationType) {
             int row;
-            if (animationType == Enemy.AnimationType.ATTACK || animationType == Enemy.AnimationType.IDLE) {
+            if (animationType == Enemy.AnimationType.ATTACK || animationType == Enemy.AnimationType.IDLE || animationType == Enemy.AnimationType.DEATH) {
                 row = 0;
             } else {
                 row = animationType.ordinal();

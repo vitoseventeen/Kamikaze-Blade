@@ -21,7 +21,8 @@ public class Player {
     public enum AnimationType {
         IDLE,
         WALK,
-        ATTACK
+        ATTACK,
+        DEATH
     }
 
     public Player(String name, int x, int y, int height, int width) {
