@@ -107,7 +107,7 @@ public class Panel extends JPanel {
         g.translate(-offsetX, -offsetY);
 
         // Draw enemies
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : enemies) if (!enemy.isDead()) {
             if (enemy.getX() + offsetX > 0 && enemy.getX() + offsetX < getWidth() &&
                     enemy.getY() + offsetY > 0 && enemy.getY() + offsetY < getHeight()) {
                 BufferedImage enemyFrame;

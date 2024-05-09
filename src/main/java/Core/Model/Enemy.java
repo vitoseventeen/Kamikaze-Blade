@@ -3,10 +3,38 @@ package Core.Model;
 public class Enemy extends Player {
     private int dx;
     private int dy;
+    private int speed;
+    private int health;
 
     public Enemy(String name, int x, int y, int height, int width) {
         super(name, x, y, height, width);
+        this.speed = 1;
+        this.health = 3;
     }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (health <= 0) {
+            isDead();
+        }
+    }
+
 
     public int getDx() {
         return dx;

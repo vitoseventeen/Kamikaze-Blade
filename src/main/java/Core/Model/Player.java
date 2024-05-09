@@ -37,7 +37,6 @@ public class Player {
         this.animationType = AnimationType.IDLE;
     }
     public boolean checkCollisionWithEnemy(int x, int y, int width, int height) {
-
         return this.x < x + width &&
                 this.x + this.width > x &&
                 this.y < y + height &&
@@ -56,6 +55,8 @@ public class Player {
             die();
         }
     }
+
+
 
     public int getHealth() {
         return health;
@@ -95,6 +96,7 @@ public class Player {
     }
 
     private void die() {
+        System.out.println("Player died");
     }
 
 

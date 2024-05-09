@@ -6,8 +6,12 @@ import Core.Model.Enemy;
 import Core.Model.Tile;
 import Core.View.Panel;
 
+import javax.swing.*;
+
 import static Core.Util.Constants.TILE_SIZE;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,12 +21,21 @@ public class Controller {
     private Panel panel;
     private Level level;
     private List<Enemy> enemies;
+    private Timer attackTimer;
+
 
     public Controller(Player player, Panel panel, Level level, List<Enemy> enemies) {
         this.player = player;
         this.panel = panel;
         this.level = level;
         this.enemies = enemies;
+        attackTimer = new Timer(1500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player.setAnimationType(Player.AnimationType.IDLE);
+                panel.repaint();
+            }
+        });
     }
 
     // Check for collision with level boundaries and tiles
@@ -51,6 +64,12 @@ public class Controller {
     // Perform player attack action
     public void attack() {
         player.setAnimationType(Player.AnimationType.ATTACK);
+
+        List<Enemy> nearbyEnemies = getNearbyEnemies(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        for (Enemy enemy : nearbyEnemies) {
+            enemy.takeDamage(1);
+        }
+
         panel.repaint();
 
         new Thread(() -> {
@@ -70,7 +89,7 @@ public class Controller {
         int newY = player.getY() + deltaY;
 
         // Check collision with enemies
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : enemies) if (!enemy.isDead()) {
             if (enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
                 return; // If collision with an enemy, do not move the player
             }

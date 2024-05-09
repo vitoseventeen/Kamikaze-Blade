@@ -62,6 +62,7 @@ public class GameManager implements Runnable {
     }
 
     private void spawnEnemies() {
+
         Random random = new Random();
         for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
             int x, y;
@@ -104,6 +105,7 @@ public class GameManager implements Runnable {
             lastTime = now;
             while (delta >= 1) {
                 controller.moveEnemies();
+
                 delta--;
             }
         }
