@@ -171,7 +171,7 @@ public class Controller {
 
             // Small delay
             try {
-                Thread.sleep(50);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

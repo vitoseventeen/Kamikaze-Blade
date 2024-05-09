@@ -24,7 +24,7 @@ public class GameManager implements Runnable {
 
     public GameManager() {
         player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
-        level = Level.loadLevelFromJson("level.json");
+        level = Level.loadLevelFromJson("level2.json");
         enemies = new ArrayList<>();
         this.view = new View(player, level, enemies);
         controller = new Controller(player, view.getPanel(), level, enemies);
