@@ -6,12 +6,6 @@ import Core.Model.Enemy;
 import Core.Model.Tile;
 import Core.View.Panel;
 
-import javax.swing.*;
-
-import static Core.Util.Constants.TILE_SIZE;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,25 +15,18 @@ public class Controller {
     private Panel panel;
     private Level level;
     private List<Enemy> enemies;
-    private Timer attackTimer;
-
 
     public Controller(Player player, Panel panel, Level level, List<Enemy> enemies) {
         this.player = player;
         this.panel = panel;
         this.level = level;
         this.enemies = enemies;
-        attackTimer = new Timer(1500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.setAnimationType(Player.AnimationType.IDLE);
-                panel.repaint();
-            }
-        });
     }
 
     // Check for collision with level boundaries and tiles
     boolean isCollision(int x, int y, int width, int height) {
+        int TILE_SIZE = Core.Util.Constants.TILE_SIZE;
+
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
             return true;
         }
@@ -89,8 +76,8 @@ public class Controller {
         int newY = player.getY() + deltaY;
 
         // Check collision with enemies
-        for (Enemy enemy : enemies) if (!enemy.isDead()) {
-            if (enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
                 return; // If collision with an enemy, do not move the player
             }
         }
@@ -100,33 +87,23 @@ public class Controller {
             player.setX(newX);
             player.setY(newY);
 
-
             if (deltaX < 0) {
                 player.setDirection(Player.Direction.LEFT);
-
             } else if (deltaX > 0) {
                 player.setDirection(Player.Direction.RIGHT);
-
             } else if (deltaY < 0) {
                 player.setDirection(Player.Direction.DOWN);
-
             } else if (deltaY > 0) {
                 player.setDirection(Player.Direction.UP);
-
             }
 
             if (player.getAnimationType() != Player.AnimationType.ATTACK) {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
-
-
-
             panel.repaint();
         }
-
     }
-
 
     // Move enemies on the game board
     public void moveEnemies() {
@@ -194,7 +171,7 @@ public class Controller {
 
             // Small delay
             try {
-                Thread.sleep(10);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -202,7 +179,6 @@ public class Controller {
 
         panel.repaint();
     }
-
 
     // Get enemies within a specified range
     public List<Enemy> getNearbyEnemies(int x, int y, int width, int height) {
@@ -214,7 +190,6 @@ public class Controller {
         }
         return nearbyEnemies;
     }
-
 
     public List<Enemy> getEnemies() {
         return enemies;

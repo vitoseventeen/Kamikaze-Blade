@@ -46,20 +46,9 @@ public class GameManager implements Runnable {
             spawnEnemies();
 
             view.getPanel().setEnemies(enemies);
-
-            new Thread(() -> {
-                while (running) {
-                    controller.moveEnemies();
-                    view.getPanel().repaint();
-                    try {
-                        Thread.sleep(1000 / Constants.TARGET_FPS);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
         }
     }
+
 
     private void spawnEnemies() {
 
