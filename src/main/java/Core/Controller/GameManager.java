@@ -4,7 +4,8 @@ import Core.Model.Enemy;
 import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
-import Core.View.Pause;
+import Core.View.DeathMenu;
+import Core.View.PauseMenu;
 import Core.View.View;
 
 import javax.swing.*;
@@ -25,7 +26,8 @@ public class GameManager implements Runnable {
     private Level level;
     private InputHandler inputHandler;
     private final Controller controller;
-    private Pause pauseMenu;
+    private PauseMenu pauseMenu;
+    private DeathMenu deathMenu;
     private boolean paused = false;
 
     public GameManager() {
@@ -112,12 +114,18 @@ public class GameManager implements Runnable {
         double delta = 0;
 
         while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / nsPerTick;
-            lastTime = now;
-            while (delta >= 1 && !paused) {
-                controller.moveEnemies();
-                delta--;
+            if (player.isDead()) {
+                showDeathMenu();
+            }
+            else {
+
+                long now = System.nanoTime();
+                delta += (now - lastTime) / nsPerTick;
+                lastTime = now;
+                while (delta >= 1 && !paused) {
+                    controller.moveEnemies();
+                    delta--;
+                }
             }
         }
     }
@@ -125,7 +133,7 @@ public class GameManager implements Runnable {
 
     public void togglePause() {
         if (pauseMenu == null) {
-            pauseMenu = new Pause(this);
+            pauseMenu = new PauseMenu(this);
             pauseMenu.setOpaque(false);
             pauseMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
             view.getFrame().getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
@@ -142,7 +150,20 @@ public class GameManager implements Runnable {
 
     }
 
+    public void showDeathMenu() {
+        if (deathMenu == null) {
+            deathMenu = new DeathMenu(this);
+            deathMenu.setOpaque(false);
+            deathMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            view.getFrame().getLayeredPane().add(deathMenu, JLayeredPane.POPUP_LAYER);
+        }
+        deathMenu.setVisible(true);
+        paused = true;
+        view.getFrame().setCursor(Cursor.getDefaultCursor());
+    }
+
     public boolean isPaused() {
         return paused;
     }
+
 }

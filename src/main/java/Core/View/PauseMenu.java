@@ -9,12 +9,12 @@ import java.awt.event.MouseEvent;
 import Core.Controller.GameManager;
 import Core.Util.Constants;
 
-public class Pause extends JPanel implements ActionListener{
+public class PauseMenu extends JPanel implements ActionListener{
     private JButton resumeButton;
     private JButton exitButton;
     private GameManager gameManager;
 
-    public Pause(GameManager gameManager) {
+    public PauseMenu(GameManager gameManager) {
         this.gameManager = gameManager;
 
         setLayout(null);
@@ -29,7 +29,6 @@ public class Pause extends JPanel implements ActionListener{
         exitButton.setIcon(new ImageIcon("assets/exitMenuDefault.png"));
         addButton(exitButton, 453, 540, 300, 50);
 
-
         resumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -40,6 +39,7 @@ public class Pause extends JPanel implements ActionListener{
                 timer.setRepeats(false);
                 timer.start();
             }});
+
 
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
