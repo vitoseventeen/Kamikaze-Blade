@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.Timer;
+import javax.swing.*;
 
 public class InputHandler implements KeyListener {
     private Controller controller;
@@ -21,7 +21,6 @@ public class InputHandler implements KeyListener {
     public InputHandler(Controller controller) {
         this.controller = controller;
 
-        // Create a timer with a delay of 8 ms to handle key presses
         inputTimer = new Timer(8, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,6 +57,7 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_ENTER:
                 controller.attack();
                 break;
+
             default:
                 break;
         }
@@ -83,13 +83,22 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_S:
                 downPressed = false;
                 break;
+            case KeyEvent.VK_ESCAPE:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.togglePause();
+                    }
+                });
+                break;
+
             default:
                 break;
         }
     }
 
-    // Update player movement based on key presses
     private void updatePlayerMovement() {
+
         int deltaX = 0;
         int deltaY = 0;
 
@@ -106,7 +115,6 @@ public class InputHandler implements KeyListener {
             deltaY += controller.getPlayer().getSpeed();
         }
 
-        // Pass player movement information to the controller
         controller.updatePlayerMovement(deltaX, deltaY);
     }
 }

@@ -15,13 +15,17 @@ public class Controller {
     private Panel panel;
     private Level level;
     private List<Enemy> enemies;
+    private GameManager gameManager;
 
-    public Controller(Player player, Panel panel, Level level, List<Enemy> enemies) {
+
+    public Controller(Player player, Panel panel, Level level, List<Enemy> enemies, GameManager gameManager) {
         this.player = player;
         this.panel = panel;
         this.level = level;
         this.enemies = enemies;
+        this.gameManager = gameManager;
     }
+
 
     // Check for collision with level boundaries and tiles
     boolean isCollision(int x, int y, int width, int height) {
@@ -72,37 +76,40 @@ public class Controller {
 
     // Update player movement
     public void updatePlayerMovement(int deltaX, int deltaY) {
-        int newX = player.getX() + deltaX;
-        int newY = player.getY() + deltaY;
-
-        // Check collision with enemies
-        for (Enemy enemy : enemies) {
-            if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
-                return; // If collision with an enemy, do not move the player
-            }
+        if (gameManager.isPaused()) {
+            return;
         }
+            int newX = player.getX() + deltaX;
+            int newY = player.getY() + deltaY;
 
-        // Check collision with level
-        if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
-            player.setX(newX);
-            player.setY(newY);
-
-            if (deltaX < 0) {
-                player.setDirection(Player.Direction.LEFT);
-            } else if (deltaX > 0) {
-                player.setDirection(Player.Direction.RIGHT);
-            } else if (deltaY < 0) {
-                player.setDirection(Player.Direction.DOWN);
-            } else if (deltaY > 0) {
-                player.setDirection(Player.Direction.UP);
+            // Check collision with enemies
+            for (Enemy enemy : enemies) {
+                if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
+                    return;
+                }
             }
 
-            if (player.getAnimationType() != Player.AnimationType.ATTACK) {
-                player.setAnimationType(Player.AnimationType.WALK);
-            }
+            // Check collision with level
+            if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
+                player.setX(newX);
+                player.setY(newY);
 
-            panel.repaint();
-        }
+                if (deltaX < 0) {
+                    player.setDirection(Player.Direction.LEFT);
+                } else if (deltaX > 0) {
+                    player.setDirection(Player.Direction.RIGHT);
+                } else if (deltaY < 0) {
+                    player.setDirection(Player.Direction.DOWN);
+                } else if (deltaY > 0) {
+                    player.setDirection(Player.Direction.UP);
+                }
+
+                if (player.getAnimationType() != Player.AnimationType.ATTACK) {
+                    player.setAnimationType(Player.AnimationType.WALK);
+                }
+
+                panel.repaint();
+            }
     }
 
     // Move enemies on the game board
@@ -197,5 +204,10 @@ public class Controller {
 
     public Player getPlayer() {
         return player;
+    }
+
+
+    public void togglePause() {
+        gameManager.togglePause();
     }
 }

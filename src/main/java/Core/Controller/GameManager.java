@@ -4,8 +4,12 @@ import Core.Model.Enemy;
 import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
+import Core.View.Pause;
 import Core.View.View;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,19 +25,17 @@ public class GameManager implements Runnable {
     private Level level;
     private InputHandler inputHandler;
     private final Controller controller;
+    private Pause pauseMenu;
+    private boolean paused = false;
 
     public GameManager() {
         player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level1.json");
         enemies = new ArrayList<>();
-        this.view = new View(player, level, enemies);
-        controller = new Controller(player, view.getPanel(), level, enemies);
+        this.view = new View(player, level, enemies, this);
+        controller = new Controller(player, view.getPanel(), level, enemies, this);
         inputHandler = new InputHandler(controller);
     }
-
-
-
-
 
     public void start() {
         if (!running) {
@@ -50,9 +52,7 @@ public class GameManager implements Runnable {
         }
     }
 
-
     private void spawnEnemies() {
-
         Random random = new Random();
         for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
             int x, y;
@@ -64,9 +64,6 @@ public class GameManager implements Runnable {
             enemies.add(enemy);
         }
     }
-
-
-
 
     public void stop() {
         running = false;
@@ -85,6 +82,21 @@ public class GameManager implements Runnable {
 
     @Override
     public void run() {
+        while (running) {
+            if (!paused) {
+                updateGame();
+                view.getPanel().repaint();
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        stop();
+    }
+
+    private void updateGame() {
         long lastTime = System.nanoTime();
         double nsPerTick = 1000000000.0 / Constants.TARGET_FPS;
         double delta = 0;
@@ -93,14 +105,34 @@ public class GameManager implements Runnable {
             long now = System.nanoTime();
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
-            while (delta >= 1) {
+            while (delta >= 1 && !paused) {
                 controller.moveEnemies();
-
                 delta--;
             }
         }
-        stop();
     }
 
 
+    public void togglePause() {
+        if (pauseMenu == null) {
+            pauseMenu = new Pause(this);
+            pauseMenu.setOpaque(false);
+            pauseMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            view.getFrame().getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
+
+        }
+        paused = !paused;
+        pauseMenu.setVisible(paused);
+        if (paused) {
+            view.getFrame().setCursor(Cursor.getDefaultCursor());
+        } else {
+            view.getFrame().setCursor(view.getFrame().getToolkit().createCustomCursor(
+                    new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
+        }
+
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
 }
