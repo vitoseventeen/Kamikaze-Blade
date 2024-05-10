@@ -17,7 +17,6 @@ public class DeathMenu extends JPanel implements ActionListener {
     private final JButton exitButton;
     private Menu menu;
 
-
     public DeathMenu(GameManager gameManager) {
         this.gameManager = gameManager;
         setLayout(null);
@@ -35,13 +34,17 @@ public class DeathMenu extends JPanel implements ActionListener {
                 menuButton.setIcon(new ImageIcon("assets/menuPressed.png"));
                 Timer timer = new Timer(2, e1 -> {
                     new Menu();
-                    //TODO: CLOSE THIS WINDOW
-
+                    // Close the current window
+                    Window window = SwingUtilities.getWindowAncestor(menuButton);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
                 });
 
                 timer.setRepeats(false);
                 timer.start();
-            }});
+            }
+        });
 
         menuButton.addMouseListener(new MouseAdapter() {
             @Override
