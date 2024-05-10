@@ -2,11 +2,15 @@ package Core.Model;
 
 import Core.Controller.Controller;
 
+import static Core.Util.Constants.ATTACK_COOLDOWN;
+
 public class Enemy extends Player {
     private int dx;
     private int dy;
     private int speed;
     private int health;
+    private long lastAttackTime; // Время последней атаки
+
 
     public Enemy(String name, int x, int y, int height, int width) {
         super(name, x, y, height, width);
@@ -16,6 +20,11 @@ public class Enemy extends Player {
 
     public boolean isDead() {
         return health <= 0;
+    }
+
+    public boolean canAttack() {
+        // Проверяем, прошло ли достаточно времени с момента последней атаки
+        return System.currentTimeMillis() - lastAttackTime >= ATTACK_COOLDOWN;
     }
 
     public int getSpeed() {
@@ -60,4 +69,7 @@ public class Enemy extends Player {
                 this.getY() + this.getHeight() > y;
     }
 
+    public void setLastAttackTime(long l) {
+        this.lastAttackTime = l;
+    }
 }

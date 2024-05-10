@@ -31,7 +31,7 @@ public class Player {
         this.height = height;
         this.width = width;
         this.name = name;
-        this.health = 100;
+        this.health = 5;
         this.score = 0;
         this.speed = 2;
         this.direction = Direction.DOWN;
