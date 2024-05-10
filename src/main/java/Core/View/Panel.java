@@ -86,18 +86,23 @@ public class Panel extends JPanel {
         }
 
         BufferedImage playerFrame;
-        if (player.getAnimationType() == Player.AnimationType.WALK) {
-            animationManager.updateAnimation("walk");
-            playerFrame = animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
-        } else if (player.getAnimationType() == Player.AnimationType.ATTACK) {
-            animationManager.updateAnimation("attack");
-            playerFrame = animationManager.getFrame("attack", player.getDirection(), player.getAnimationType());
-        } else if (player.getAnimationType() == Player.AnimationType.DEATH) {
-            animationManager.updateAnimation("death");
-            playerFrame = animationManager.getFrame("death", Player.Direction.DOWN, Player.AnimationType.DEATH);
-        }
-        else {
-            playerFrame = animationManager.getFrame("idle", player.getDirection(), player.getAnimationType());
+        switch (player.getAnimationType()) {
+            case WALK:
+                animationManager.updateAnimation("walk");
+                playerFrame = animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
+                break;
+            case ATTACK:
+                animationManager.updateAnimation("attack");
+                playerFrame = animationManager.getFrame("attack", player.getDirection(), player.getAnimationType());
+                break;
+            case DEATH:
+                animationManager.updateAnimation("death");
+                playerFrame = animationManager.getFrame("death", Player.Direction.DOWN, Player.AnimationType.DEATH);
+                break;
+            default:
+                animationManager.updateAnimation("idle");
+                playerFrame = animationManager.getFrame("idle", player.getDirection(), player.getAnimationType());
+                break;
         }
 
         if (playerFrame != null) {
@@ -108,6 +113,7 @@ public class Panel extends JPanel {
             g.drawImage(playerFrame, playerX, playerY, null);
         }
 
+
         g.translate(-offsetX, -offsetY);
 
         // Draw enemies
@@ -115,26 +121,30 @@ public class Panel extends JPanel {
             if (enemy.getX() + offsetX > 0 && enemy.getX() + offsetX < getWidth() &&
                     enemy.getY() + offsetY > 0 && enemy.getY() + offsetY < getHeight()) {
                 BufferedImage enemyFrame;
-                if (enemy.getAnimationType() == Enemy.AnimationType.WALK) {
-                    animationManager.updateAnimation("enemyWalk");
-                    enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
-                } else if (enemy.getAnimationType() == Enemy.AnimationType.ATTACK) {
-                    animationManager.updateAnimation("enemyAttack");
-                    enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
-                } else if (enemy.getAnimationType() == Enemy.AnimationType.DEATH) {
-                    animationManager.updateAnimation("enemyDeath");
-                    enemyFrame = animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
-                } else {
-                    enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+                switch (enemy.getAnimationType()) {
+                    case WALK:
+                        animationManager.updateAnimation("enemyWalk");
+                        enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
+                        break;
+                    case ATTACK:
+                        animationManager.updateAnimation("enemyAttack");
+                        enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+                        break;
+                    case DEATH:
+                        animationManager.updateAnimation("enemyDeath");
+                        enemyFrame = animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
+                        break;
+                    default:
+                        animationManager.updateAnimation("enemyIdle");
+                        enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+                        break;
                 }
-
 
                 if (enemyFrame != null) {
                     int enemyX = enemy.getX() + offsetX;
                     int enemyY = enemy.getY() + offsetY;
                     g.drawImage(enemyFrame, enemyX, enemyY, null);
                 }
-
             }
         }
 

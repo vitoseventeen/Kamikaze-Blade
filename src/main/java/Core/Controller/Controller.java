@@ -195,7 +195,14 @@ public class Controller {
                     if (enemy.canAttack()) {
                         enemy.setAnimationType(Enemy.AnimationType.ATTACK);
                         player.takeDamage(1);
+
                         enemy.setLastAttackTime(System.currentTimeMillis());
+                        try {
+                            Thread.sleep(200); // Adjust the time as needed
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        enemy.setAnimationType(Enemy.AnimationType.IDLE);
                     }
                 } else {
                     // Check collision with other enemies
