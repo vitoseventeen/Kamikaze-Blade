@@ -97,7 +97,7 @@ public class Panel extends JPanel {
                 break;
             case DEATH:
                 animationManager.updateAnimation("death");
-                playerFrame = animationManager.getFrame("death", Player.Direction.DOWN, Player.AnimationType.DEATH);
+                playerFrame = animationManager.getFrame("death", player.getDirection(), player.getAnimationType());
                 break;
             default:
                 animationManager.updateAnimation("idle");

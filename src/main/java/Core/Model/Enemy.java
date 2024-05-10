@@ -18,13 +18,23 @@ public class Enemy extends Player {
         this.health = 3;
     }
 
-    public boolean isDead() {
-        return health <= 0;
-    }
-
     public boolean canAttack() {
         // Проверяем, прошло ли достаточно времени с момента последней атаки
         return System.currentTimeMillis() - lastAttackTime >= ATTACK_COOLDOWN;
+    }
+
+
+    public boolean isDead() {
+        return health <= 0;
+
+    }
+
+
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (health <= 0) {
+            isDead();
+        }
     }
 
     public int getSpeed() {
@@ -39,12 +49,6 @@ public class Enemy extends Player {
         return health;
     }
 
-    public void takeDamage(int damage) {
-        this.health -= damage;
-        if (health <= 0) {
-            isDead();
-        }
-    }
 
 
     public int getDx() {

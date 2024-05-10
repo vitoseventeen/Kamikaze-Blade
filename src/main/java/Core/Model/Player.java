@@ -1,5 +1,7 @@
 package Core.Model;
 
+import static Core.Util.Constants.ATTACK_COOLDOWN;
+
 public class Player {
     private int x;
     private int y;
@@ -46,15 +48,22 @@ public class Player {
 
 
 
-    public int getSpeed() {
-        return speed;
+    public boolean isDead() {
+        return health <= 0;
+
     }
+
 
     public void takeDamage(int damage) {
         this.health -= damage;
         if (health <= 0) {
-            die();
+            isDead();
+            setAnimationType(AnimationType.DEATH);
         }
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
 
@@ -94,10 +103,6 @@ public class Player {
 
     public void setWidth(int width) {
         this.width = width;
-    }
-
-    private void die() {
-        System.out.println("Player died");
     }
 
 

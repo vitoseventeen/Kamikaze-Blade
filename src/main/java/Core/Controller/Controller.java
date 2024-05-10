@@ -56,7 +56,7 @@ public class Controller {
 
     // Perform player attack action
     public void attack() {
-        if (gameManager.isPaused()) {
+        if (gameManager.isPaused() || player.isDead()) {
             return;
         }
         player.setAnimationType(Player.AnimationType.ATTACK);
@@ -84,40 +84,43 @@ public class Controller {
 
     // Update player movement
     public void updatePlayerMovement(int deltaX, int deltaY) {
+        if (player.isDead()) {
+            return;
+        }
         if (gameManager.isPaused()) {
             return;
         }
-            int newX = player.getX() + deltaX;
-            int newY = player.getY() + deltaY;
+        int newX = player.getX() + deltaX;
+        int newY = player.getY() + deltaY;
 
-            // Check collision with enemies
-            for (Enemy enemy : enemies) {
-                if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
-                    return;
-                }
+        // Check collision with enemies
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
+                return;
+            }
+        }
+
+        // Check collision with level
+        if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
+            player.setX(newX);
+            player.setY(newY);
+
+            if (deltaX < 0) {
+                player.setDirection(Player.Direction.LEFT);
+            } else if (deltaX > 0) {
+                player.setDirection(Player.Direction.RIGHT);
+            } else if (deltaY < 0) {
+                player.setDirection(Player.Direction.DOWN);
+            } else if (deltaY > 0) {
+                player.setDirection(Player.Direction.UP);
             }
 
-            // Check collision with level
-            if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
-                player.setX(newX);
-                player.setY(newY);
-
-                if (deltaX < 0) {
-                    player.setDirection(Player.Direction.LEFT);
-                } else if (deltaX > 0) {
-                    player.setDirection(Player.Direction.RIGHT);
-                } else if (deltaY < 0) {
-                    player.setDirection(Player.Direction.DOWN);
-                } else if (deltaY > 0) {
-                    player.setDirection(Player.Direction.UP);
-                }
-
-                if (player.getAnimationType() != Player.AnimationType.ATTACK) {
-                    player.setAnimationType(Player.AnimationType.WALK);
-                }
-
-                panel.repaint();
+            if (player.getAnimationType() != Player.AnimationType.ATTACK) {
+                player.setAnimationType(Player.AnimationType.WALK);
             }
+
+            panel.repaint();
+        }
     }
 
     public boolean isPlayerInEnemyRadius(Enemy enemy, int radius) {
@@ -132,6 +135,9 @@ public class Controller {
 
     // Move enemies on the game board
     public void moveEnemies() {
+        if (player.isDead()) {
+            return;
+        }
         Random random = new Random();
         for (Enemy enemy : enemies) {
             if (enemy.isDead()) {
