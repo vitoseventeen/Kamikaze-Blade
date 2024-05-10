@@ -106,10 +106,10 @@ public class Menu  extends JPanel implements ActionListener {
         Image background = new ImageIcon("assets/background.jpg").getImage();
         g.drawImage(background, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, null);
 
-
-
     }
     public void addButton(JButton button, int x, int y, int width, int height) {
+        // Calculate new x coordinate to center horizontally
+        int newX = (Constants.GAME_WIDTH - width) / 2;
 
         button.setOpaque(false);
         button.setContentAreaFilled(false);
@@ -117,10 +117,10 @@ public class Menu  extends JPanel implements ActionListener {
         button.setBorder(null);
         button.setFocusPainted(false);
         button.setMargin(new Insets(0, 0, 0, 0));
-        button.setBounds(x,y,width,height);
+        button.setBounds(newX, y, width, height);
         add(button);
-
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
