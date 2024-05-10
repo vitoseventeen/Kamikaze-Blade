@@ -25,9 +25,9 @@ public class Pause extends JPanel implements ActionListener{
         exitButton = new JButton();
 
         resumeButton.setIcon(new ImageIcon("assets/resumeDefault.png"));
-        addButton(resumeButton, 453,440,350,50);
+        addButton(resumeButton, 453,450,350,50);
         exitButton.setIcon(new ImageIcon("assets/exitMenuDefault.png"));
-        addButton(exitButton, 453, 540, 350, 50);
+        addButton(exitButton, 453, 540, 300, 50);
 
 
         resumeButton.addActionListener(new ActionListener() {
