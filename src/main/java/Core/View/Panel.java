@@ -1,12 +1,9 @@
 package Core.View;
 
-import Core.Controller.Controller;
-import Core.Controller.InputHandler;
 import Core.Model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -27,6 +24,7 @@ public class Panel extends JPanel {
     private Map<String, BufferedImage> imageCache = new HashMap<>();
     private final int frameWidth = 16;
     private final int frameHeight = 16;
+    private BufferedImage heartImage;
 
     private double zoomFactor = 2.0;
 
@@ -39,6 +37,27 @@ public class Panel extends JPanel {
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
+
+        loadHeartImage(); // Load heart image
+    }
+
+    private void loadHeartImage() {
+        heartImage = loadImage("/heart.png");
+    }
+
+    private BufferedImage loadImage(String path) {
+        try (InputStream is = getClass().getResourceAsStream(path)) {
+            if (is != null) {
+                return ImageIO.read(is);
+            } else {
+                System.err.println("Unable to load image: " + path);
+                System.err.println("You have to make 'assets' folder as a source root in your IDE.");
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void setZoomFactor(double zoomFactor) {
@@ -65,7 +84,6 @@ public class Panel extends JPanel {
 
         g2d.translate(offsetX, offsetY);
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -97,11 +115,11 @@ public class Panel extends JPanel {
                 break;
             case DEATH:
                 animationManager.updateAnimation("death");
-                playerFrame = animationManager.getFrame("death", player.getDirection(), player.getAnimationType());
+                playerFrame = animationManager.getFrame("death", Player.Direction.UP, Player.AnimationType.DEATH);
                 break;
             default:
                 animationManager.updateAnimation("idle");
-                playerFrame = animationManager.getFrame("idle", player.getDirection(), player.getAnimationType());
+                playerFrame = animationManager.getFrame("idle", Player.Direction.UP, Player.AnimationType.IDLE);
                 break;
         }
 
@@ -113,44 +131,56 @@ public class Panel extends JPanel {
             g.drawImage(playerFrame, playerX, playerY, null);
         }
 
-
+        // Draw hearts
         g.translate(-offsetX, -offsetY);
+
+        int heartWidth = 16;
+        int heartHeight = 16;
+        int spacing = 2;
+
+        int playerHealth = player.getHealth();
+        int heartCount = (int) Math.ceil((double) playerHealth);
+
+        for (int i = 0; i < heartCount; i++) {
+            int heartY = 2;
+            int heartX = 2;
+            int drawX = heartX + spacing + i * (heartWidth + spacing);
+            int drawY = heartY + spacing;
+            g.drawImage(heartImage, drawX, drawY, heartWidth, heartHeight, null);
+        }
 
         // Draw enemies
         for (Enemy enemy : enemies) {
-            if (enemy.getX() + offsetX > 0 && enemy.getX() + offsetX < getWidth() &&
-                    enemy.getY() + offsetY > 0 && enemy.getY() + offsetY < getHeight()) {
-                BufferedImage enemyFrame;
-                switch (enemy.getAnimationType()) {
-                    case WALK:
-                        animationManager.updateAnimation("enemyWalk");
-                        enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
-                        break;
-                    case ATTACK:
-                        animationManager.updateAnimation("enemyAttack");
-                        enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
-                        break;
-                    case DEATH:
-                        animationManager.updateAnimation("enemyDeath");
-                        enemyFrame = animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
-                        break;
-                    default:
-                        animationManager.updateAnimation("enemyIdle");
-                        enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
-                        break;
-                }
+            BufferedImage enemyFrame;
+            switch (enemy.getAnimationType()) {
+                case WALK:
+                    animationManager.updateAnimation("enemyWalk");
+                    enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
+                    break;
+                case ATTACK:
+                    animationManager.updateAnimation("enemyAttack");
+                    enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+                    break;
+                case DEATH:
+                    animationManager.updateAnimation("enemyDeath");
+                    enemyFrame = animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
+                    break;
+                default:
+                    animationManager.updateAnimation("enemyIdle");
+                    enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+                    break;
+            }
 
-                if (enemyFrame != null) {
-                    int enemyX = enemy.getX() + offsetX;
-                    int enemyY = enemy.getY() + offsetY;
-                    g.drawImage(enemyFrame, enemyX, enemyY, null);
-                }
+            if (enemyFrame != null) {
+                int enemyX = enemy.getX() + offsetX;
+                int enemyY = enemy.getY() + offsetY;
+                g.drawImage(enemyFrame, enemyX, enemyY, null);
             }
         }
 
 
-
         g.translate(-offsetX, -offsetY);
+
     }
 
     private void drawTile(Graphics g, Tile tile, int x, int y) {
@@ -191,4 +221,7 @@ public class Panel extends JPanel {
     public void setEnemies(List<Enemy> enemies) {
         this.enemies = enemies;
     }
+
+
+
 }
