@@ -16,4 +16,5 @@ public class Constants {
     public static final int PLAYER_HEIGHT = 16;
     public static final int NUMBER_OF_ENEMIES = 5;
     public static final double ZOOM_FACTOR = 2.5; // 2.5 skoro idealni
+    public static final int ATTACK_RADIUS = 30;
 }

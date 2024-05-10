@@ -83,6 +83,16 @@ public class GameManager implements Runnable {
     @Override
     public void run() {
         while (running) {
+            for (Enemy enemy : enemies) {
+                if (!enemy.isDead()) {
+                    if (controller.isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
+                        enemy.setAnimationType(Enemy.AnimationType.ATTACK);
+                        player.takeDamage(1);
+                    } else {
+                        enemy.setAnimationType(Enemy.AnimationType.IDLE);
+                    }
+                }
+            }
             if (!paused) {
                 updateGame();
                 view.getPanel().repaint();

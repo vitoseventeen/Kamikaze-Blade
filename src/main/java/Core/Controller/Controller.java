@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static Core.Util.Constants.ATTACK_RADIUS;
+
 public class Controller {
     private Player player;
     private Panel panel;
@@ -112,53 +114,84 @@ public class Controller {
             }
     }
 
+    public boolean isPlayerInEnemyRadius(Enemy enemy, int radius) {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        int enemyX = enemy.getX();
+        int enemyY = enemy.getY();
+        int distance = (int) Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
+        return distance <= radius;
+    }
+
+
     // Move enemies on the game board
     public void moveEnemies() {
-        // Update enemy positions
         Random random = new Random();
         for (Enemy enemy : enemies) {
             if (enemy.isDead()) {
-                enemy.setAnimationType(Enemy.AnimationType.DEATH);
+                // Если враг мертв, он не должен двигаться
                 enemy.setDx(0);
                 enemy.setDy(0);
-                continue; // Skip further processing for this enemy
-            }
-            if (random.nextInt(100) < 5) { // 5% chance to change direction
-                int direction = random.nextInt(4);
-                switch (direction) {
-                    case 0: // Move up
-                        enemy.setDy(-enemy.getSpeed());
-                        enemy.setDx(0);
-                        enemy.setDirection(Enemy.Direction.DOWN);
-                        break;
-                    case 1: // Move down
-                        enemy.setDy(enemy.getSpeed());
-                        enemy.setDx(0);
-                        enemy.setDirection(Enemy.Direction.UP);
-                        break;
-                    case 2: // Move left
-                        enemy.setDx(-enemy.getSpeed());
-                        enemy.setDy(0);
-                        enemy.setDirection(Enemy.Direction.LEFT);
-                        break;
-                    case 3: // Move right
-                        enemy.setDx(enemy.getSpeed());
-                        enemy.setDy(0);
-                        enemy.setDirection(Enemy.Direction.RIGHT);
-                        break;
-                }
-                enemy.setAnimationType(Enemy.AnimationType.WALK);
-            }
-
-            int newX = enemy.getX() + enemy.getDx();
-            int newY = enemy.getY() + enemy.getDy();
-
-            // Check collision with player
-            if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                enemy.setAnimationType(Enemy.AnimationType.DEATH);
                 continue;
             }
 
-            // Check collision with other enemies
+            if (isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) { // Проверяем, находится ли игрок в радиусе 30 пикселей от врага
+                int playerX = player.getX();
+                int playerY = player.getY();
+                int enemyX = enemy.getX();
+                int enemyY = enemy.getY();
+
+                // Определяем направление движения врага к игроку
+                int dx = Integer.compare(playerX, enemyX);
+                int dy = Integer.compare(playerY, enemyY);
+
+                // Устанавливаем направление движения врага к игроку
+                enemy.setDx(dx * enemy.getSpeed());
+                enemy.setDy(dy * enemy.getSpeed());
+                enemy.setAnimationType(Enemy.AnimationType.WALK);
+            } else {
+                // Если игрок не в радиусе видимости врага, враги двигаются случайным образом
+                if (random.nextInt(100) < 5) { // 5% шанс изменить направление
+                    int direction = random.nextInt(4);
+                    switch (direction) {
+                        case 0: // Движение вверх
+                            enemy.setDy(-enemy.getSpeed());
+                            enemy.setDx(0);
+                            enemy.setDirection(Enemy.Direction.DOWN);
+                            break;
+                        case 1: // Движение вниз
+                            enemy.setDy(enemy.getSpeed());
+                            enemy.setDx(0);
+                            enemy.setDirection(Enemy.Direction.UP);
+                            break;
+                        case 2: // Движение влево
+                            enemy.setDx(-enemy.getSpeed());
+                            enemy.setDy(0);
+                            enemy.setDirection(Enemy.Direction.LEFT);
+                            break;
+                        case 3: // Движение вправо
+                            enemy.setDx(enemy.getSpeed());
+                            enemy.setDy(0);
+                            enemy.setDirection(Enemy.Direction.RIGHT);
+                            break;
+                    }
+                    enemy.setAnimationType(Enemy.AnimationType.WALK);
+                }
+            }
+
+            // Перемещаем врага
+            int newX = enemy.getX() + enemy.getDx();
+            int newY = enemy.getY() + enemy.getDy();
+
+            // Проверяем коллизии с игроком
+            if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                // Если враг касается игрока, атакуем игрока
+                enemy.setAnimationType(Enemy.AnimationType.ATTACK);
+                player.takeDamage(1);
+            }
+
+            // Проверяем коллизии с другими врагами
             boolean collisionWithOtherEnemy = false;
             for (Enemy otherEnemy : enemies) {
                 if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
@@ -170,13 +203,13 @@ public class Controller {
                 continue;
             }
 
-            // Check collision with level
+            // Проверяем коллизии с уровнем
             if (!isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                 enemy.setX(newX);
                 enemy.setY(newY);
             }
 
-            // Small delay
+            // Небольшая задержка для плавности анимации
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -184,8 +217,10 @@ public class Controller {
             }
         }
 
+        // Обновляем отрисовку
         panel.repaint();
     }
+
 
     // Get enemies within a specified range
     public List<Enemy> getNearbyEnemies(int x, int y, int width, int height) {
