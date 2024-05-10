@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public enum SurfaceType {
-    WALL("/Wall.png"), // oldwall.png
+    WALL("/Wall.png"),
     GRASS("/Grass.png"),
     EMPTY("/Empty.png"),
-    BUSH("/Bush.png");
+    DOOR("/Door.png"),;
 
     private final String texturePath;
     private BufferedImage textureImage;

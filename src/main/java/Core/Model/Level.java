@@ -36,7 +36,7 @@ public class Level {
                     SurfaceType surfaceType = switch (tileType) {
                         case 0 -> SurfaceType.GRASS;
                         case 1 -> SurfaceType.WALL;
-                        case 2 -> SurfaceType.BUSH;
+                        case 2 -> SurfaceType.DOOR;
                         default -> SurfaceType.EMPTY;
                     };
                     tiles[x][y] = new Tile(surfaceType);
