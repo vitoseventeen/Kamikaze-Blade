@@ -85,6 +85,7 @@ public class Panel extends JPanel {
         g2d.translate(offsetX, offsetY);
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -103,25 +104,24 @@ public class Panel extends JPanel {
             }
         }
 
-        BufferedImage playerFrame;
-        switch (player.getAnimationType()) {
-            case WALK:
+        BufferedImage playerFrame = switch (player.getAnimationType()) {
+            case WALK -> {
                 animationManager.updateAnimation("walk");
-                playerFrame = animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
-                break;
-            case ATTACK:
+                yield animationManager.getFrame("walk", player.getDirection(), player.getAnimationType());
+            }
+            case ATTACK -> {
                 animationManager.updateAnimation("attack");
-                playerFrame = animationManager.getFrame("attack", player.getDirection(), player.getAnimationType());
-                break;
-            case DEATH:
+                yield animationManager.getFrame("attack", player.getDirection(), player.getAnimationType());
+            }
+            case DEATH -> {
                 animationManager.updateAnimation("death");
-                playerFrame = animationManager.getFrame("death", Player.Direction.UP, Player.AnimationType.DEATH);
-                break;
-            default:
+                yield animationManager.getFrame("death", Player.Direction.UP, Player.AnimationType.DEATH);
+            }
+            default -> {
                 animationManager.updateAnimation("idle");
-                playerFrame = animationManager.getFrame("idle", Player.Direction.UP, Player.AnimationType.IDLE);
-                break;
-        }
+                yield animationManager.getFrame("idle", Player.Direction.UP, Player.AnimationType.IDLE);
+            }
+        };
 
         if (playerFrame != null) {
             int playerX = player.getX();
@@ -151,25 +151,24 @@ public class Panel extends JPanel {
 
         // Draw enemies
         for (Enemy enemy : enemies) {
-            BufferedImage enemyFrame;
-            switch (enemy.getAnimationType()) {
-                case WALK:
+            BufferedImage enemyFrame = switch (enemy.getAnimationType()) {
+                case WALK -> {
                     animationManager.updateAnimation("enemyWalk");
-                    enemyFrame = animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
-                    break;
-                case ATTACK:
+                    yield animationManager.getEnemyFrame("enemyWalk", enemy.getDirection(), enemy.getAnimationType());
+                }
+                case ATTACK -> {
                     animationManager.updateAnimation("enemyAttack");
-                    enemyFrame = animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
-                    break;
-                case DEATH:
+                    yield animationManager.getEnemyFrame("enemyAttack", enemy.getDirection(), enemy.getAnimationType());
+                }
+                case DEATH -> {
                     animationManager.updateAnimation("enemyDeath");
-                    enemyFrame = animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
-                    break;
-                default:
+                    yield animationManager.getEnemyFrame("enemyDeath", Player.Direction.UP, Player.AnimationType.DEATH);
+                }
+                default -> {
                     animationManager.updateAnimation("enemyIdle");
-                    enemyFrame = animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
-                    break;
-            }
+                    yield animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
+                }
+            };
 
             if (enemyFrame != null) {
                 int enemyX = enemy.getX() + offsetX;

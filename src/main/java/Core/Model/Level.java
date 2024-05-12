@@ -34,9 +34,10 @@ public class Level {
                 for (int x = 0; x < width; x++) {
                     int tileType = row.get(x).getAsInt();
                     SurfaceType surfaceType = switch (tileType) {
-                        case 0 -> SurfaceType.GRASS;
+                        case 0 -> SurfaceType.FLOOR;
                         case 1 -> SurfaceType.WALL;
-                        case 2 -> SurfaceType.DOOR;
+                        case 2 -> SurfaceType.DOOR_CLOSED;
+                        case 3 -> SurfaceType.DOOR_OPEN;
                         default -> SurfaceType.EMPTY;
                     };
                     tiles[x][y] = new Tile(surfaceType);

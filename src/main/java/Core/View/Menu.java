@@ -18,8 +18,8 @@ public class Menu  extends JPanel implements ActionListener {
     private final JButton exitButton;
     private  GameManager gameManager;
 
-    public Menu() {
-
+    public Menu(GameManager gameManager) {
+        this.gameManager = gameManager;
 
         JFrame jFrame = new JFrame("Kamikaze Blade");
         jFrame.setIconImage(new ImageIcon("assets/icon.png").getImage());

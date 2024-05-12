@@ -33,9 +33,9 @@ public class Player {
         this.height = height;
         this.width = width;
         this.name = name;
-        this.health = 5;
+        this.health = 8;
         this.score = 0;
-        this.speed = 2;
+        this.speed = 3;
         this.direction = Direction.DOWN;
         this.animationType = AnimationType.IDLE;
     }

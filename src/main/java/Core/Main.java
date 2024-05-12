@@ -5,6 +5,9 @@ import Core.View.Menu;
 
 public class Main {
     public static void main(String[] args) {
-        new Menu();
+        GameManager gameManager = new GameManager();
+        new Menu(gameManager);
     }
 }
+
+

@@ -7,9 +7,16 @@ import java.io.InputStream;
 
 public enum SurfaceType {
     WALL("/Wall.png"),
-    GRASS("/Grass.png"),
+    FLOOR("/Floor.png"),
     EMPTY("/Empty.png"),
-    DOOR("/Door.png"),;
+    DOOR_CLOSED("/closeddoor.png"),
+    DOOR_OPEN("/openeddoor.png")
+
+    //KEY
+    //DOOR
+    //CHEST
+
+    ;
 
     private final String texturePath;
     private BufferedImage textureImage;

@@ -25,7 +25,7 @@ public class GameManager implements Runnable {
     private View view;
     private Level level;
     private InputHandler inputHandler;
-    private final Controller controller;
+    private Controller controller;
     private PauseMenu pauseMenu;
     private DeathMenu deathMenu;
     private boolean paused = false;
@@ -34,12 +34,13 @@ public class GameManager implements Runnable {
         player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
         level = Level.loadLevelFromJson("level1.json");
         enemies = new ArrayList<>();
-        this.view = new View(player, level, enemies, this);
-        controller = new Controller(player, view.getPanel(), level, enemies, this);
-        inputHandler = new InputHandler(controller);
+
     }
 
     public void start() {
+        this.view = new View(player, level, enemies, this);
+        controller = new Controller(player, view.getPanel(), level, enemies, this);
+        inputHandler = new InputHandler(controller);
         if (!running) {
             running = true;
             gameThread = new Thread(this);

@@ -17,10 +17,10 @@
         private Map<String, Integer> animationSpeeds = new HashMap<>();
 
         public AnimationManager() {
-            addAnimations("idle", "/Idle.png", 16, 16, 1, 4);
-            addAnimations("walk", "/Walk.png", 16, 16, 4, 4);
-            addAnimations("attack", "/Attack.png", 16, 16, 1, 4);
-            addAnimations("death", "/Dead.png", 16, 16, 1, 1);
+            addAnimations("idle", "/samuraiIdle.png", 16, 16, 1, 4);
+            addAnimations("walk", "/samuraiWalk.png", 16, 16, 4, 4);
+            addAnimations("attack", "/samuraiAttack.png", 16, 16, 1, 4);
+            addAnimations("death", "/samuraiDead.png", 16, 16, 1, 1);
 
             setAnimationSpeed("walk", 20);
             setAnimationSpeed("enemyWalk",20);

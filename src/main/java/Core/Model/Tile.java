@@ -13,7 +13,7 @@ public class Tile {
 
     public boolean hasCollision() {
         return switch (surfaceType) {
-            case WALL, EMPTY -> true;
+            case WALL, EMPTY, DOOR_CLOSED -> true;
             default -> false;
         };
     }

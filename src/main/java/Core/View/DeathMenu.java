@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 public class DeathMenu extends JPanel implements ActionListener {
 
     private GameManager gameManager;
-    private final JButton menuButton;
+    // private final JButton menuButton;
     private final JButton exitButton;
     private Menu menu;
 
@@ -21,41 +21,41 @@ public class DeathMenu extends JPanel implements ActionListener {
         this.gameManager = gameManager;
         setLayout(null);
         setBounds(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-        menuButton = new JButton();
-        exitButton = new JButton();
-        menuButton.setIcon(new ImageIcon("assets/menuDefault.png"));
-        addButton(menuButton, 453, 440, 430, 120);
+        // menuButton = new JButton();
+         exitButton = new JButton();
+        // menuButton.setIcon(new ImageIcon("assets/menuDefault.png"));
+//        addButton(menuButton, 453, 440, 430, 120);
         exitButton.setIcon(new ImageIcon("assets/exitDefault2.png"));
         addButton(exitButton, 453, 580, 430, 120);
 
-        menuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                menuButton.setIcon(new ImageIcon("assets/menuPressed.png"));
-                Timer timer = new Timer(2, e1 -> {
-                    new Menu();
-                    // Close the current window
-                    Window window = SwingUtilities.getWindowAncestor(menuButton);
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispose();
-                    }
-                });
-
-                timer.setRepeats(false);
-                timer.start();
-            }
-        });
-
-        menuButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                menuButton.setIcon(new ImageIcon("assets/menuHover.png"));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                menuButton.setIcon(new ImageIcon("assets/menuDefault.png"));
-            }
-        });
+//        menuButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                menuButton.setIcon(new ImageIcon("assets/menuPressed.png"));
+//                Timer timer = new Timer(2, e1 -> {
+//                    new Menu();
+//                    // Close the current window
+//                    Window window = SwingUtilities.getWindowAncestor(menuButton);
+//                    if (window instanceof JFrame) {
+//                        ((JFrame) window).dispose();
+//                    }
+//                });
+//
+//                timer.setRepeats(false);
+//                timer.start();
+//            }
+//        });
+//
+//        menuButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseEntered(MouseEvent e) {
+//                menuButton.setIcon(new ImageIcon("assets/menuHover.png"));
+//            }
+//            @Override
+//            public void mouseExited(MouseEvent e) {
+//                menuButton.setIcon(new ImageIcon("assets/menuDefault.png"));
+//            }
+//        });
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -80,7 +80,7 @@ public class DeathMenu extends JPanel implements ActionListener {
                 exitButton.setIcon(new ImageIcon("assets/exitDefault2.png"));
             }
         });
-        menuButton.addActionListener(this);
+//        menuButton.addActionListener(this);
         exitButton.addActionListener(this);
     }
 
