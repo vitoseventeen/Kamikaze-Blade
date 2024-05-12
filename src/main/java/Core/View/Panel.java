@@ -70,20 +70,27 @@ public class Panel extends JPanel {
     }
 
     private void centerCameraOnPlayer(Graphics2D g2d) {
-        int halfWidth = (int) (getWidth() / (2 * zoomFactor));
-        int halfHeight = (int) (getHeight() / (2 * zoomFactor));
+        int playerX = player.getX();
+        int playerY = player.getY();
 
-        offsetX = halfWidth - player.getX() - (frameWidth / 2);
-        offsetY = halfHeight - player.getY() - (frameHeight / 2);
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
+
+        int halfPanelWidth = (int) (panelWidth / (2 * zoomFactor));
+        int halfPanelHeight = (int) (panelHeight / (2 * zoomFactor));
+
+        offsetX = halfPanelWidth - playerX - (frameWidth / 2);
+        offsetY = halfPanelHeight - playerY - (frameHeight / 2);
 
         offsetX = Math.min(offsetX, 0);
         offsetY = Math.min(offsetY, 0);
 
-        offsetX = Math.max(offsetX, halfWidth * 2 - level.getWidth() * TILE_SIZE);
-        offsetY = Math.max(offsetY, halfHeight * 2 - level.getHeight() * TILE_SIZE);
+        offsetX = Math.max(offsetX, halfPanelWidth * 2 - level.getWidth() * TILE_SIZE);
+        offsetY = Math.max(offsetY, halfPanelHeight * 2 - level.getHeight() * TILE_SIZE);
 
         g2d.translate(offsetX, offsetY);
     }
+
 
 
     @Override

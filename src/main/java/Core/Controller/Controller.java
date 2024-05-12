@@ -33,15 +33,18 @@ public class Controller {
     boolean isCollision(int x, int y, int width, int height) {
         int TILE_SIZE = Core.Util.Constants.TILE_SIZE;
 
+        // Проверяем выход за границы уровня
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
             return true;
         }
 
+        // Получаем индексы тайлов, на которых находится персонаж
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
         int tileWidth = (x + width) / TILE_SIZE;
         int tileHeight = (y + height) / TILE_SIZE;
 
+        // Проверяем каждый тайл на наличие коллизии
         for (int i = tileX; i <= tileWidth; i++) {
             for (int j = tileY; j <= tileHeight; j++) {
                 Tile tile = level.getTile(i, j);
@@ -53,6 +56,8 @@ public class Controller {
 
         return false;
     }
+
+
 
     // Perform player attack action
     public void attack() {
