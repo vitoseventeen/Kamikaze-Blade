@@ -1,6 +1,9 @@
 package Core.View;
 
 import Core.Model.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.LinkedTransferQueue;
 
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 import static Core.Util.Constants.TILE_SIZE;
@@ -20,6 +24,8 @@ public class Panel extends JPanel {
     private Player player;
     private Level level;
     private List<Enemy> enemies = new ArrayList<>();
+    private List<GameObject> objects = new ArrayList<>();
+    private JsonArray objectsArray;
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
     private final int frameWidth = 16;
@@ -89,6 +95,25 @@ public class Panel extends JPanel {
         offsetY = Math.max(offsetY, halfPanelHeight * 2 - level.getHeight() * TILE_SIZE);
 
         g2d.translate(offsetX, offsetY);
+    }
+
+    private void loadLevelObjects(JsonObject levelJson) {
+        // Load objects
+        for (JsonElement objElement : objectsArray) {
+            JsonObject objJson = objElement.getAsJsonObject();
+            String type = objJson.get("type").getAsString();
+            int x = objJson.get("x").getAsInt();
+            int y = objJson.get("y").getAsInt();
+            // Create objects based on type
+            GameObject gameObject = switch (type) {
+                case "chest" -> new Chest(x, y);
+                case "door" -> new Door(x, y);
+                default -> null;
+            };
+            if (gameObject != null) {
+                objects.add(gameObject);
+            }
+        }
     }
 
 
@@ -183,7 +208,10 @@ public class Panel extends JPanel {
                 g.drawImage(enemyFrame, enemyX, enemyY, null);
             }
         }
-
+        // draw level objects
+        for (GameObject object : objects) {
+            object.draw(g);
+        }
 
         g.translate(-offsetX, -offsetY);
 

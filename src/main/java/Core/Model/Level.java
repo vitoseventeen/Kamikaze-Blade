@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Level {
+    public static final List<Level> levels = new ArrayList<>();
     private final Tile[][] tiles;
-    private static List<Level> levels = new ArrayList<>();
+    private final List<GameObject> objects; // Добавим список объектов
 
-    public Level(Tile[][] tiles) {
+
+    public Level(Tile[][] tiles, List<GameObject> objects) {
         this.tiles = tiles;
+        this.objects = objects;
     }
 
     public static Level loadLevelFromJson(String filePath) {
@@ -27,8 +30,12 @@ public class Level {
             int width = levelJson.get("width").getAsInt();
             int height = levelJson.get("height").getAsInt();
             JsonArray tilesArray = levelJson.getAsJsonArray("tiles");
+            JsonArray objectsArray = levelJson.getAsJsonArray("objects"); // Загружаем массив объектов
 
             Tile[][] tiles = new Tile[width][height];
+            List<GameObject> objects = new ArrayList<>(); // Создаем список объектов
+
+            // Загружаем тайлы
             for (int y = 0; y < height; y++) {
                 JsonArray row = tilesArray.get(y).getAsJsonArray();
                 for (int x = 0; x < width; x++) {
@@ -36,15 +43,30 @@ public class Level {
                     SurfaceType surfaceType = switch (tileType) {
                         case 0 -> SurfaceType.FLOOR;
                         case 1 -> SurfaceType.WALL;
-                        case 2 -> SurfaceType.DOOR_CLOSED;
-                        case 3 -> SurfaceType.DOOR_OPEN;
                         default -> SurfaceType.EMPTY;
                     };
                     tiles[x][y] = new Tile(surfaceType);
                 }
             }
 
-            Level level = new Level(tiles);
+            // Загружаем объекты
+            for (JsonElement objElement : objectsArray) {
+                JsonObject objJson = objElement.getAsJsonObject();
+                String type = objJson.get("type").getAsString();
+                int x = objJson.get("x").getAsInt();
+                int y = objJson.get("y").getAsInt();
+                // Создаем объекты на основе типа
+                GameObject gameObject = switch (type) {
+                    case "chest" -> new Chest(x, y);
+                    case "door" -> new Door(x, y);
+                    default -> null;
+                };
+                if (gameObject != null) {
+                    objects.add(gameObject);
+                }
+            }
+
+            Level level = new Level(tiles, objects);
             levels.add(level);
             return level;
         } catch (Exception e) {
@@ -52,6 +74,12 @@ public class Level {
             return null;
         }
     }
+
+    // Добавим геттер для объектов
+    public List<GameObject> getObjects() {
+        return objects;
+    }
+
 
     public Tile getTile(int x, int y) {
         if (x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length) {
@@ -68,4 +96,5 @@ public class Level {
     public int getHeight() {
         return tiles[0].length;
     }
+
 }

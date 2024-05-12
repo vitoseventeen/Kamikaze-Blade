@@ -8,13 +8,8 @@ import java.io.InputStream;
 public enum SurfaceType {
     WALL("/Wall.png"),
     FLOOR("/Floor.png"),
-    EMPTY("/Empty.png"),
-    DOOR_CLOSED("/closeddoor.png"),
-    DOOR_OPEN("/openeddoor.png")
+    EMPTY("/Empty.png")
 
-    //KEY
-    //DOOR
-    //CHEST
 
     ;
 
