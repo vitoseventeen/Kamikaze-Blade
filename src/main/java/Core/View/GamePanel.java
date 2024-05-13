@@ -11,10 +11,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 import static Core.Util.Constants.TILE_SIZE;
@@ -108,13 +106,13 @@ public class GamePanel extends JPanel {
     public static void loadObjects(JsonArray objectsArray, List<GameObject> objects) {
         for (JsonElement objElement : objectsArray) {
             JsonObject objJson = objElement.getAsJsonObject();
-            String type = objJson.get("type").getAsString();
+            ObjectType type = ObjectType.valueOf(objJson.get("type").getAsString().toUpperCase());
             int x = objJson.get("x").getAsInt();
             int y = objJson.get("y").getAsInt();
             // Создать объекты на основе типа
             GameObject gameObject = switch (type) {
-                case "chest" -> new Chest(x, y);
-//                case "door" -> new Door(x, y);
+                case CHEST -> new Chest(x, y);
+                // Добавьте другие типы объектов при необходимости
                 default -> null;
             };
             if (gameObject != null) {
@@ -220,17 +218,29 @@ public class GamePanel extends JPanel {
             if (enemyFrame != null) {
                 int enemyX = enemy.getX() + offsetX;
                 int enemyY = enemy.getY() + offsetY;
+
                 g.drawImage(enemyFrame, enemyX, enemyY, null);
             }
         }
         // draw level objects
-        // draw level objects
         for (GameObject object : objects) {
             int objectX = Integer.parseInt(object.getX()) + offsetX;
             int objectY = Integer.parseInt(object.getY()) + offsetY;
+            String objectType = String.valueOf(object.getType());
 
-            object.draw(g, objectX, objectY);
+            if (Objects.equals(objectType, "CHEST")) {
+                Chest chest = (Chest) object;
+                if (chest.isOpened()) {
+                    chest.drawOpened(g, objectX, objectY);
+                } else {
+                    chest.draw(g, objectX, objectY);
+                }
+            } else {
+                System.out.println("Drawing object");
+                object.draw(g, objectX, objectY);
+            }
         }
+
 
 
 

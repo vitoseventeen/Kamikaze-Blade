@@ -5,9 +5,11 @@ import Core.View.GamePanel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static Core.Util.Constants.ATTACK_RADIUS;
+import static Core.Util.Constants.INTERACTION_RADIUS;
 
 public class Controller {
     private Player player;
@@ -50,12 +52,6 @@ public class Controller {
 
         for (GameObject object : gamePanel.getObjects()) {
             if (object.checkCollision(x, y, width, height)) {
-                return true;
-            }
-        }
-
-        for (Enemy enemy : enemies) {
-            if (enemy.checkCollision(x, y, width, height)) {
                 return true;
             }
         }
@@ -313,7 +309,42 @@ public class Controller {
         gameManager.togglePause();
     }
 
-    public void interact( ) {
+    public void interact() {
+        if (gameManager.isPaused() || player.isDead()) {
+            return;
+        }
 
+        int playerCenterX = player.getX() + player.getWidth() / 2;
+        int playerCenterY = player.getY() + player.getHeight() / 2;
+
+        for (GameObject object : gamePanel.getObjects()) {
+            int objectCenterX = Integer.parseInt(object.getX()) + object.getWidth() / 2;
+            int objectCenterY = Integer.parseInt(object.getY()) + object.getHeight() / 2;
+
+            double distance = Math.sqrt(Math.pow(playerCenterX - objectCenterX, 2) + Math.pow(playerCenterY - objectCenterY, 2));
+
+            if (distance <= INTERACTION_RADIUS) {
+                object.interact(player);
+
+                if (object.getType().equals(ObjectType.CHEST)) {
+                    Chest chest = (Chest) object;
+                    chest.interact(player);
+                    player.setAnimationType(Player.AnimationType.OPEN); // TODO: MAKE GOOD ANIMATION
+                    System.out.println("Chest opened");
+                    if (chest.isOpened()) {
+                        gamePanel.repaint();
+                    }
+                }
+                else {
+                    player.setAnimationType(Player.AnimationType.INTERACT);
+                    System.out.println("Interacted with object " + object.getType() + " at " + object.getX() + ", " + object.getY());
+                    gamePanel.repaint();
+                }
+                break;
+
+            }
+        }
     }
+
+
 }

@@ -17,17 +17,22 @@
         private Map<String, Integer> animationSpeeds = new HashMap<>();
 
         public AnimationManager() {
-            addAnimations("idle", "/samuraiIdle.png", 16, 16, 1, 4);
-            addAnimations("walk", "/samuraiWalk.png", 16, 16, 4, 4);
-            addAnimations("attack", "/samuraiAttack.png", 16, 16, 1, 4);
-            addAnimations("death", "/samuraiDead.png", 16, 16, 1, 1);
+            addAnimations("idle", "/Idle.png", 16, 16, 1, 4);
+            addAnimations("walk", "/Walk.png", 16, 16, 4, 4);
+            addAnimations("attack", "/Attack.png", 16, 16, 1, 4);
+            addAnimations("death", "/Dead.png", 16, 16, 1, 1);
+            addAnimations("interact", "/Item.png", 16, 16, 1, 1);
+            addAnimations("open","/attack.png",16,16,1,4);
 
+            setAnimationSpeed("idle", 20);
+            setAnimationSpeed("open", 20);
             setAnimationSpeed("walk", 20);
             setAnimationSpeed("enemyWalk",20);
             setAnimationSpeed("attack", 20);
             setAnimationSpeed("enemyAttack",20);
             setAnimationSpeed("death", 20);
             setAnimationSpeed("enemyDeath",20);
+            setAnimationSpeed("interact", 20);
 
             addAnimations("enemyIdle", "/enemyIdle.png", 16, 16, 1, 4);
             addAnimations("enemyWalk", "/enemyWalk.png", 16, 16, 4, 4);
@@ -58,28 +63,24 @@
 
         public BufferedImage getFrame(String name, Player.Direction direction, Player.AnimationType animationType) {
             int row;
-            if (animationType == Player.AnimationType.ATTACK || animationType == Player.AnimationType.IDLE || animationType == Player.AnimationType.DEATH) {
+            if (animationType == Player.AnimationType.ATTACK || animationType == Player.AnimationType.IDLE || animationType == Player.AnimationType.DEATH || animationType == Player.AnimationType.INTERACT || animationType == Player.AnimationType.OPEN) {
                 row = 0;
             } else {
                 row = animationType.ordinal();
             }
-            int col = direction.ordinal();
-
-            BufferedImage[][] frames = animations.get(name);
-            if (frames != null && row < frames.length && col < frames[row].length) {
-                int index = animationIndices.get(name);
-                return frames[index][col];
-            } else {
-                return null;
-            }
+            return getBufferedImage(name, direction, row);
         }
         public BufferedImage getEnemyFrame(String name, Enemy.Direction direction, Enemy.AnimationType animationType) {
             int row;
-            if (animationType == Enemy.AnimationType.ATTACK || animationType == Enemy.AnimationType.IDLE || animationType == Enemy.AnimationType.DEATH) {
+            if (animationType == Enemy.AnimationType.ATTACK || animationType == Enemy.AnimationType.IDLE || animationType == Enemy.AnimationType.DEATH ) {
                 row = 0;
             } else {
                 row = animationType.ordinal();
             }
+            return getBufferedImage(name, direction, row);
+        }
+
+        private BufferedImage getBufferedImage(String name, Player.Direction direction, int row) {
             int col = direction.ordinal();
 
             BufferedImage[][] frames = animations.get(name);

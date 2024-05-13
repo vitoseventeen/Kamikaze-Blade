@@ -10,10 +10,22 @@ public class Chest extends GameObject {
     private boolean isOpened = false;
     private Image closedChestImage;
     private Image openedChestImage;
+    private static final int CHEST_WIDTH = 16;
+    private static final int CHEST_HEIGHT = 16;
 
     public Chest(int x, int y) {
-        super(x, y);
+        super(x, y, ObjectType.CHEST);
         loadImages();
+    }
+
+    @Override
+    public int getWidth() {
+        return CHEST_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return CHEST_HEIGHT;
     }
 
     private void loadImages() {
@@ -35,23 +47,20 @@ public class Chest extends GameObject {
         isOpened = true;
     }
 
-    @Override
-    public void draw(Graphics g, int x, int y) {
-        if (isOpened) {
-            g.drawImage(openedChestImage, x, y, null);
-        } else {
-            g.drawImage(closedChestImage, x, y, null);
-        }
+
+    public void drawOpened(Graphics g, int x, int y) {
+        g.drawImage(openedChestImage, x, y, null);
     }
 
 
-
-
+    @Override
+    public void draw(Graphics g, int x, int y) {
+        g.drawImage(closedChestImage, x, y, null);
+    }
 
     @Override
     public void interact(Player player) {
         if (!isOpened) {
-            // Add some logic to interact with the player
             open();
         }
     }

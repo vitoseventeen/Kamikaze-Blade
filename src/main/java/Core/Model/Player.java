@@ -24,7 +24,9 @@ public class Player {
         IDLE,
         WALK,
         ATTACK,
-        DEATH
+        DEATH,
+        INTERACT,
+        OPEN
     }
 
     public Player(String name, int x, int y, int height, int width) {
