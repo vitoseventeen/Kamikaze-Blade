@@ -1,9 +1,6 @@
 package Core.Controller;
 
-import Core.Model.Level;
-import Core.Model.Player;
-import Core.Model.Enemy;
-import Core.Model.Tile;
+import Core.Model.*;
 import Core.View.GamePanel;
 
 import java.util.ArrayList;
@@ -30,27 +27,30 @@ public class Controller {
 
 
     // Check for collision with level boundaries and tiles
-    boolean isCollision(int x, int y, int width, int height) {
+    public boolean isCollision(int x, int y, int width, int height) {
         int TILE_SIZE = Core.Util.Constants.TILE_SIZE;
 
-        // Проверяем выход за границы уровня
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
             return true;
         }
 
-        // Получаем индексы тайлов, на которых находится персонаж
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
         int tileWidth = (x + width) / TILE_SIZE;
         int tileHeight = (y + height) / TILE_SIZE;
 
-        // Проверяем каждый тайл на наличие коллизии
         for (int i = tileX; i <= tileWidth; i++) {
             for (int j = tileY; j <= tileHeight; j++) {
                 Tile tile = level.getTile(i, j);
                 if (tile.hasCollision()) {
                     return true;
                 }
+            }
+        }
+
+        for (GameObject object : gamePanel.getObjects()) {
+            if (object.checkCollision(x, y, width, height)) {
+                return true;
             }
         }
 
@@ -98,14 +98,6 @@ public class Controller {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
 
-        // Check collision with enemies
-        for (Enemy enemy : enemies) {
-            if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
-                return;
-            }
-        }
-
-        // Check collision with level
         if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
             player.setX(newX);
             player.setY(newY);

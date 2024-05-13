@@ -36,15 +36,15 @@ public class Chest extends GameObject {
     }
 
     @Override
-    public void draw(Graphics g) {
-
-        // Make sure to get the correct coordinates for drawing
+    public void draw(Graphics g, int x, int y) {
         if (isOpened) {
             g.drawImage(openedChestImage, x, y, null);
         } else {
             g.drawImage(closedChestImage, x, y, null);
         }
     }
+
+
 
 
 

@@ -123,6 +123,15 @@ public class GamePanel extends JPanel {
         }
     }
 
+    public int getAbsoluteX(int x) {
+        return x - offsetX;
+    }
+
+    public int getAbsoluteY(int y) {
+        return y - offsetY;
+    }
+
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -215,9 +224,14 @@ public class GamePanel extends JPanel {
             }
         }
         // draw level objects
+        // draw level objects
         for (GameObject object : objects) {
-            object.draw(g);
+            int objectX = Integer.parseInt(object.getX()) + offsetX;
+            int objectY = Integer.parseInt(object.getY()) + offsetY;
+
+            object.draw(g, objectX, objectY);
         }
+
 
 
         g.translate(-offsetX, -offsetY);
@@ -272,5 +286,7 @@ public class GamePanel extends JPanel {
     }
 
 
-
+    public GameObject[] getObjects() {
+        return objects.toArray(new GameObject[0]);
+    }
 }
