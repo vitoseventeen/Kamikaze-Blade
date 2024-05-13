@@ -31,6 +31,7 @@ public class GameManager implements Runnable {
     private PauseMenu pauseMenu;
     private DeathMenu deathMenu;
     private InventoryMenu inventoryMenu;
+    private boolean isInMenu = false;
     private boolean paused = false;
 
     public GameManager() {
@@ -135,24 +136,31 @@ public class GameManager implements Runnable {
         }
     }
 
+    public boolean isInMenu() {
+        return isInMenu;
+    }
+
+
 
     public void togglePause() {
-        if (pauseMenu == null) {
-            pauseMenu = new PauseMenu(this);
-            pauseMenu.setOpaque(false);
-            pauseMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            view.getFrame().getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
+        if (!isInMenu) {
+            if (pauseMenu == null) {
 
-        }
-        paused = !paused;
-        pauseMenu.setVisible(paused);
-        if (paused) {
-            view.getFrame().setCursor(Cursor.getDefaultCursor());
-        } else {
-            view.getFrame().setCursor(view.getFrame().getToolkit().createCustomCursor(
-                    new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
-        }
+                pauseMenu = new PauseMenu(this);
+                pauseMenu.setOpaque(false);
+                pauseMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+                view.getFrame().getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
 
+            }
+            paused = !paused;
+            pauseMenu.setVisible(paused);
+            if (paused) {
+                view.getFrame().setCursor(Cursor.getDefaultCursor());
+            } else {
+                view.getFrame().setCursor(view.getFrame().getToolkit().createCustomCursor(
+                        new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
+            }
+        }
     }
 
     public void showDeathMenu() {
@@ -179,8 +187,10 @@ public class GameManager implements Runnable {
             view.getFrame().getLayeredPane().add(inventoryMenu, JLayeredPane.POPUP_LAYER);
 
             inventoryMenu.setVisible(true);
+            isInMenu = true;
         } else {
            inventoryMenu.setVisible(!inventoryMenu.isVisible());
+            isInMenu = !isInMenu;
         }
         paused = !paused;
         if (paused) {
