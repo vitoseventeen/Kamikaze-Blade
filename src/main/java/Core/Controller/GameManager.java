@@ -1,6 +1,7 @@
 package Core.Controller;
 
 import Core.Model.Enemy;
+import Core.Model.Inventory;
 import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
@@ -31,7 +32,8 @@ public class GameManager implements Runnable {
     private boolean paused = false;
 
     public GameManager() {
-        player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH);
+        Inventory playerInventory = new Inventory(10);
+        player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH, playerInventory);
         level = Level.loadLevelFromJson("level1.json");
         enemies = new ArrayList<>();
 

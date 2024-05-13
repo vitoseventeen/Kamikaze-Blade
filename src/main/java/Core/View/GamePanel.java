@@ -112,6 +112,7 @@ public class GamePanel extends JPanel {
             // Создать объекты на основе типа
             GameObject gameObject = switch (type) {
                 case CHEST -> new Chest(x, y);
+                case KEY -> new Key(x, y);
                 // Добавьте другие типы объектов при необходимости
                 default -> null;
             };
@@ -231,12 +232,18 @@ public class GamePanel extends JPanel {
             if (Objects.equals(objectType, "CHEST")) {
                 Chest chest = (Chest) object;
                 if (chest.isOpened()) {
-                    chest.drawOpened(g, objectX, objectY);
+                    chest.drawOpened(g, objectX, objectY); // Используйте метод drawOpened, когда сундук открыт
                 } else {
-                    chest.draw(g, objectX, objectY);
+                    chest.draw(g, objectX, objectY); // Используйте метод draw для закрытого сундука
                 }
-            } else {
-                System.out.println("Drawing object");
+            } else if (Objects.equals(objectType, "KEY")) {
+                Key key = (Key) object;
+                if (key.isTaken()) {
+                    key.drawTaken(g, objectX, objectY);
+                } else {
+                    key.draw(g, objectX, objectY);
+                }
+             } else {
                 object.draw(g, objectX, objectY);
             }
         }
@@ -298,5 +305,9 @@ public class GamePanel extends JPanel {
 
     public GameObject[] getObjects() {
         return objects.toArray(new GameObject[0]);
+    }
+
+    public void removeObject(GameObject object) {
+        objects.remove(object);
     }
 }

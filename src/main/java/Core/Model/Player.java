@@ -13,6 +13,7 @@ public class Player {
     private int speed;
     private Direction direction;
     private AnimationType animationType;
+    private Inventory inventory;
 
     public enum Direction {
         UP,
@@ -29,11 +30,12 @@ public class Player {
         OPEN
     }
 
-    public Player(String name, int x, int y, int height, int width) {
+    public Player(String name, int x, int y, int height, int width, Inventory inventory) {
         this.x = x;
         this.y = y;
         this.height = height;
         this.width = width;
+        this.inventory = inventory;
         this.name = name;
         this.health = 8;
         this.score = 0;
@@ -62,6 +64,14 @@ public class Player {
             isDead();
             setAnimationType(AnimationType.DEATH);
         }
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public int getSpeed() {

@@ -13,7 +13,7 @@ public class Enemy extends Player {
 
 
     public Enemy(String name, int x, int y, int height, int width) {
-        super(name, x, y, height, width);
+        super(name, x, y, height, width, null);
         this.speed = 1;
         this.health = 3;
     }

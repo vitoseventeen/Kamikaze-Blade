@@ -60,6 +60,7 @@ public class Chest extends GameObject {
 
     @Override
     public void interact(Player player) {
+
         if (!isOpened) {
             open();
         }

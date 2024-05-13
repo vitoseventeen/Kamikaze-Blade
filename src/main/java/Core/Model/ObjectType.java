@@ -1,6 +1,9 @@
 package Core.Model;
 
 public enum ObjectType {
-    CHEST
+    CHEST,
+    KEY,
+    DOOR
+
 
 }

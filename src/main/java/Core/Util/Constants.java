@@ -17,7 +17,7 @@ public class Constants {
     public static final int NUMBER_OF_ENEMIES = 5;
     public static final double ZOOM_FACTOR = 3.0; // 2.5 skoro idealni
     public static final int ATTACK_RADIUS = 45;
-    public static final int INTERACTION_RADIUS = 20;
+    public static final int INTERACTION_RADIUS = 25;
 
     public static final long ATTACK_COOLDOWN = 800; // Время в миллисекундах между атаками
 

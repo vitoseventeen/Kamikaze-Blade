@@ -17,6 +17,7 @@ public class Controller {
     private Level level;
     private List<Enemy> enemies;
     private GameManager gameManager;
+    private Inventory inventory;
 
 
     public Controller(Player player, GamePanel gamePanel, Level level, List<Enemy> enemies, GameManager gameManager) {
@@ -25,6 +26,7 @@ public class Controller {
         this.level = level;
         this.enemies = enemies;
         this.gameManager = gameManager;
+        this.inventory = player.getInventory();
     }
 
 
@@ -126,7 +128,6 @@ public class Controller {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
-            //check collision with panel objects
 
 
             gamePanel.repaint();
@@ -325,19 +326,28 @@ public class Controller {
 
             if (distance <= INTERACTION_RADIUS) {
                 object.interact(player);
-
                 if (object.getType().equals(ObjectType.CHEST)) {
                     Chest chest = (Chest) object;
                     chest.interact(player);
                     player.setAnimationType(Player.AnimationType.OPEN); // TODO: MAKE GOOD ANIMATION
-                    System.out.println("Chest opened");
                     if (chest.isOpened()) {
                         gamePanel.repaint();
                     }
                 }
+                if (object.getType().equals(ObjectType.KEY)) {
+                    Key key = (Key) object;
+                    key.interact(player);
+                    inventory.addItem(object);
+                    System.out.println(inventory.toString());
+                    gamePanel.repaint();
+                    gamePanel.removeObject(object);
+                    // remove collision with key
+
+                }
+
+
                 else {
                     player.setAnimationType(Player.AnimationType.INTERACT);
-                    System.out.println("Interacted with object " + object.getType() + " at " + object.getX() + ", " + object.getY());
                     gamePanel.repaint();
                 }
                 break;
