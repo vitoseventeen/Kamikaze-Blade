@@ -343,6 +343,12 @@ public class Controller {
                     // remove collision with key
 
                 }
+                if (object.getType().equals(ObjectType.COIN)) {
+                    Coin coin = (Coin) object;
+                    coin.interact(player);
+                    gamePanel.removeObject(object);
+                    gamePanel.repaint();
+                }
 
 
                 else {

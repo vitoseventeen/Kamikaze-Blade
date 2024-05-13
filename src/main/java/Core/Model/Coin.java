@@ -9,8 +9,8 @@ public class Coin extends GameObject {
     private final int value;
     private boolean isCollected;
     private Image coinImage;
-    private static final int COIN_WIDTH = 16;
-    private static final int COIN_HEIGHT = 16;
+    private static final int COIN_WIDTH = 10;
+    private static final int COIN_HEIGHT = 10;
 
     public Coin(int x, int y) {
         super(x, y, ObjectType.COIN);
@@ -26,6 +26,17 @@ public class Coin extends GameObject {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public int getWidth() {
+        return COIN_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return COIN_HEIGHT;
+    }
+
 
     public boolean isCollected() {
         return isCollected;
