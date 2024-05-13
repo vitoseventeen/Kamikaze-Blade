@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.LinkedTransferQueue;
 
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 import static Core.Util.Constants.TILE_SIZE;
 
-public class Panel extends JPanel {
+public class GamePanel extends JPanel {
     private Player player;
     private Level level;
     private List<Enemy> enemies = new ArrayList<>();
@@ -37,12 +36,13 @@ public class Panel extends JPanel {
     private int offsetX;
     private int offsetY;
 
-    public Panel(Player player, Level level) {
+    public GamePanel(Player player, Level level) {
         this.player = player;
         this.level = level;
         setMinimumSize(SCREEN_SIZE_DIMENSION);
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
+        loadLevelObjects(level.getLevelJson());
 
         loadHeartImage(); // Load heart image
     }
@@ -98,16 +98,23 @@ public class Panel extends JPanel {
     }
 
     private void loadLevelObjects(JsonObject levelJson) {
-        // Load objects
+        // Загрузить массив объектов из JSON
+        objectsArray = levelJson.getAsJsonArray("objects");
+
+        // Загрузить объекты
+        loadObjects(objectsArray, objects);
+    }
+
+    public static void loadObjects(JsonArray objectsArray, List<GameObject> objects) {
         for (JsonElement objElement : objectsArray) {
             JsonObject objJson = objElement.getAsJsonObject();
             String type = objJson.get("type").getAsString();
             int x = objJson.get("x").getAsInt();
             int y = objJson.get("y").getAsInt();
-            // Create objects based on type
+            // Создать объекты на основе типа
             GameObject gameObject = switch (type) {
                 case "chest" -> new Chest(x, y);
-                case "door" -> new Door(x, y);
+//                case "door" -> new Door(x, y);
                 default -> null;
             };
             if (gameObject != null) {
@@ -115,7 +122,6 @@ public class Panel extends JPanel {
             }
         }
     }
-
 
 
     @Override
@@ -213,8 +219,17 @@ public class Panel extends JPanel {
             object.draw(g);
         }
 
+
         g.translate(-offsetX, -offsetY);
 
+    }
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
     }
 
     private void drawTile(Graphics g, Tile tile, int x, int y) {

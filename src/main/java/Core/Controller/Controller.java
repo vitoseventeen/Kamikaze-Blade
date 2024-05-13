@@ -4,7 +4,7 @@ import Core.Model.Level;
 import Core.Model.Player;
 import Core.Model.Enemy;
 import Core.Model.Tile;
-import Core.View.Panel;
+import Core.View.GamePanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +14,15 @@ import static Core.Util.Constants.ATTACK_RADIUS;
 
 public class Controller {
     private Player player;
-    private Panel panel;
+    private GamePanel gamePanel;
     private Level level;
     private List<Enemy> enemies;
     private GameManager gameManager;
 
 
-    public Controller(Player player, Panel panel, Level level, List<Enemy> enemies, GameManager gameManager) {
+    public Controller(Player player, GamePanel gamePanel, Level level, List<Enemy> enemies, GameManager gameManager) {
         this.player = player;
-        this.panel = panel;
+        this.gamePanel = gamePanel;
         this.level = level;
         this.enemies = enemies;
         this.gameManager = gameManager;
@@ -72,13 +72,13 @@ public class Controller {
                 enemy.takeDamage(1);
             }
         }
-        panel.repaint();
+        gamePanel.repaint();
 
         new Thread(() -> {
             try {
                 Thread.sleep(200);
                 player.setAnimationType(Player.AnimationType.IDLE);
-                panel.repaint();
+                gamePanel.repaint();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -124,7 +124,7 @@ public class Controller {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
-            panel.repaint();
+            gamePanel.repaint();
         }
     }
 
@@ -274,7 +274,7 @@ public class Controller {
         }
 
         // Update the rendering
-        panel.repaint();
+        gamePanel.repaint();
     }
 
 

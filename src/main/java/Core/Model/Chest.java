@@ -2,7 +2,6 @@ package Core.Model;
 
 import java.awt.*;
 
-import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.net.URL;
@@ -19,8 +18,8 @@ public class Chest extends GameObject {
 
     private void loadImages() {
         try {
-            URL closedChestURL = getClass().getResource("/lockedchest.png");
-            URL openedChestURL = getClass().getResource("/openedChest.png");
+            URL closedChestURL = getClass().getResource("/chestClosed.png");
+            URL openedChestURL = getClass().getResource("/chestOpened.png");
             closedChestImage = ImageIO.read(closedChestURL);
             openedChestImage = ImageIO.read(openedChestURL);
         } catch (IOException e) {
@@ -38,24 +37,23 @@ public class Chest extends GameObject {
 
     @Override
     public void draw(Graphics g) {
+
+        // Make sure to get the correct coordinates for drawing
         if (isOpened) {
-            g.drawImage(openedChestImage, getX(), getY(), null);
+            g.drawImage(openedChestImage, x, y, null);
         } else {
-            g.drawImage(closedChestImage, getX(), getY(), null);
+            g.drawImage(closedChestImage, x, y, null);
         }
     }
 
-    private int getY() {
-        return y;
-    }
 
-    private int getX() {
-        return x;
-    }
 
     @Override
     public void interact(Player player) {
-        // Логика взаимодействия с сундуком
+        if (!isOpened) {
+            // Add some logic to interact with the player
+            open();
+        }
     }
 }
 

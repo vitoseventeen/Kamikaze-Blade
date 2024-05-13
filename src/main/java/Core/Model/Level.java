@@ -2,6 +2,7 @@ package Core.Model;
 
 import Core.Model.SurfaceType;
 import Core.Model.Tile;
+import Core.View.GamePanel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -50,21 +51,7 @@ public class Level {
             }
 
             // Загружаем объекты
-            for (JsonElement objElement : objectsArray) {
-                JsonObject objJson = objElement.getAsJsonObject();
-                String type = objJson.get("type").getAsString();
-                int x = objJson.get("x").getAsInt();
-                int y = objJson.get("y").getAsInt();
-                // Создаем объекты на основе типа
-                GameObject gameObject = switch (type) {
-                    case "chest" -> new Chest(x, y);
-                    case "door" -> new Door(x, y);
-                    default -> null;
-                };
-                if (gameObject != null) {
-                    objects.add(gameObject);
-                }
-            }
+            GamePanel.loadObjects(objectsArray, objects);
 
             Level level = new Level(tiles, objects);
             levels.add(level);
@@ -92,6 +79,44 @@ public class Level {
     public int getWidth() {
         return tiles.length;
     }
+
+    public JsonObject getLevelJson() {
+        JsonObject levelJson = new JsonObject();
+        levelJson.addProperty("width", getWidth());
+        levelJson.addProperty("height", getHeight());
+
+        JsonArray tilesArray = new JsonArray();
+        for (int y = 0; y < getHeight(); y++) {
+            JsonArray row = new JsonArray();
+            for (int x = 0; x < getWidth(); x++) {
+                row.add(getTile(x, y).getSurfaceType().ordinal());
+            }
+            tilesArray.add(row);
+        }
+        levelJson.add("tiles", tilesArray);
+
+        JsonArray objectsArray = getJsonElements();
+        levelJson.add("objects", objectsArray);
+
+        return levelJson;
+    }
+
+    private JsonArray getJsonElements() {
+        JsonArray objectsArray = new JsonArray();
+        for (GameObject object : objects) {
+            JsonObject objectJson = new JsonObject();
+            if (object instanceof Chest) {
+                objectJson.addProperty("type", "chest");
+//            } else if (object instanceof Door) {
+//                objectJson.addProperty("type", "door");
+            }
+            objectJson.addProperty("x", object.getX());
+            objectJson.addProperty("y", object.getY());
+            objectsArray.add(objectJson);
+        }
+        return objectsArray;
+    }
+
 
     public int getHeight() {
         return tiles[0].length;
