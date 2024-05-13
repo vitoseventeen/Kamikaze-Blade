@@ -54,6 +54,12 @@ public class Controller {
             }
         }
 
+        for (Enemy enemy : enemies) {
+            if (enemy.checkCollision(x, y, width, height)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -305,5 +311,9 @@ public class Controller {
 
     public void togglePause() {
         gameManager.togglePause();
+    }
+
+    public void interact( ) {
+
     }
 }
