@@ -9,11 +9,13 @@ public class Player {
     private int height;
     private String name;
     private int health;
-    private int score;
+    private int score; // amount of kills
     private int speed;
     private Direction direction;
     private AnimationType animationType;
     private Inventory inventory;
+
+
 
     public enum Direction {
         UP,
@@ -54,7 +56,10 @@ public class Player {
 
     public boolean isDead() {
         return health <= 0;
+    }
 
+    public void addScore() {
+        this.score++;
     }
 
 

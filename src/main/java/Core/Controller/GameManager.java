@@ -6,6 +6,7 @@ import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
 import Core.View.DeathMenu;
+import Core.View.InventoryMenu;
 import Core.View.PauseMenu;
 import Core.View.View;
 
@@ -29,6 +30,7 @@ public class GameManager implements Runnable {
     private Controller controller;
     private PauseMenu pauseMenu;
     private DeathMenu deathMenu;
+    private InventoryMenu inventoryMenu;
     private boolean paused = false;
 
     public GameManager() {
@@ -169,4 +171,23 @@ public class GameManager implements Runnable {
         return paused;
     }
 
+    public void showInventoryMenu() {
+        if (inventoryMenu == null) {
+            inventoryMenu = new InventoryMenu(this, player);
+            inventoryMenu.setOpaque(false);
+            inventoryMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            view.getFrame().getLayeredPane().add(inventoryMenu, JLayeredPane.POPUP_LAYER);
+
+            inventoryMenu.setVisible(true);
+        } else {
+           inventoryMenu.setVisible(!inventoryMenu.isVisible());
+        }
+        paused = !paused;
+        if (paused) {
+            view.getFrame().setCursor(Cursor.getDefaultCursor());
+        } else {
+            view.getFrame().setCursor(view.getFrame().getToolkit().createCustomCursor(
+                    new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
+        }
+    }
 }

@@ -95,7 +95,14 @@ public class InputHandler implements KeyListener {
                     }
                 });
                 break;
-
+            case KeyEvent.VK_E:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.showInventory();
+                    }
+                });
+                break;
             default:
                 break;
         }

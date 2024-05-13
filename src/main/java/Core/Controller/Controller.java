@@ -75,6 +75,9 @@ public class Controller {
             if (!enemy.isDead()) {
                 enemy.takeDamage(1);
             }
+            if (enemy.isDead()) {
+                player.addScore();
+            }
         }
         gamePanel.repaint();
 
@@ -361,5 +364,9 @@ public class Controller {
         }
     }
 
+
+    public void showInventory() {
+        gameManager.showInventoryMenu();
+    }
 
 }
