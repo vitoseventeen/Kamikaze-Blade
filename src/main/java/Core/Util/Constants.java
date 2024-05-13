@@ -12,6 +12,7 @@ public class Constants {
     public static final Dimension SCREEN_SIZE_DIMENSION = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
 
+
     public static final int PLAYER_WIDTH = 16;
     public static final int PLAYER_HEIGHT = 16;
     public static final int NUMBER_OF_ENEMIES = 5;

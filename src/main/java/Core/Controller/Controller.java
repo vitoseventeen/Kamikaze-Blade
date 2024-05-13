@@ -337,7 +337,6 @@ public class Controller {
                 if (object.getType().equals(ObjectType.KEY)) {
                     Key key = (Key) object;
                     key.interact(player);
-                    inventory.addItem(object);
                     System.out.println(inventory.toString());
                     gamePanel.repaint();
                     gamePanel.removeObject(object);

@@ -6,14 +6,14 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Key extends GameObject {
-    private boolean isTaken = false;
+    private boolean isTaken;
     private Image keyImage;
     private static final int KEY_WIDTH = 16;
     private static final int KEY_HEIGHT = 16;
-    private Inventory inventory;
 
     public Key(int x, int y) {
         super(x, y, ObjectType.KEY);
+        this.isTaken = false;
         loadImages();
     }
 
@@ -59,6 +59,7 @@ public class Key extends GameObject {
     public void interact(Player player) {
         if (!isTaken) {
             take();
+            player.getInventory().addItem(this);
         }
     }
 }

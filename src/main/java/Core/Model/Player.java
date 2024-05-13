@@ -118,10 +118,6 @@ public class Player {
     }
 
 
-    public void collectCoin(int value) {
-        this.score += value;
-    }
-
     public Direction getDirection() {
         return direction;
     }

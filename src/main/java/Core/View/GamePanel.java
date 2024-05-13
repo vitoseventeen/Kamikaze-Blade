@@ -113,6 +113,7 @@ public class GamePanel extends JPanel {
             GameObject gameObject = switch (type) {
                 case CHEST -> new Chest(x, y);
                 case KEY -> new Key(x, y);
+                case COIN -> new Coin(x, y);
                 // Добавьте другие типы объектов при необходимости
                 default -> null;
             };
@@ -243,7 +244,17 @@ public class GamePanel extends JPanel {
                 } else {
                     key.draw(g, objectX, objectY);
                 }
-             } else {
+             } else if (Objects.equals(objectType, "COIN")) {
+                Coin coin = (Coin) object;
+                if (coin.isCollected()) {
+                    coin.drawCollected(g, objectX, objectY);
+                } else {
+                    coin.draw(g, objectX, objectY);
+                }
+
+            }
+
+            else {
                 object.draw(g, objectX, objectY);
             }
         }
