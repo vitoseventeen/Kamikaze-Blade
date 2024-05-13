@@ -60,6 +60,7 @@ public class Coin extends GameObject {
     public void interact(Player player) {
         if (!isCollected) {
             player.getInventory().addCoinToBalance(value);
+            player.getInventory().printInventory();
             collect();
         }
     }

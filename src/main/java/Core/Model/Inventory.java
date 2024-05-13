@@ -22,20 +22,14 @@ public class Inventory {
         this.coinBalance += amount;
     }
 
-    public String getItemsString() {
-        StringBuilder itemsString = new StringBuilder();
-        for (GameObject item : items) {
-            itemsString.append(item.getType()).append(" ");
+
+    public boolean containsItem(GameObject item) {
+        for (GameObject i : items) {
+            return i.equals(item);
         }
-        return itemsString.toString();
+        return false;
     }
 
-    @Override
-    public String toString() {
-        return "Inventory " +
-                "capacity is: " + capacity +
-                ", my items are: " + items + " " ;
-    }
 
     public boolean addItem(GameObject item) {
         if (items.size() < capacity) {
@@ -43,13 +37,17 @@ public class Inventory {
             this.capacity -= 1;
             return true;
         }
-        System.out.println("Sorry, your inventory is full :(");
-        return false;
+        else {
+            System.out.println("Inventory is full");
+            return false;
+        }
     }
 
     public boolean removeItem(GameObject item) {
         return items.remove(item);
     }
+
+
 
     public List<GameObject> getItems() {
         return items;
@@ -67,5 +65,27 @@ public class Inventory {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
+    public void printInventory() {
+        System.out.println("Inventory: ");
+        for (GameObject item : items) {
+            System.out.println(item.getType());
+        }
+        System.out.println("Coin balance: " + coinBalance);
+    }
+
+
+    public void removeCoinFromBalance(int amount) {
+        this.coinBalance -= amount;
+    }
+
+    public void setCoinBalance(int coinBalance) {
+        this.coinBalance = coinBalance;
+    }
+
+    public void setItems(List<GameObject> items) {
+        this.items = items;
+    }
+
 
 }
