@@ -98,6 +98,14 @@ public class Controller {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
 
+        // Check collision with enemies
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
+                return;
+            }
+        }
+
+        // Check collision with level
         if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
             player.setX(newX);
             player.setY(newY);
@@ -115,6 +123,9 @@ public class Controller {
             if (player.getAnimationType() != Player.AnimationType.ATTACK) {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
+
+            //check collision with panel objects
+
 
             gamePanel.repaint();
         }
