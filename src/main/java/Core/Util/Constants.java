@@ -29,6 +29,7 @@ public class Constants {
     public static final int ATTACK_RADIUS = 45;
     public static final int INTERACTION_RADIUS = 25;
 
+
     public static final long ATTACK_COOLDOWN = 800; // Время в миллисекундах между атаками
 
 }

@@ -21,27 +21,15 @@ public class Door extends GameObject {
 
     }
 
-    public int getTileX() {
-        return x / TILE_SIZE;
-    }
-
-    public int getTileY() {
-         return y / TILE_SIZE;
-    }
-
-
-
 
     @Override
     public int getWidth() {
-        System.out.println("x " + getTileX());
         return DOOR_WIDTH;
 
     }
 
     @Override
     public int getHeight() {
-        System.out.println("y " + getTileY());
         return DOOR_HEIGHT;
     }
 

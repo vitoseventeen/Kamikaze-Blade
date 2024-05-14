@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static Core.Util.Constants.ATTACK_RADIUS;
-import static Core.Util.Constants.INTERACTION_RADIUS;
+import static Core.Util.Constants.*;
 
 public class Controller {
     private Player player;
@@ -19,6 +18,7 @@ public class Controller {
     private List<Enemy> enemies;
     private GameManager gameManager;
     private Inventory inventory;
+    private int COLLISION_RADIUS = 1;
 
 
     public Controller(Player player, GamePanel gamePanel, Level level, List<Enemy> enemies, GameManager gameManager) {
@@ -53,17 +53,26 @@ public class Controller {
             }
         }
 
+        // Check collision with objects
         for (GameObject object : gamePanel.getObjects()) {
             if (object.checkCollision(x, y, width, height)) {
                 return true;
             }
             else if (object.getType().equals(ObjectType.DOOR)) {
                 Door door = (Door) object;
-                if (!door.isOpened() && door.checkCollision(x, y, width, height)) {
-                    return true;
+                // Increase collision area around the door
+                if (!door.isOpened()) {
+                    int doorCollisionX = Integer.parseInt(door.getX()) - COLLISION_RADIUS;
+                    int doorCollisionY = Integer.parseInt(door.getY()) - COLLISION_RADIUS;
+                    int doorCollisionWidth = door.getWidth() + 2 * COLLISION_RADIUS;
+                    int doorCollisionHeight = door.getHeight() + 2 * COLLISION_RADIUS;
+                    if (x + width > doorCollisionX && x < doorCollisionX + doorCollisionWidth &&
+                            y + height > doorCollisionY && y < doorCollisionY + doorCollisionHeight) {
+                        return true;
+                    }
                 }
-            }
 
+            }
         }
 
         return false;
@@ -330,6 +339,27 @@ public class Controller {
         int playerCenterY = player.getY() + player.getHeight() / 2;
 
         for (GameObject object : gamePanel.getObjects()) {
+            if (object.getType().equals(ObjectType.DOOR)) {
+                Door door = (Door) object;
+                int doorCenterX = Integer.parseInt(door.getX()) + door.getWidth() / 2;
+                int doorCenterY = Integer.parseInt(door.getY()) + door.getHeight() / 2;
+
+                double distance = Math.sqrt(Math.pow(playerCenterX - doorCenterX, 2) + Math.pow(playerCenterY - doorCenterY, 2));
+
+                // Учтем радиус коллизии при взаимодействии с дверью
+                if (distance <= INTERACTION_RADIUS + (COLLISION_RADIUS + 20 )) {
+                    if (door.interact(player)) {
+                        COLLISION_RADIUS = 0;
+                        gamePanel.repaint();
+                        gamePanel.removeObject(object);
+
+                    }
+                    return;
+                }
+            }
+        }
+
+        for (GameObject object : gamePanel.getObjects()) {
             int objectCenterX = Integer.parseInt(object.getX()) + object.getWidth() / 2;
             int objectCenterY = Integer.parseInt(object.getY()) + object.getHeight() / 2;
 
@@ -359,22 +389,14 @@ public class Controller {
                     coin.interact(player);
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
-                }
-                if (object.getType().equals(ObjectType.DOOR)){
-                    Door door = (Door) object;
-                    if (door.interact(player)) {
-                        gamePanel.repaint();
-                        gamePanel.removeObject(object);
-                    }
-                }
-                else {
+                } else {
                     player.setAnimationType(Player.AnimationType.INTERACT);
                     gamePanel.repaint();
                 }
                 break;
-
             }
         }
+
     }
 
 
