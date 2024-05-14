@@ -22,12 +22,7 @@ public class InputHandler implements KeyListener {
     public InputHandler(Controller controller) {
         this.controller = controller;
 
-        inputTimer = new Timer(8, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updatePlayerMovement();
-            }
-        });
+        inputTimer = new Timer(8, e -> updatePlayerMovement());
         inputTimer.start();
     }
 
@@ -56,13 +51,7 @@ public class InputHandler implements KeyListener {
                 downPressed = true;
                 break;
             case KeyEvent.VK_F:
-                try {
                     controller.interact();
-                } catch (InstantiationException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IllegalAccessException ex) {
-                    throw new RuntimeException(ex);
-                }
                 System.out.println("Interact");
                 break;
             case KeyEvent.VK_ENTER:
@@ -94,12 +83,16 @@ public class InputHandler implements KeyListener {
                 downPressed = false;
                 break;
             case KeyEvent.VK_ESCAPE:
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        controller.togglePause();
-                    }
-                });
+                if(controller.showingInventory()) {
+                    controller.hideInventory();
+                } else {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.togglePause();
+                        }
+                    });
+                }
                 break;
             case KeyEvent.VK_E:
                 SwingUtilities.invokeLater(new Runnable() {

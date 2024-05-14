@@ -200,4 +200,18 @@ public class GameManager implements Runnable {
                     new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
         }
     }
+
+    public boolean showingInventory() {
+        return inventoryMenu != null && inventoryMenu.isVisible();
+    }
+
+    public void hideInventoryMenu() {
+        if (inventoryMenu != null) {
+            inventoryMenu.setVisible(false);
+            isInMenu = false;
+            paused = false;
+            view.getFrame().setCursor(view.getFrame().getToolkit().createCustomCursor(
+                    new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
+        }
+    }
 }

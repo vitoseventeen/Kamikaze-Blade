@@ -330,7 +330,7 @@ public class Controller {
         gameManager.togglePause();
     }
 
-    public void interact() throws InstantiationException, IllegalAccessException {
+    public void interact() {
         if (gameManager.isPaused() || player.isDead()) {
             return;
         }
@@ -403,5 +403,12 @@ public class Controller {
     public void showInventory() {
         gameManager.showInventoryMenu();
     }
+    public boolean showingInventory() {
+        return  gameManager.showingInventory();
+    }
 
+
+    public void hideInventory() {
+        gameManager.hideInventoryMenu();
+    }
 }
