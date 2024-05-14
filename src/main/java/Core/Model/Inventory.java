@@ -44,8 +44,9 @@ public class Inventory {
         }
     }
 
-    public boolean removeItem(ObjectType item) {
-        return items.remove(item);
+    public void removeItem(GameObject item) {
+        items.remove(item);
+        this.capacity += 1;
     }
 
 
@@ -55,13 +56,13 @@ public class Inventory {
     }
 
 
-    public boolean getItem(ObjectType item) {
+    public GameObject getItem(ObjectType item) {
         for (GameObject i : items) {
             if (i.getType().equals(item)) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return null;
     }
 
     public int getCapacity() {

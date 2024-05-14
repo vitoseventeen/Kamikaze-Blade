@@ -126,4 +126,7 @@ public class Level {
         return tiles[0].length;
     }
 
+    // for level doors x - 24 y - 46
+
+
 }

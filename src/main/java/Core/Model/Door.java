@@ -66,9 +66,10 @@ public class Door extends GameObject {
 
     @Override
     public boolean interact(Player player) {
+        Key key = (Key) player.getInventory().getItem(ObjectType.KEY);
         if (!isOpened ) {
-            if (player.getInventory().getItem(ObjectType.KEY)) {
-                player.getInventory().removeItem(ObjectType.KEY);
+            if (player.getInventory().getItem(ObjectType.KEY) != null && !isOpened && key.isTaken()) {
+                player.getInventory().removeItem(key);
                 open();
             }
         }
