@@ -14,7 +14,6 @@ public class Inventory {
         this.items = new ArrayList<>();
     }
 
-
     public int getCoinBalance() {
         return this.coinBalance;
     }
@@ -23,38 +22,30 @@ public class Inventory {
         this.coinBalance += amount;
     }
 
-
     public boolean containsItem(ObjectType item) {
         for (GameObject i : items) {
-            return i.equals(item);
+            if (i.getType().equals(item)) {
+                return true;
+            }
         }
         return false;
     }
 
-
-    public boolean addItem(GameObject item) {
+    public void addItem(GameObject item) {
         if (items.size() < capacity) {
             items.add(item);
-            this.capacity -= 1;
-            return true;
-        }
-        else {
+        } else {
             System.out.println("Inventory is full");
-            return false;
         }
     }
 
     public void removeItem(GameObject item) {
         items.remove(item);
-        this.capacity += 1;
     }
-
-
 
     public List<GameObject> getItems() {
         return items;
     }
-
 
     public GameObject getItem(ObjectType item) {
         for (GameObject i : items) {
@@ -69,7 +60,6 @@ public class Inventory {
         return capacity;
     }
 
-
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
@@ -82,7 +72,6 @@ public class Inventory {
         System.out.println("Coin balance: " + coinBalance);
     }
 
-
     public void removeCoinFromBalance(int amount) {
         this.coinBalance -= amount;
     }
@@ -94,6 +83,4 @@ public class Inventory {
     public void setItems(List<GameObject> items) {
         this.items = items;
     }
-
-
 }
