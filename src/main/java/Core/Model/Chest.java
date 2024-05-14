@@ -59,11 +59,12 @@ public class Chest extends GameObject {
     }
 
     @Override
-    public void interact(Player player) {
+    public boolean interact(Player player) {
 
         if (!isOpened) {
             open();
         }
+        return false;
     }
 }
 

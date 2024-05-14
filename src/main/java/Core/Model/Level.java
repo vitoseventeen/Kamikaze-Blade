@@ -111,6 +111,8 @@ public class Level {
                 objectJson.addProperty("type", "key");
             } else if (object instanceof Coin) {
                 objectJson.addProperty("type", "coin");
+            } else if (object instanceof Door) {
+                objectJson.addProperty("type", "door");
             }
             objectJson.addProperty("x", object.getX());
             objectJson.addProperty("y", object.getY());

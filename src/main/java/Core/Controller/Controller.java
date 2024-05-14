@@ -3,6 +3,7 @@ package Core.Controller;
 import Core.Model.*;
 import Core.View.GamePanel;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +57,13 @@ public class Controller {
             if (object.checkCollision(x, y, width, height)) {
                 return true;
             }
+            else if (object.getType().equals(ObjectType.DOOR)) {
+                Door door = (Door) object;
+                if (!door.isOpened() && door.checkCollision(x, y, width, height)) {
+                    return true;
+                }
+            }
+
         }
 
         return false;
@@ -313,7 +321,7 @@ public class Controller {
         gameManager.togglePause();
     }
 
-    public void interact() {
+    public void interact() throws InstantiationException, IllegalAccessException {
         if (gameManager.isPaused() || player.isDead()) {
             return;
         }
@@ -352,8 +360,13 @@ public class Controller {
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
                 }
-
-
+                if (object.getType().equals(ObjectType.DOOR)){
+                    Door door = (Door) object;
+                    if (door.interact(player)) {
+                        gamePanel.repaint();
+                        gamePanel.removeObject(object);
+                    }
+                }
                 else {
                     player.setAnimationType(Player.AnimationType.INTERACT);
                     gamePanel.repaint();

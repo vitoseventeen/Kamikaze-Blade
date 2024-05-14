@@ -56,10 +56,11 @@ public class Key extends GameObject {
     }
 
     @Override
-    public void interact(Player player) {
+    public boolean interact(Player player) {
         if (!isTaken) {
             take();
             player.getInventory().addItem(this);
         }
+        return false;
     }
 }

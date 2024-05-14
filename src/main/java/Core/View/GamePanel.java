@@ -114,6 +114,7 @@ public class GamePanel extends JPanel {
                 case CHEST -> new Chest(x, y);
                 case KEY -> new Key(x, y);
                 case COIN -> new Coin(x, y);
+                case DOOR -> new Door(x, y);
                 // Добавьте другие типы объектов при необходимости
                 default -> null;
             };
@@ -246,14 +247,19 @@ public class GamePanel extends JPanel {
                 }
              } else if (Objects.equals(objectType, "COIN")) {
                 Coin coin = (Coin) object;
-                if (coin.isCollected()) {
-                    coin.drawCollected(g, objectX, objectY);
+                if (coin.isCollected())
+                {coin.drawCollected(g, objectX, objectY);}
+                else {coin.draw(g, objectX, objectY);}
+            }else if (Objects.equals(objectType, "DOOR")) {
+                Door door = (Door) object;
+                if (door.isOpened()) {
+                    door.drawOpened(g, objectX, objectY);
                 } else {
-                    coin.draw(g, objectX, objectY);
+                    door.draw(g, objectX, objectY);
+
                 }
 
             }
-
             else {
                 object.draw(g, objectX, objectY);
             }

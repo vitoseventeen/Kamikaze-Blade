@@ -14,6 +14,7 @@ public class Inventory {
         this.items = new ArrayList<>();
     }
 
+
     public int getCoinBalance() {
         return this.coinBalance;
     }
@@ -23,7 +24,7 @@ public class Inventory {
     }
 
 
-    public boolean containsItem(GameObject item) {
+    public boolean containsItem(ObjectType item) {
         for (GameObject i : items) {
             return i.equals(item);
         }
@@ -43,7 +44,7 @@ public class Inventory {
         }
     }
 
-    public boolean removeItem(GameObject item) {
+    public boolean removeItem(ObjectType item) {
         return items.remove(item);
     }
 
@@ -53,8 +54,14 @@ public class Inventory {
         return items;
     }
 
-    public boolean contains(GameObject item) {
-        return items.contains(item);
+
+    public boolean getItem(ObjectType item) {
+        for (GameObject i : items) {
+            if (i.getType().equals(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getCapacity() {

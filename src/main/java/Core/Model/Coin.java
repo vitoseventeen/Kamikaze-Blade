@@ -57,12 +57,13 @@ public class Coin extends GameObject {
     }
 
     @Override
-    public void interact(Player player) {
+    public boolean interact(Player player) {
         if (!isCollected) {
             player.getInventory().addCoinToBalance(value);
             player.getInventory().printInventory();
             collect();
         }
+        return false;
     }
 
     public void drawCollected(Graphics g, int objectX, int objectY)

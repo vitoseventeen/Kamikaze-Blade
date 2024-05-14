@@ -56,7 +56,13 @@ public class InputHandler implements KeyListener {
                 downPressed = true;
                 break;
             case KeyEvent.VK_F:
-                controller.interact();
+                try {
+                    controller.interact();
+                } catch (InstantiationException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IllegalAccessException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println("Interact");
                 break;
             case KeyEvent.VK_ENTER:

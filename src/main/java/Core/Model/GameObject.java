@@ -35,7 +35,7 @@ public abstract class GameObject {
 
     public abstract void draw(Graphics g, int x, int y);
 
-    public abstract void interact(Player player);
+    public abstract boolean interact(Player player);
 
     public boolean checkCollision(int x, int y, int width, int height) {
         return this.x < x + width &&
