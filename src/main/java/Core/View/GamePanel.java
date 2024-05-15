@@ -118,6 +118,9 @@ public class GamePanel extends JPanel {
                 case COIN -> new Coin(x, y);
                 case DOOR -> new Door(x, y);
                 case NPC -> new NPC(x, y);
+                case POTION -> new Potion(x, y);
+                case HEAL -> new Heal(x, y);
+                case QUEST_KEY -> new QuestKey(x, y);
                 default -> null;
             };
             if (gameObject != null) {
@@ -204,7 +207,6 @@ public class GamePanel extends JPanel {
                     yield animationManager.getEnemyFrame("enemyIdle", enemy.getDirection(), enemy.getAnimationType());
                 }
             };
-
             if (enemyFrame != null) {
                 int enemyX = enemy.getX() + offsetX;
                 int enemyY = enemy.getY() + offsetY;
@@ -221,9 +223,9 @@ public class GamePanel extends JPanel {
             if (Objects.equals(GameObjectType, "CHEST")) {
                 Chest chest = (Chest) object;
                 if (chest.isOpened()) {
-                    chest.drawOpened(g, objectX, objectY); // Используйте метод drawOpened, когда сундук открыт
+                    chest.drawOpened(g, objectX, objectY);
                 } else {
-                    chest.draw(g, objectX, objectY); // Используйте метод draw для закрытого сундука
+                    chest.draw(g, objectX, objectY);
                 }
             } else if (Objects.equals(GameObjectType, "KEY")) {
                 Key key = (Key) object;
@@ -245,9 +247,7 @@ public class GamePanel extends JPanel {
                     door.drawOpened(g, objectX, objectY);
                 } else {
                     door.draw(g, objectX, objectY);
-
                 }
-
             }  else if (Objects.equals(GameObjectType, "NPC")) {
                 NPC npc = (NPC) object;
                 npc.draw(g, objectX, objectY);
@@ -257,12 +257,16 @@ public class GamePanel extends JPanel {
                         g.drawImage(npc.getTaskCompleted(), objectX + 20, objectY - 30, npc.getTaskCompleted().getWidth(null) / 7, npc.getTaskCompleted().getHeight(null) / 7, null);
                     }
                 }
-        }
+            }   else if (Objects.equals(GameObjectType, "POTION")) {
+                Potion potion = (Potion) object;
+                potion.draw(g, objectX, objectY);
+            } else if (Objects.equals(GameObjectType, "HEAL")) {
+                Heal heal = (Heal) object;
+                heal.draw(g, objectX, objectY); }
             else {
                 object.draw(g, objectX, objectY);
             }
         }
-
 
         int heartWidth = 16;
         int heartHeight = 16;
@@ -278,8 +282,6 @@ public class GamePanel extends JPanel {
             int drawY = heartY + spacing;
             g.drawImage(heartImage, drawX, drawY, heartWidth, heartHeight, null);
         }
-
-
         g.translate(-offsetX, -offsetY);
 
     }

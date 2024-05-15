@@ -13,6 +13,9 @@ public class Player {
     private AnimationType animationType;
     private Inventory inventory;
 
+    public void setHealth(int i) {
+        this.health = i;
+    }
 
 
     public enum Direction {

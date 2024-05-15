@@ -5,7 +5,10 @@ public enum GameObjectType {
     KEY,
     DOOR,
     NPC,
-    COIN
+    COIN,
+    POTION,
+    QUEST_KEY,
+    HEAL
 
 
 }

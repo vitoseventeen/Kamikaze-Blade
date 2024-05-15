@@ -11,7 +11,7 @@ public abstract class GameObject {
     protected int y;
     private boolean isInteracted = false;
     private boolean hasCollision = false;
-    private GameObjectType type;
+    private final GameObjectType type;
 
     public GameObject(int x, int y, GameObjectType type) {
         this.x = x;

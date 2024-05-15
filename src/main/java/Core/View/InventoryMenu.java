@@ -57,6 +57,10 @@ public class InventoryMenu extends JPanel {
 
     private void loadItemImages() {
         itemImages.put("KEY", new ImageIcon("assets/key.png").getImage());
+        itemImages.put("POTION", new ImageIcon("assets/potion.png").getImage());
+        itemImages.put("HEAL", new ImageIcon("assets/heal.png").getImage());
+        itemImages.put("COIN", new ImageIcon("assets/coin.png").getImage());
+        itemImages.put("QUEST_KEY", new ImageIcon("assets/QuestKey.png").getImage());
         // Add other items similarly
     }
 

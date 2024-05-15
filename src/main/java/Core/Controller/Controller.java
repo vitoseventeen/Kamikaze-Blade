@@ -371,7 +371,7 @@ public class Controller {
                     npc.interact(player);
                     if (inventory.isQuestFinished()) {
                         player.getInventory().removeCoinFromBalance(3);
-                        player.getInventory().addItem(new Key(0, 0));
+                        player.getInventory().addItem(new QuestKey(0, 0));
                         npc.setTask1Complete(true);
                     }
                     gamePanel.repaint();
@@ -405,6 +405,24 @@ public class Controller {
                 if (object.getType().equals(GameObjectType.COIN)) {
                     Coin coin = (Coin) object;
                     coin.interact(player);
+                    gamePanel.removeObject(object);
+                    gamePanel.repaint();
+                }
+                if (object.getType().equals(GameObjectType.POTION)) {
+                    Potion potion = (Potion) object;
+                    potion.interact(player);
+                    gamePanel.removeObject(object);
+                    gamePanel.repaint();
+                }
+                if (object.getType().equals(GameObjectType.HEAL)) {
+                    Heal heal = (Heal) object;
+                    heal.interact(player);
+                    gamePanel.removeObject(object);
+                    gamePanel.repaint();
+                }
+                if (object.getType().equals(GameObjectType.QUEST_KEY)) {
+                    QuestKey questKey = (QuestKey) object;
+                    questKey.interact(player);
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
                 }

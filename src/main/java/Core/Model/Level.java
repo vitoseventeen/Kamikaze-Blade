@@ -115,7 +115,14 @@ public class Level {
                 objectJson.addProperty("type", "door");
             } else if (object instanceof NPC) {
                 objectJson.addProperty("type", "npc");
+            } else if (object instanceof Potion) {
+                objectJson.addProperty("type", "potion");
+            } else if (object instanceof Heal) {
+                objectJson.addProperty("type", "heal");
+            } else if (object instanceof QuestKey) {
+                objectJson.addProperty("type", "questKey");
             }
+
             objectJson.addProperty("x", object.getX());
             objectJson.addProperty("y", object.getY());
             objectsArray.add(objectJson);
