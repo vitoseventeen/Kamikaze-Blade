@@ -1,5 +1,6 @@
 package Core.View;
 
+import Core.Controller.Controller;
 import Core.Model.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -7,6 +8,7 @@ import com.google.gson.JsonObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -116,7 +118,6 @@ public class GamePanel extends JPanel {
                 case COIN -> new Coin(x, y);
                 case DOOR -> new Door(x, y);
                 case NPC -> new NPC(x, y);
-                // Добавьте другие типы объектов при необходимости
                 default -> null;
             };
             if (gameObject != null) {
@@ -246,11 +247,13 @@ public class GamePanel extends JPanel {
                 } else {
                     key.draw(g, objectX, objectY);
                 }
-             } else if (Objects.equals(GameObjectType, "COIN")) {
+            } else if (Objects.equals(GameObjectType, "COIN")) {
                 Coin coin = (Coin) object;
-                if (coin.isCollected())
-                {coin.drawCollected(g, objectX, objectY);}
-                else {coin.draw(g, objectX, objectY);}
+                if (coin.isCollected()) {
+                    coin.drawCollected(g, objectX, objectY);
+                } else {
+                    coin.draw(g, objectX, objectY);
+                }
             } else if (Objects.equals(GameObjectType, "DOOR")) {
                 Door door = (Door) object;
                 if (door.isOpened()) {
@@ -260,16 +263,16 @@ public class GamePanel extends JPanel {
 
                 }
 
-            } else if (Objects.equals(GameObjectType, "NPC")) {
+            }  else if (Objects.equals(GameObjectType, "NPC")) {
                 NPC npc = (NPC) object;
-                if (!npc.isTalking()) {
-                    npc.draw(g, objectX, objectY);
-                } else {
-                    npc.draw(g, objectX, objectY);
+                npc.draw(g, objectX, objectY);
+                if (npc.isTalking()) {
+                    g.drawImage(npc.getTask1(), objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7, null);
+                    if (npc.isTask1Complete()) {
+                        g.drawImage(npc.getTaskCompleted(), objectX + 20, objectY - 30, npc.getTaskCompleted().getWidth(null) / 7, npc.getTaskCompleted().getHeight(null) / 7, null);
+                    }
                 }
-
-
-            }
+        }
             else {
                 object.draw(g, objectX, objectY);
             }

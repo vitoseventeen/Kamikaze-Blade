@@ -93,4 +93,9 @@ public class Inventory {
         }
         return count;
     }
+
+    public boolean isQuestFinished() {
+        System.out.println("Checking if quest is finished");
+        return getCoinBalance() >= 3;
+    }
 }
