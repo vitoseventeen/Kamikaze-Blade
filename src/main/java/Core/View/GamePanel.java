@@ -262,12 +262,21 @@ public class GamePanel extends JPanel {
                 }
             }   else if (Objects.equals(GameObjectType, "POTION")) {
                 Potion potion = (Potion) object;
-                potion.draw(g, objectX, objectY);
+                if (potion.isTaken()) {
+                    potion.drawTaken(g, objectX, objectY);
+                } else {
+                    potion.draw(g, objectX, objectY);
+                }
             } else if (Objects.equals(GameObjectType, "HEAL")) {
                 Heal heal = (Heal) object;
-                heal.draw(g, objectX, objectY); }
+                if (heal.isTaken()) {
+                    heal.drawTaken(g, objectX, objectY);
+                } else {
+                    heal.draw(g, objectX, objectY);
+                }
+            }
             else {
-                object.draw(g, objectX, objectY);
+                    object.draw(g, objectX, objectY);
             }
         }
 

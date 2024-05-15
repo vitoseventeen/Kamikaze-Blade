@@ -9,12 +9,25 @@ public class Potion extends GameObject{
 
     private boolean isTaken;
     private Image potionImage;
+
     private static final int POTION_WIDTH = 9;
     private static final int POTION_HEIGHT = 11;
 
     public Potion(int x, int y) {
         super(x, y, GameObjectType.POTION);
+        this.isTaken = false;
         loadImages();
+    }
+
+
+
+    public void take() {
+        isTaken = true;
+    }
+
+
+    public void drawTaken(Graphics g, int x, int y) {
+        //TODO remove from screen and add to inventory
     }
 
     @Override
@@ -43,11 +56,15 @@ public class Potion extends GameObject{
 
     @Override
     public boolean interact(Player player) {
-        player.setHealth(player.getHealth() + 1);
+        if (!isTaken) {
+            take();
+            player.getInventory().addItem(this);
+        }
         return false;
     }
 
     public boolean isTaken() {
-        return false;
+        return isTaken;
     }
+
 }

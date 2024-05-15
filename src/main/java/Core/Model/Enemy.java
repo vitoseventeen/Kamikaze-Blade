@@ -9,7 +9,7 @@ public class Enemy extends Player {
     private int dy;
     private int speed;
     private int health;
-    private long lastAttackTime; // Время последней атаки
+    private long lastAttackTime;
 
 
     public Enemy(String name, int x, int y, int height, int width) {
@@ -19,7 +19,6 @@ public class Enemy extends Player {
     }
 
     public boolean canAttack() {
-        // Проверяем, прошло ли достаточно времени с момента последней атаки
         return System.currentTimeMillis() - lastAttackTime >= ATTACK_COOLDOWN;
     }
 
