@@ -31,6 +31,12 @@
     {"type":  "npc" , "x": 91, "y":  83},
     {"type":  "heal", "x" : 620, "y":  520},
     {"type":  "potion", "x":  600, "y":  500},
-    {"type":  "potion", "x":  590, "y":  490}
+    {"type":  "potion", "x":  590, "y":  490},
+
+    {"type":  "potion", "x":  592, "y":  492},
+
+    {"type":  "potion", "x":  593, "y":  493},
+
+    {"type":  "potion", "x":  595, "y":  495}
   ]
 }

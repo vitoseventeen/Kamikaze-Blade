@@ -8,8 +8,7 @@ import Core.Util.Constants;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +34,9 @@ public class InventoryMenu extends JPanel {
         defaultCell = new ImageIcon("assets/defaultCell.png").getImage();
         selectedCell = new ImageIcon("assets/activeCell.png").getImage();
 
+        selectedSlotX = 0;
+        selectedSlotY = 0;
+
         itemImages = new HashMap<>();
         loadItemImages(); // Load item images into the map
 
@@ -53,6 +55,66 @@ public class InventoryMenu extends JPanel {
                 }
             }
         });
+        this.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int notches = e.getWheelRotation();
+                if (notches < 0) {
+                    // Mouse wheel moved UP
+                    selectedSlotX = (selectedSlotX + 1) % Constants.INVENTORY_COLUMNS;
+                    if (selectedSlotX == 0) { // If we've reached the end of a row
+                        selectedSlotY = (selectedSlotY + 1) % Constants.INVENTORY_ROWS; // Move to the next row
+                    }
+                } else {
+                    // Mouse wheel moved DOWN
+                    selectedSlotX = (selectedSlotX - 1 + Constants.INVENTORY_COLUMNS) % Constants.INVENTORY_COLUMNS;
+                    if (selectedSlotX == Constants.INVENTORY_COLUMNS - 1) { // If we've reached the start of a row
+                        selectedSlotY = (selectedSlotY - 1 + Constants.INVENTORY_ROWS) % Constants.INVENTORY_ROWS; // Move to the previous row
+                    }
+                }
+                repaint();
+            }
+        });
+
+        InputMap inputMap = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = this.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("UP"), "up");
+        actionMap.put("up", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedSlotY = (selectedSlotY - 1 + Constants.INVENTORY_ROWS) % Constants.INVENTORY_ROWS;
+                repaint();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "down");
+        actionMap.put("down", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedSlotY = (selectedSlotY + 1) % Constants.INVENTORY_ROWS;
+                repaint();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "left");
+        actionMap.put("left", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedSlotX = (selectedSlotX - 1 + Constants.INVENTORY_COLUMNS) % Constants.INVENTORY_COLUMNS;
+                repaint();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "right");
+        actionMap.put("right", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedSlotX = (selectedSlotX + 1) % Constants.INVENTORY_COLUMNS;
+                repaint();
+            }
+        });
+
     }
 
     private void loadItemImages() {
