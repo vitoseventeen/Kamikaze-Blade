@@ -214,6 +214,7 @@ public class GamePanel extends JPanel {
                 g.drawImage(enemyFrame, enemyX, enemyY, null);
             }
         }
+
         // draw level objects
         for (GameObject object : objects) {
             int objectX = Integer.parseInt(object.getX()) + offsetX;
@@ -248,12 +249,14 @@ public class GamePanel extends JPanel {
                 } else {
                     door.draw(g, objectX, objectY);
                 }
-            }  else if (Objects.equals(GameObjectType, "NPC")) {
+            } else if (Objects.equals(GameObjectType, "NPC")) {
                 NPC npc = (NPC) object;
                 npc.draw(g, objectX, objectY);
                 if (npc.isTalking()) {
                     g.drawImage(npc.getTask1(), objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7, null);
                     if (npc.isTask1Complete()) {
+                        g.clearRect(objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7);
+                        npc.drawAfterQuest(g, objectX, objectY);
                         g.drawImage(npc.getTaskCompleted(), objectX + 20, objectY - 30, npc.getTaskCompleted().getWidth(null) / 7, npc.getTaskCompleted().getHeight(null) / 7, null);
                     }
                 }
@@ -283,7 +286,6 @@ public class GamePanel extends JPanel {
             g.drawImage(heartImage, drawX, drawY, heartWidth, heartHeight, null);
         }
         g.translate(-offsetX, -offsetY);
-
     }
 
     public int getOffsetX() {

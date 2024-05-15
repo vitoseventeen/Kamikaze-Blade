@@ -355,7 +355,6 @@ public class Controller {
                         COLLISION_RADIUS = 0;
                         gamePanel.repaint();
                         gamePanel.removeObject(object);
-
                     }
                     return;
                 }

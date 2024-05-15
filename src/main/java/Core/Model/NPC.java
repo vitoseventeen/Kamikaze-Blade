@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class NPC extends GameObject {
-    private Image npcImage;
+    private Image npcImage, npcQuest;
     private boolean isTalking = false;
     private Image task1;
     private Image taskCompleted;
@@ -25,6 +25,7 @@ public class NPC extends GameObject {
     private void loadImages() {
         try {
             npcImage = ImageIO.read(getClass().getResource("/npcStand.png"));
+            npcQuest = ImageIO.read(getClass().getResource("/npcQuest.png"));
             task1 = ImageIO.read(getClass().getResource("/Task1.png"));
             taskCompleted = ImageIO.read(getClass().getResource("/TaskFinish.png"));
         } catch (IOException e) {
@@ -35,6 +36,10 @@ public class NPC extends GameObject {
     @Override
     public void draw(Graphics g, int x, int y) {
         g.drawImage(npcImage, x, y, null);
+    }
+
+    public void drawAfterQuest(Graphics g, int x, int y) {
+        g.drawImage(npcQuest, x, y, null);
     }
 
     @Override
@@ -64,4 +69,5 @@ public class NPC extends GameObject {
     public void setTask1Complete(boolean complete) {
         this.task1Complete = complete;
     }
+
 }

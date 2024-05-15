@@ -13,11 +13,6 @@ public class Player {
     private AnimationType animationType;
     private Inventory inventory;
 
-    public void setHealth(int i) {
-        this.health = i;
-    }
-
-
     public enum Direction {
         UP,
         DOWN,
@@ -40,12 +35,17 @@ public class Player {
         this.width = width;
         this.inventory = inventory;
         this.name = name;
-        this.health = 8;
+        this.health = 3;
         this.score = 0;
         this.speed = 3;
         this.direction = Direction.DOWN;
         this.animationType = AnimationType.IDLE;
     }
+
+    public void setHealth(int i) {
+        this.health = i;
+    }
+
     public boolean checkCollisionWithEnemy(int x, int y, int width, int height) {
         return this.x < x + width &&
                 this.x + this.width > x &&
