@@ -435,6 +435,31 @@ public class Controller {
 
     }
 
+    public void craftHeal() {
+        int potionCount = 0;
+        List<GameObject> potionsToRemove = new ArrayList<>();
+
+        for (GameObject item : inventory.getItems()) {
+            if (item.getType().equals(GameObjectType.POTION)) {
+                potionsToRemove.add(item);
+                potionCount++;
+                if (potionCount == 2) {
+                    break;
+                }
+            }
+        }
+        if (potionCount == 2) {
+            for (GameObject potion : potionsToRemove) {
+                inventory.removeItem(potion);
+            }
+            inventory.addItem(new Heal(0, 0));
+        }
+        gamePanel.repaint();
+    }
+
+
+
+
 
     public void showInventory() {
         gameManager.showInventoryMenu();

@@ -14,6 +14,7 @@ public class Inventory {
         this.items = new ArrayList<>();
     }
 
+
     public int getCoinBalance() {
         return this.coinBalance;
     }
@@ -22,14 +23,6 @@ public class Inventory {
         this.coinBalance += amount;
     }
 
-    public boolean containsItem(GameObjectType item) {
-        for (GameObject i : items) {
-            if (i.getType().equals(item)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void addItem(GameObject item) {
         if (items.size() < capacity) {
@@ -41,6 +34,12 @@ public class Inventory {
 
     public void removeItem(GameObject item) {
         items.remove(item);
+    }
+
+    public void removeItems(GameObject item, int amount) {
+        for (int i = 0; i < amount; i++) {
+            items.remove(item);
+        }
     }
 
     public List<GameObject> getItems() {
@@ -93,6 +92,8 @@ public class Inventory {
         }
         return count;
     }
+
+
 
     public boolean isQuestFinished() {
         System.out.println("Checking if quest is finished");

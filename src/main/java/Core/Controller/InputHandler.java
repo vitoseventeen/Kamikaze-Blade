@@ -57,6 +57,9 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_ENTER:
                 controller.attack();
                 break;
+            case KeyEvent.VK_C:
+                controller.craftHeal();
+                break;
             default:
                 break;
         }
