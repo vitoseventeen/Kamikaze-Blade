@@ -184,21 +184,6 @@ public class GamePanel extends JPanel {
         // Draw hearts
         g.translate(-offsetX, -offsetY);
 
-        int heartWidth = 16;
-        int heartHeight = 16;
-        int spacing = 2;
-
-        int playerHealth = player.getHealth();
-        int heartCount = (int) Math.ceil((double) playerHealth);
-
-        for (int i = 0; i < heartCount; i++) {
-            int heartY = 2;
-            int heartX = 2;
-            int drawX = heartX + spacing + i * (heartWidth + spacing);
-            int drawY = heartY + spacing;
-            g.drawImage(heartImage, drawX, drawY, heartWidth, heartHeight, null);
-        }
-
         // Draw enemies
         for (Enemy enemy : enemies) {
             BufferedImage enemyFrame = switch (enemy.getAnimationType()) {
@@ -279,6 +264,20 @@ public class GamePanel extends JPanel {
         }
 
 
+        int heartWidth = 16;
+        int heartHeight = 16;
+        int spacing = 2;
+
+        int playerHealth = player.getHealth();
+        int heartCount = (int) Math.ceil((double) playerHealth);
+
+        for (int i = 0; i < heartCount; i++) {
+            int heartY = 2;
+            int heartX = 2;
+            int drawX = heartX + spacing + i * (heartWidth + spacing);
+            int drawY = heartY + spacing;
+            g.drawImage(heartImage, drawX, drawY, heartWidth, heartHeight, null);
+        }
 
 
         g.translate(-offsetX, -offsetY);
