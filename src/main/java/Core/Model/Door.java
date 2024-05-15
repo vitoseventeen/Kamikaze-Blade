@@ -18,6 +18,8 @@ public class Door extends GameObject {
     public Door(int x, int y) {
         super(x, y, GameObjectType.DOOR);
         loadImages();
+        this.setHasCollision(true);
+
 
     }
 
@@ -45,6 +47,7 @@ public class Door extends GameObject {
     }
 
     public boolean isOpened() {
+        this.setHasCollision(false);
         return isOpened;
     }
 

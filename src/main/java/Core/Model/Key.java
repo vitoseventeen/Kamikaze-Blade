@@ -14,6 +14,7 @@ public class Key extends GameObject {
     public Key(int x, int y) {
         super(x, y, GameObjectType.KEY);
         this.isTaken = false;
+        this.setHasCollision(true);
         loadImages();
     }
 

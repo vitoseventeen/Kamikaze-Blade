@@ -54,13 +54,15 @@ public class Controller {
         }
 
         // Check collision with objects
+        // Check collision with objects
+        // Check collision with objects
         for (GameObject object : gamePanel.getObjects()) {
-            if (object.checkCollision(x, y, width, height)) {
+            // Проверяем, имеет ли объект коллизию
+            if (object.hasCollision() && object.checkCollision(x, y, width, height)) {
                 return true;
             }
-            else if (object.getType().equals(GameObjectType.DOOR)) {
+            if (object.getType().equals(GameObjectType.DOOR)) {
                 Door door = (Door) object;
-                // Increase collision area around the door
                 if (!door.isOpened()) {
                     int doorCollisionX = Integer.parseInt(door.getX()) - COLLISION_RADIUS;
                     int doorCollisionY = Integer.parseInt(door.getY()) - COLLISION_RADIUS;
@@ -71,16 +73,14 @@ public class Controller {
                         return true;
                     }
                 }
-
             }
         }
-
         return false;
     }
 
 
 
-    // Perform player attack action
+        // Perform player attack action
     public void attack() {
         if (gameManager.isPaused() || player.isDead()) {
             return;
@@ -148,7 +148,7 @@ public class Controller {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
-//            System.out.println("Player X: " + player.getX() + " Y: " + player.getY());
+            // System.out.println("Player X: " + player.getX() + " Y: " + player.getY());
 
 
 
@@ -341,6 +341,7 @@ public class Controller {
         int playerCenterY = player.getY() + player.getHeight() / 2;
 
         for (GameObject object : gamePanel.getObjects()) {
+
             if (object.getType().equals(GameObjectType.DOOR)) {
                 Door door = (Door) object;
                 int doorCenterX = Integer.parseInt(door.getX()) + door.getWidth() / 2;
@@ -359,9 +360,24 @@ public class Controller {
                     return;
                 }
             }
-        }
+            if (object.getType().equals(GameObjectType.NPC)) {
+                NPC npc = (NPC) object;
+                int npcCenterX = Integer.parseInt(npc.getX()) + npc.getWidth() / 2;
+                int npcCenterY = Integer.parseInt(npc.getY()) + npc.getHeight() / 2;
 
-        for (GameObject object : gamePanel.getObjects()) {
+                double distance = Math.sqrt(Math.pow(playerCenterX - npcCenterX, 2) + Math.pow(playerCenterY - npcCenterY, 2));
+
+                if (distance <= INTERACTION_RADIUS + (COLLISION_RADIUS + 5 )) {
+                    npc.interact(player);
+                    if (inventory.isQuestFinished()) {
+                        player.getInventory().removeCoinFromBalance(3);
+                        player.getInventory().addItem(new Key(0, 0));
+                        npc.setTask1Complete(true);
+                    }
+                    gamePanel.repaint();
+                    return;
+                }
+        }
             int objectCenterX = Integer.parseInt(object.getX()) + object.getWidth() / 2;
             int objectCenterY = Integer.parseInt(object.getY()) + object.getHeight() / 2;
 
@@ -390,14 +406,6 @@ public class Controller {
                     Coin coin = (Coin) object;
                     coin.interact(player);
                     gamePanel.removeObject(object);
-                    gamePanel.repaint();
-                }
-                if (object.getType().equals(GameObjectType.NPC)) {
-                    NPC npc = (NPC) object;
-                    npc.interact(player);
-                    if (inventory.isQuestFinished()) {
-                        npc.setTask1Complete(true);
-                    }
                     gamePanel.repaint();
                 }
                 else {

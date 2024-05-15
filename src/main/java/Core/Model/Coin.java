@@ -15,6 +15,7 @@ public class Coin extends GameObject {
     public Coin(int x, int y) {
         super(x, y, GameObjectType.COIN);
         this.value = 1;
+        this.setHasCollision(true);
         loadImages();
     }
 

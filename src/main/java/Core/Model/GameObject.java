@@ -17,7 +17,7 @@ public abstract class GameObject {
         this.x = x;
         this.y = y;
         this.isInteracted = false;
-        this.hasCollision = false;
+        this.hasCollision = true;
         this.type = type;
     }
 
