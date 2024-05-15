@@ -12,7 +12,7 @@ public class Key extends GameObject {
     private static final int KEY_HEIGHT = 16;
 
     public Key(int x, int y) {
-        super(x, y, ObjectType.KEY);
+        super(x, y, GameObjectType.KEY);
         this.isTaken = false;
         loadImages();
     }

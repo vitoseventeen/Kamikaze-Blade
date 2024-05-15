@@ -58,7 +58,7 @@ public class Controller {
             if (object.checkCollision(x, y, width, height)) {
                 return true;
             }
-            else if (object.getType().equals(ObjectType.DOOR)) {
+            else if (object.getType().equals(GameObjectType.DOOR)) {
                 Door door = (Door) object;
                 // Increase collision area around the door
                 if (!door.isOpened()) {
@@ -341,7 +341,7 @@ public class Controller {
         int playerCenterY = player.getY() + player.getHeight() / 2;
 
         for (GameObject object : gamePanel.getObjects()) {
-            if (object.getType().equals(ObjectType.DOOR)) {
+            if (object.getType().equals(GameObjectType.DOOR)) {
                 Door door = (Door) object;
                 int doorCenterX = Integer.parseInt(door.getX()) + door.getWidth() / 2;
                 int doorCenterY = Integer.parseInt(door.getY()) + door.getHeight() / 2;
@@ -369,7 +369,7 @@ public class Controller {
 
             if (distance <= INTERACTION_RADIUS) {
                 object.interact(player);
-                if (object.getType().equals(ObjectType.CHEST)) {
+                if (object.getType().equals(GameObjectType.CHEST)) {
                     Chest chest = (Chest) object;
                     chest.interact(player);
                     player.setAnimationType(Player.AnimationType.OPEN); // TODO: MAKE GOOD ANIMATION
@@ -377,7 +377,7 @@ public class Controller {
                         gamePanel.repaint();
                     }
                 }
-                if (object.getType().equals(ObjectType.KEY)) {
+                if (object.getType().equals(GameObjectType.KEY)) {
                     Key key = (Key) object;
                     key.interact(player);
                     inventory.printInventory();
@@ -386,12 +386,18 @@ public class Controller {
                     // remove collision with key
 
                 }
-                if (object.getType().equals(ObjectType.COIN)) {
+                if (object.getType().equals(GameObjectType.COIN)) {
                     Coin coin = (Coin) object;
                     coin.interact(player);
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
-                } else {
+                }
+                if (object.getType().equals(GameObjectType.NPC)) {
+                    NPC npc = (NPC) object;
+                    npc.interact(player);
+                    gamePanel.repaint();
+                }
+                else {
                     player.setAnimationType(Player.AnimationType.INTERACT);
                     gamePanel.repaint();
                 }

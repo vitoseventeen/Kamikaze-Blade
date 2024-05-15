@@ -13,7 +13,7 @@ public class Coin extends GameObject {
     private static final int COIN_HEIGHT = 10;
 
     public Coin(int x, int y) {
-        super(x, y, ObjectType.COIN);
+        super(x, y, GameObjectType.COIN);
         this.value = 1;
         loadImages();
     }

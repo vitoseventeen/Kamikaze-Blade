@@ -1,9 +1,10 @@
 package Core.Model;
 
-public enum ObjectType {
+public enum GameObjectType {
     CHEST,
     KEY,
     DOOR,
+    NPC,
     COIN
 
 

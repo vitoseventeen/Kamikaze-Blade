@@ -16,7 +16,7 @@ public class Door extends GameObject {
     private static final int DOOR_HEIGHT = 64;
 
     public Door(int x, int y) {
-        super(x, y, ObjectType.DOOR);
+        super(x, y, GameObjectType.DOOR);
         loadImages();
 
     }
@@ -66,9 +66,9 @@ public class Door extends GameObject {
 
     @Override
     public boolean interact(Player player) {
-        Key key = (Key) player.getInventory().getItem(ObjectType.KEY);
+        Key key = (Key) player.getInventory().getItem(GameObjectType.KEY);
         if (!isOpened ) {
-            if (player.getInventory().getItem(ObjectType.KEY) != null && !isOpened && key.isTaken()) {
+            if (player.getInventory().getItem(GameObjectType.KEY) != null && !isOpened && key.isTaken()) {
                 player.getInventory().removeItem(key);
                 open();
             }

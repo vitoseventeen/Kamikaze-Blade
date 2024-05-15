@@ -11,9 +11,9 @@ public abstract class GameObject {
     protected int y;
     private boolean isInteracted = false;
     private boolean hasCollision = false;
-    private ObjectType type;
+    private GameObjectType type;
 
-    public GameObject(int x, int y, ObjectType type) {
+    public GameObject(int x, int y, GameObjectType type) {
         this.x = x;
         this.y = y;
         this.isInteracted = false;
@@ -29,7 +29,7 @@ public abstract class GameObject {
         return hasCollision;
     }
 
-    public ObjectType getType() {
+    public GameObjectType getType() {
         return type;
     }
 

@@ -22,7 +22,7 @@ public class Inventory {
         this.coinBalance += amount;
     }
 
-    public boolean containsItem(ObjectType item) {
+    public boolean containsItem(GameObjectType item) {
         for (GameObject i : items) {
             if (i.getType().equals(item)) {
                 return true;
@@ -47,7 +47,7 @@ public class Inventory {
         return items;
     }
 
-    public GameObject getItem(ObjectType item) {
+    public GameObject getItem(GameObjectType item) {
         for (GameObject i : items) {
             if (i.getType().equals(item)) {
                 return i;

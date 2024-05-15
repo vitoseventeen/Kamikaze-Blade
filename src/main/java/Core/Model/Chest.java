@@ -14,7 +14,7 @@ public class Chest extends GameObject {
     private static final int CHEST_HEIGHT = 16;
 
     public Chest(int x, int y) {
-        super(x, y, ObjectType.CHEST);
+        super(x, y, GameObjectType.CHEST);
         loadImages();
     }
 

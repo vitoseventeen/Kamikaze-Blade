@@ -106,7 +106,7 @@ public class GamePanel extends JPanel {
     public static void loadObjects(JsonArray objectsArray, List<GameObject> objects) {
         for (JsonElement objElement : objectsArray) {
             JsonObject objJson = objElement.getAsJsonObject();
-            ObjectType type = ObjectType.valueOf(objJson.get("type").getAsString().toUpperCase());
+            GameObjectType type = GameObjectType.valueOf(objJson.get("type").getAsString().toUpperCase());
             int x = objJson.get("x").getAsInt();
             int y = objJson.get("y").getAsInt();
             // Создать объекты на основе типа
@@ -115,6 +115,7 @@ public class GamePanel extends JPanel {
                 case KEY -> new Key(x, y);
                 case COIN -> new Coin(x, y);
                 case DOOR -> new Door(x, y);
+                case NPC -> new NPC(x, y);
                 // Добавьте другие типы объектов при необходимости
                 default -> null;
             };
@@ -229,34 +230,42 @@ public class GamePanel extends JPanel {
         for (GameObject object : objects) {
             int objectX = Integer.parseInt(object.getX()) + offsetX;
             int objectY = Integer.parseInt(object.getY()) + offsetY;
-            String objectType = String.valueOf(object.getType());
+            String GameObjectType = String.valueOf(object.getType());
 
-            if (Objects.equals(objectType, "CHEST")) {
+            if (Objects.equals(GameObjectType, "CHEST")) {
                 Chest chest = (Chest) object;
                 if (chest.isOpened()) {
                     chest.drawOpened(g, objectX, objectY); // Используйте метод drawOpened, когда сундук открыт
                 } else {
                     chest.draw(g, objectX, objectY); // Используйте метод draw для закрытого сундука
                 }
-            } else if (Objects.equals(objectType, "KEY")) {
+            } else if (Objects.equals(GameObjectType, "KEY")) {
                 Key key = (Key) object;
                 if (key.isTaken()) {
                     key.drawTaken(g, objectX, objectY);
                 } else {
                     key.draw(g, objectX, objectY);
                 }
-             } else if (Objects.equals(objectType, "COIN")) {
+             } else if (Objects.equals(GameObjectType, "COIN")) {
                 Coin coin = (Coin) object;
                 if (coin.isCollected())
                 {coin.drawCollected(g, objectX, objectY);}
                 else {coin.draw(g, objectX, objectY);}
-            }else if (Objects.equals(objectType, "DOOR")) {
+            } else if (Objects.equals(GameObjectType, "DOOR")) {
                 Door door = (Door) object;
                 if (door.isOpened()) {
                     door.drawOpened(g, objectX, objectY);
                 } else {
                     door.draw(g, objectX, objectY);
 
+                }
+
+            } else if (Objects.equals(GameObjectType, "NPC")) {
+                NPC npc = (NPC) object;
+                if (npc.isTalking()) {
+                    npc.drawTalking(g, objectX, objectY);
+                } else {
+                    npc.draw(g, objectX, objectY);
                 }
 
             }
