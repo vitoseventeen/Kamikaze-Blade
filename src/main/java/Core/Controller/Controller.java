@@ -394,13 +394,26 @@ public class Controller {
                 }
                 if (object.getType().equals(GameObjectType.NPC)) {
                     NPC npc = (NPC) object;
-                    npc.interact(player);
-                    gamePanel.repaint();
+                    if (!npc.isTask0_1Complete()) {
+                        npc.showFirstDialog(gamePanel.getGraphics());
+                        npc.setTask0_1Complete(true);
+                    }
+//                    else if (!npc.isTask0_2Complete()) {
+//                        npc.showSecondDialog();
+//                        npc.setTask0_2Complete(true);
+//                    }
+//                    else if (!npc.isTask1Complete() && (player.getInventory().countKeys() >= 3 && player.getScore() >= 3)) {
+//                        npc.showThirdDialog();
+//                        npc.setTask1Complete(true);
+//                    }
+//                    else {
+//                        npc.showFourthDialog();
+//                    }
                 }
                 else {
                     player.setAnimationType(Player.AnimationType.INTERACT);
-                    gamePanel.repaint();
                 }
+                gamePanel.repaint();
                 break;
             }
         }

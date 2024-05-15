@@ -83,4 +83,14 @@ public class Inventory {
     public void setItems(List<GameObject> items) {
         this.items = items;
     }
+
+    public int countKeys() {
+        int count = 0;
+        for (GameObject i : items) {
+            if (i.getType().equals(GameObjectType.KEY)) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

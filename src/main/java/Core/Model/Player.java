@@ -1,7 +1,5 @@
 package Core.Model;
 
-import static Core.Util.Constants.ATTACK_COOLDOWN;
-
 public class Player {
     private int x;
     private int y;
@@ -52,7 +50,9 @@ public class Player {
                 this.y + this.height > y;
     }
 
-
+    public int getScore() {
+        return score;
+    }
 
     public boolean isDead() {
         return health <= 0;
@@ -60,6 +60,10 @@ public class Player {
 
     public void addScore() {
         this.score++;
+    }
+
+    public Object countKeys() {
+        return inventory.countKeys();
     }
 
 

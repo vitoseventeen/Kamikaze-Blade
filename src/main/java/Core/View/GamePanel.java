@@ -262,11 +262,12 @@ public class GamePanel extends JPanel {
 
             } else if (Objects.equals(GameObjectType, "NPC")) {
                 NPC npc = (NPC) object;
-                if (npc.isTalking()) {
-                    npc.drawTalking(g, objectX, objectY);
+                if (!npc.isTalking()) {
+                    npc.draw(g, objectX, objectY);
                 } else {
                     npc.draw(g, objectX, objectY);
                 }
+
 
             }
             else {
