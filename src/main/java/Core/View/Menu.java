@@ -16,6 +16,7 @@ import Core.Controller.GameManager;
 public class Menu  extends JPanel implements ActionListener {
     private final JButton startButton;
     private final JButton exitButton;
+    private final JButton loadButton;
     private  GameManager gameManager;
 
     public Menu(GameManager gameManager) {
@@ -35,12 +36,15 @@ public class Menu  extends JPanel implements ActionListener {
         requestFocus();
 
         startButton = new JButton();
+        loadButton = new JButton();
         exitButton = new JButton();
 
         startButton.setIcon(new ImageIcon("assets/startDefault.png"));
-        addButton(startButton, 453,440,430,120);
+        addButton(startButton, 453,490,430,120);
+        loadButton.setIcon(new ImageIcon("assets/loadDefault.png"));
+        addButton(loadButton, 453, 590, 430, 120);
         exitButton.setIcon(new ImageIcon("assets/exitDefault.png"));
-        addButton(exitButton, 453, 580, 430, 120);
+        addButton(exitButton, 453, 690, 430, 120);
         jFrame.setVisible(true);
         startButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -71,6 +75,29 @@ public class Menu  extends JPanel implements ActionListener {
                 startButton.setIcon(new ImageIcon("assets/startDefault.png"));
             }
         });
+
+        loadButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                loadButton.setIcon(new ImageIcon("assets/loadPressed.png"));
+//                try {
+//                    gameManager.loadGame();
+//                } catch (IOException | ParseException ex) {
+//                    ex.printStackTrace();
+//                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                loadButton.setIcon(new ImageIcon("assets/loadHover.png"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                loadButton.setIcon(new ImageIcon("assets/loadDefault.png"));
+            }
+        });
+
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -95,6 +122,7 @@ public class Menu  extends JPanel implements ActionListener {
                 exitButton.setIcon(new ImageIcon("assets/exitDefault.png"));
             }
         });
+        loadButton.addActionListener(this);
         startButton.addActionListener(this);
         exitButton.addActionListener(this);
 
@@ -103,7 +131,7 @@ public class Menu  extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Image background = new ImageIcon("assets/background.jpg").getImage();
+        Image background = new ImageIcon("assets/background.png").getImage();
         g.drawImage(background, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, null);
 
     }
