@@ -12,22 +12,25 @@ import Core.Util.Constants;
 public class PauseMenu extends JPanel implements ActionListener{
     private JButton resumeButton;
     private JButton exitButton;
+    private JButton saveButton;
     private GameManager gameManager;
 
     public PauseMenu(GameManager gameManager) {
         this.gameManager = gameManager;
 
         setLayout(null);
-        resumeButton = new JButton("Resume");
-        exitButton = new JButton("Exit");
 
         resumeButton = new JButton();
+        saveButton = new JButton();
+
         exitButton = new JButton();
 
         resumeButton.setIcon(new ImageIcon("assets/resumeDefault.png"));
-        addButton(resumeButton, 453,450,350,50);
+        addButton(resumeButton, 453,410,400,80);
+        saveButton.setIcon(new ImageIcon("assets/saveDefault.png"));
+        addButton(saveButton, 453, 500, 400, 80);
         exitButton.setIcon(new ImageIcon("assets/exitMenuDefault.png"));
-        addButton(exitButton, 453, 540, 300, 50);
+        addButton(exitButton, 453, 590, 400, 80);
 
         resumeButton.addActionListener(new ActionListener() {
             @Override
@@ -40,6 +43,27 @@ public class PauseMenu extends JPanel implements ActionListener{
                 timer.start();
             }});
 
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveButton.setIcon(new ImageIcon("assets/savePressed.png"));
+                Timer timer = new Timer(2, e1 -> {
+//                    gameManager.saveGame();
+                });
+                timer.setRepeats(false);
+                timer.start();
+            }});
+
+        saveButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                saveButton.setIcon(new ImageIcon("assets/saveHover.png"));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                saveButton.setIcon(new ImageIcon("assets/saveDefault.png"));
+            }
+        });
 
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -76,6 +100,7 @@ public class PauseMenu extends JPanel implements ActionListener{
                 exitButton.setIcon(new ImageIcon("assets/exitMenuDefault.png"));
             }
         });
+        saveButton.addActionListener(this);
         resumeButton.addActionListener(this);
         exitButton.addActionListener(this);
     }

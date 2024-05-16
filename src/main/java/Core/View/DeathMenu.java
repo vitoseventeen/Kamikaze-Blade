@@ -60,7 +60,7 @@ public class DeathMenu extends JPanel implements ActionListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 new Thread(() -> {
-                    exitButton.setIcon(new ImageIcon("assets/exitPressed2.png"));
+                    exitButton.setIcon(new ImageIcon("assets/exitHover2.png"));
                     try {
                         Thread.sleep(3);
                     } catch (InterruptedException ex) {

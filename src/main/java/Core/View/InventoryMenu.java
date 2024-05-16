@@ -177,7 +177,7 @@ public class InventoryMenu extends JPanel {
             e.printStackTrace();
         }
         g.setFont(customFont.deriveFont(Font.BOLD, 62));
-        g.setColor(Color.MAGENTA);
+        g.setColor(Color.RED);
 
         String name = player.getName();
         int score = player.getScore();
