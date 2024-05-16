@@ -45,4 +45,5 @@ public class QuestKey extends GameObject{
     public boolean interact(Player player) {
         return false;
     }
+
 }

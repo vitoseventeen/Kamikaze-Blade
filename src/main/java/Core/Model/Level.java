@@ -121,6 +121,8 @@ public class Level {
                 objectJson.addProperty("type", "heal");
             } else if (object instanceof QuestKey) {
                 objectJson.addProperty("type", "questKey");
+            } else if (object instanceof LevelDoor) {
+                objectJson.addProperty("type", "levelDoor");
             }
 
             objectJson.addProperty("x", object.getX());

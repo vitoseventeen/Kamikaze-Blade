@@ -72,6 +72,19 @@ public class Controller {
                             y + height > doorCollisionY && y < doorCollisionY + doorCollisionHeight) {
                         return true;
                     }
+
+                }
+            } if (object.getType().equals(GameObjectType.LEVELDOOR)) {
+                LevelDoor levelDoor = (LevelDoor) object;
+                if (!levelDoor.isOpened()) {
+                    int levelDoorCollisionX = Integer.parseInt(levelDoor.getX()) - COLLISION_RADIUS;
+                    int levelDoorCollisionY = Integer.parseInt(levelDoor.getY()) - COLLISION_RADIUS;
+                    int levelDoorCollisionWidth = levelDoor.getWidth() + 2 * COLLISION_RADIUS;
+                    int levelDoorCollisionHeight = levelDoor.getHeight() + 2 * COLLISION_RADIUS;
+                    if (x + width > levelDoorCollisionX && x < levelDoorCollisionX + levelDoorCollisionWidth &&
+                            y + height > levelDoorCollisionY && y < levelDoorCollisionY + levelDoorCollisionHeight) {
+                        return true;
+                    }
                 }
             }
         }
@@ -358,7 +371,24 @@ public class Controller {
                     }
                     return;
                 }
+
             }
+            if (object.getType().equals(GameObjectType.LEVELDOOR)) {
+                LevelDoor level_door = (LevelDoor) object;
+                int levelDoorCenterX = Integer.parseInt(level_door.getX()) + level_door.getWidth() / 2;
+                int levelDoorCenterY = Integer.parseInt(level_door.getY()) + level_door.getHeight() / 2;
+
+                double distance = Math.sqrt(Math.pow(playerCenterX - levelDoorCenterX, 2) + Math.pow(playerCenterY - levelDoorCenterY, 2));
+                if (distance <= INTERACTION_RADIUS + (COLLISION_RADIUS + 20 )) {
+                    if (level_door.interact(player)) {
+                        COLLISION_RADIUS = 0;
+                        gamePanel.repaint();
+                        gamePanel.removeObject(object);
+                    }
+                    return;
+                }
+            }
+
             if (object.getType().equals(GameObjectType.NPC)) {
                 NPC npc = (NPC) object;
                 int npcCenterX = Integer.parseInt(npc.getX()) + npc.getWidth() / 2;
@@ -366,7 +396,7 @@ public class Controller {
 
                 double distance = Math.sqrt(Math.pow(playerCenterX - npcCenterX, 2) + Math.pow(playerCenterY - npcCenterY, 2));
 
-                if (distance <= INTERACTION_RADIUS + (COLLISION_RADIUS + 5 )) {
+                if (distance <= INTERACTION_RADIUS + (COLLISION_RADIUS + 5)) {
                     npc.interact(player);
                     if (inventory.isQuestFinished()) {
                         player.getInventory().removeCoinFromBalance(3);
@@ -376,7 +406,10 @@ public class Controller {
                     gamePanel.repaint();
                     return;
                 }
+
         }
+
+
             int objectCenterX = Integer.parseInt(object.getX()) + object.getWidth() / 2;
             int objectCenterY = Integer.parseInt(object.getY()) + object.getHeight() / 2;
 

@@ -121,6 +121,7 @@ public class GamePanel extends JPanel {
                 case POTION -> new Potion(x, y);
                 case HEAL -> new Heal(x, y);
                 case QUEST_KEY -> new QuestKey(x, y);
+                case LEVELDOOR -> new LevelDoor(x, y);
                 default -> null;
             };
             if (gameObject != null) {
@@ -249,7 +250,15 @@ public class GamePanel extends JPanel {
                 } else {
                     door.draw(g, objectX, objectY);
                 }
-            } else if (Objects.equals(GameObjectType, "NPC")) {
+            } else if (Objects.equals(GameObjectType, "LEVELDOOR")) {
+                LevelDoor levelDoor = (LevelDoor) object;
+                if (levelDoor.isOpened()) {
+                    levelDoor.drawOpened(g, objectX, objectY);
+                } else {
+                    levelDoor.draw(g, objectX, objectY);
+                }
+            }
+             else if (Objects.equals(GameObjectType, "NPC")) {
                 NPC npc = (NPC) object;
                 npc.draw(g, objectX, objectY);
                 if (npc.isTalking()) {

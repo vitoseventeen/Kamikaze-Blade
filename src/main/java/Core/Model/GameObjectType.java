@@ -8,6 +8,7 @@ public enum GameObjectType {
     COIN,
     POTION,
     QUEST_KEY,
+    LEVELDOOR,
     HEAL
 
 
