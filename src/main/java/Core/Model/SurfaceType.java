@@ -8,7 +8,8 @@ import java.io.InputStream;
 public enum SurfaceType {
     WALL("/Wall.png"),
     FLOOR("/Floor.png"),
-    EMPTY("/Empty.png");
+    EMPTY("/Empty.png"),
+    LEVELTILE("/LevelTile.png");
 
     private final String texturePath;
     private BufferedImage textureImage;

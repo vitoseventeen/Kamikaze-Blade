@@ -44,6 +44,7 @@ public class Level {
                     SurfaceType surfaceType = switch (tileType) {
                         case 0 -> SurfaceType.FLOOR;
                         case 1 -> SurfaceType.WALL;
+                        case 2 -> SurfaceType.LEVELTILE;
                         default -> SurfaceType.EMPTY;
                     };
                     tiles[x][y] = new Tile(surfaceType);
@@ -138,6 +139,7 @@ public class Level {
     }
 
     // for level doors x - 24 y - 46
+
 
 
 }

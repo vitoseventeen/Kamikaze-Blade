@@ -161,7 +161,7 @@ public class Controller {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
 
-            // System.out.println("Player X: " + player.getX() + " Y: " + player.getY());
+             System.out.println("Player X: " + player.getX() + " Y: " + player.getY());
 
 
 
