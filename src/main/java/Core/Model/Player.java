@@ -13,6 +13,10 @@ public class Player {
     private AnimationType animationType;
     private Inventory inventory;
 
+    public String getName() {
+        return name;
+    }
+
     public enum Direction {
         UP,
         DOWN,

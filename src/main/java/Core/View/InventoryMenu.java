@@ -10,6 +10,8 @@ import Core.Util.Constants;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -166,6 +168,26 @@ public class InventoryMenu extends JPanel {
         super.paintComponent(g);
         Image inventoryMenuImage = new ImageIcon("assets/inventoryMenu.png").getImage();
         g.drawImage(inventoryMenuImage, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, this);
+
+        Font customFont = null;
+        try {
+            InputStream fontStream = getClass().getResourceAsStream("/upheavtt.ttf");
+            customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+        g.setFont(customFont.deriveFont(Font.BOLD, 62));
+        g.setColor(Color.MAGENTA);
+
+        String name = player.getName();
+        int score = player.getScore();
+        int coinBalance = player.getInventory().getCoinBalance();
+
+        g.drawString(name, 432 , 675 );
+        g.drawString(String.valueOf(score), 468 , 730 );
+        g.drawString(String.valueOf(coinBalance), 554, 785);
+
+
 
         for (int y = 0; y < Constants.INVENTORY_ROWS; y++) {
             for (int x = 0; x < Constants.INVENTORY_COLUMNS; x++) {
