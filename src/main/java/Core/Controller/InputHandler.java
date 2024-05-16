@@ -62,6 +62,7 @@ public class InputHandler implements KeyListener {
                 break;
             default:
                 break;
+                // U = USE ITEM IN InventoryMenu
         }
     }
 

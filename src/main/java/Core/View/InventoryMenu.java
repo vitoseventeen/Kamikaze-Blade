@@ -2,6 +2,7 @@ package Core.View;
 
 import Core.Controller.GameManager;
 import Core.Model.GameObject;
+import Core.Model.GameObjectType;
 import Core.Model.Inventory;
 import Core.Model.Player;
 import Core.Util.Constants;
@@ -23,6 +24,7 @@ public class InventoryMenu extends JPanel {
     private Image selectedCell;
     private int selectedSlotX = -1;
     private int selectedSlotY = -1;
+    private boolean itemSelected = false; // Флаг для отслеживания выбранного предмета
     private Map<String, Image> itemImages; // Map to store item images
 
     public InventoryMenu(GameManager gameManager, Player player) {
@@ -43,15 +45,25 @@ public class InventoryMenu extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                selectedSlotX = (e.getX() - Constants.INVENTORY_X) / Constants.INVENTORY_CELL_WIDTH;
-                selectedSlotY = (e.getY() - Constants.INVENTORY_Y) / Constants.INVENTORY_CELL_HEIGHT;
+                int clickedSlotX = (e.getX() - Constants.INVENTORY_X) / Constants.INVENTORY_CELL_WIDTH;
+                int clickedSlotY = (e.getY() - Constants.INVENTORY_Y) / Constants.INVENTORY_CELL_HEIGHT;
 
-                if (selectedSlotX >= 0 && selectedSlotX < Constants.INVENTORY_COLUMNS &&
-                        selectedSlotY >= 0 && selectedSlotY < Constants.INVENTORY_ROWS) {
+                if (clickedSlotX >= 0 && clickedSlotX < Constants.INVENTORY_COLUMNS &&
+                        clickedSlotY >= 0 && clickedSlotY < Constants.INVENTORY_ROWS) {
+                    if (!itemSelected) {
+                        selectedSlotX = clickedSlotX;
+                        selectedSlotY = clickedSlotY;
+                        itemSelected = true;
+                    } else {
+                        if (selectedSlotX == clickedSlotX && selectedSlotY == clickedSlotY) {
+                            useSelectedItem();
+                            itemSelected = false;
+                        } else {
+                            selectedSlotX = clickedSlotX;
+                            selectedSlotY = clickedSlotY;
+                        }
+                    }
                     repaint();
-                } else {
-                    selectedSlotX = -1;
-                    selectedSlotY = -1;
                 }
             }
         });
@@ -78,6 +90,15 @@ public class InventoryMenu extends JPanel {
 
         InputMap inputMap = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = this.getActionMap();
+
+        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_U, 0), "useItem");
+        getActionMap().put("useItem", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                useSelectedItem();
+                repaint();
+            }
+        });
 
         inputMap.put(KeyStroke.getKeyStroke("UP"), "up");
         actionMap.put("up", new AbstractAction() {
@@ -116,6 +137,20 @@ public class InventoryMenu extends JPanel {
         });
 
     }
+
+    private void useSelectedItem() {
+        if (inventory.getItems().size() > selectedSlotY * Constants.INVENTORY_COLUMNS + selectedSlotX) {
+            GameObject selectedItem = inventory.getItems().get(selectedSlotY * Constants.INVENTORY_COLUMNS + selectedSlotX);
+            if (selectedItem.getType() == GameObjectType.POTION) {
+                player.setHealth(player.getHealth() + 2);
+                inventory.removeItem(selectedItem);
+            } else if (selectedItem.getType() == GameObjectType.HEAL) {
+                player.setHealth(player.getHealth() + 5);
+                inventory.removeItem(selectedItem);
+            }
+        }
+    }
+
 
     private void loadItemImages() {
         itemImages.put("KEY", new ImageIcon("assets/key.png").getImage());
