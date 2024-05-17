@@ -129,6 +129,8 @@ public class Controller {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
 
+        checkLevelTeleport(newX,newY);
+
         // Check collision with enemies
         for (Enemy enemy : enemies) {
             if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
@@ -155,6 +157,20 @@ public class Controller {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
             gamePanel.repaint();
+        }
+    }
+
+    private void checkLevelTeleport(int newX, int newY) {
+        for (GameObject object : gamePanel.getObjects()) {
+            if (object.getType().equals(GameObjectType.LEVELDOOR)) {
+                LevelDoor levelDoor = (LevelDoor) object;
+                if (levelDoor.checkCollision(newX, newY, player.getWidth(), player.getHeight())) {
+                    if (levelDoor.isOpened()) {
+                        levelDoor.interact(player);
+                        gamePanel.repaint();
+                    }
+                }
+            }
         }
     }
 
