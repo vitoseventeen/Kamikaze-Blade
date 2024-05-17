@@ -48,7 +48,7 @@ public class PauseMenu extends JPanel implements ActionListener{
             public void actionPerformed(ActionEvent e) {
                 saveButton.setIcon(new ImageIcon("assets/savePressed.png"));
                 Timer timer = new Timer(2, e1 -> {
-//                    gameManager.saveGame();
+                    gameManager.saveInventory();
                 });
                 timer.setRepeats(false);
                 timer.start();

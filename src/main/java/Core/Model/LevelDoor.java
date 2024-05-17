@@ -41,7 +41,6 @@ public class LevelDoor extends GameObject{
     }
 
     //TODO: ADD TO ALL CLASSES AND MAKE LEVEL DOORS INTERACTABLE (еще переход между лвлами)
-    //TODO: ADD TO ALL CLASSES AND MAKE LEVEL DOORS INTERACTABLE (еще переход между лвлами)
 
     public boolean isOpened() {
         this.setHasCollision(false);

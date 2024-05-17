@@ -13,6 +13,7 @@ import Core.View.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +37,7 @@ public class GameManager implements Runnable {
 
     public GameManager() {
         Inventory playerInventory = new Inventory(10);
-        player = new Player("yukhnory", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH, playerInventory);
+        player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH, playerInventory);
         level = Level.loadLevelFromJson("level1.json");
         enemies = new ArrayList<>();
 
@@ -136,10 +137,15 @@ public class GameManager implements Runnable {
         }
     }
 
-    public boolean isInMenu() {
-        return isInMenu;
+    public void saveInventory() {
+        System.out.println("Saving inventory");
+
     }
 
+    public void loadInventory() {
+        System.out.println("Loading inventory");
+
+    }
 
 
     public void togglePause() {

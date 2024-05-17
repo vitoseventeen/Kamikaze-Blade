@@ -34,11 +34,9 @@ public class Controller {
     // Check for collision with level boundaries and tiles
     public boolean isCollision(int x, int y, int width, int height) {
         int TILE_SIZE = Core.Util.Constants.TILE_SIZE;
-
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
             return true;
         }
-
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
         int tileWidth = (x + width) / TILE_SIZE;
@@ -53,8 +51,6 @@ public class Controller {
             }
         }
 
-        // Check collision with objects
-        // Check collision with objects
         // Check collision with objects
         for (GameObject object : gamePanel.getObjects()) {
             // Проверяем, имеет ли объект коллизию
@@ -90,8 +86,6 @@ public class Controller {
         }
         return false;
     }
-
-
 
         // Perform player attack action
     public void attack() {
@@ -160,11 +154,6 @@ public class Controller {
             if (player.getAnimationType() != Player.AnimationType.ATTACK) {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
-
-             System.out.println("Player X: " + player.getX() + " Y: " + player.getY());
-
-
-
             gamePanel.repaint();
         }
     }
@@ -177,7 +166,6 @@ public class Controller {
         int distance = (int) Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
         return distance <= radius;
     }
-
 
     // Move enemies on the game board
     public void moveEnemies() {
@@ -271,7 +259,6 @@ public class Controller {
                     }
                 }
             }
-
 // Set the direction based on movement
             if (enemy.getDx() < 0) {
                 enemy.setDirection(Enemy.Direction.LEFT);
@@ -283,7 +270,6 @@ public class Controller {
                 enemy.setDirection(Enemy.Direction.UP);
             }
 
-
             // Check collision with the player
             if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                 if (enemy.canAttack()) {
@@ -292,7 +278,6 @@ public class Controller {
                     enemy.setLastAttackTime(System.currentTimeMillis());
                 }
             }
-
             // Check collision with other enemies
             boolean collisionWithOtherEnemy = false;
             for (Enemy otherEnemy : enemies) {
@@ -304,7 +289,6 @@ public class Controller {
             if (collisionWithOtherEnemy) {
                 continue;
             }
-
 
             // Small delay for smooth animation
             try {
@@ -406,7 +390,6 @@ public class Controller {
                     gamePanel.repaint();
                     return;
                 }
-
         }
 
 
@@ -432,7 +415,6 @@ public class Controller {
                     gamePanel.repaint();
                     gamePanel.removeObject(object);
                     // remove collision with key
-
                 }
                 if (object.getType().equals(GameObjectType.COIN)) {
                     Coin coin = (Coin) object;
@@ -465,13 +447,11 @@ public class Controller {
                 break;
             }
         }
-
     }
 
     public void craftHeal() {
         int potionCount = 0;
         List<GameObject> potionsToRemove = new ArrayList<>();
-
         for (GameObject item : inventory.getItems()) {
             if (item.getType().equals(GameObjectType.POTION)) {
                 potionsToRemove.add(item);
@@ -481,6 +461,7 @@ public class Controller {
                 }
             }
         }
+
         if (potionCount == 2) {
             for (GameObject potion : potionsToRemove) {
                 inventory.removeItem(potion);
@@ -489,9 +470,6 @@ public class Controller {
         }
         gamePanel.repaint();
     }
-
-
-
 
 
     public void showInventory() {

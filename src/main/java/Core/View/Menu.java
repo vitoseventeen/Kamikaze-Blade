@@ -80,11 +80,7 @@ public class Menu  extends JPanel implements ActionListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 loadButton.setIcon(new ImageIcon("assets/loadPressed.png"));
-//                try {
-//                    gameManager.loadGame();
-//                } catch (IOException | ParseException ex) {
-//                    ex.printStackTrace();
-//                }
+                gameManager.loadInventory();
             }
 
             @Override
