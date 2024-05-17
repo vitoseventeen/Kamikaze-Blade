@@ -188,6 +188,10 @@ public class GameManager implements Runnable {
     }
 
     public void showInventoryMenu() {
+        if(player.isDead()) {
+            hideInventoryMenu();
+            return;
+        }
         if (inventoryMenu == null) {
             inventoryMenu = new InventoryMenu(this, player);
             inventoryMenu.setOpaque(false);
