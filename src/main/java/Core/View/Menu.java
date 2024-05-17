@@ -79,8 +79,19 @@ public class Menu  extends JPanel implements ActionListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 loadButton.setIcon(new ImageIcon("assets/loadPressed.png"));
-                gameManager.loadInventory();
+                Timer timer = new Timer(1, e1 -> {
+                    try {
+                        gameManager.loadInventory();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                    jFrame.dispose();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
+
 
             @Override
             public void mouseEntered(MouseEvent e) {

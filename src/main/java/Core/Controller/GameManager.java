@@ -148,6 +148,7 @@ public class GameManager implements Runnable {
         Inventory loadedInventory = Inventory.loadInventory("inventory.dat");
         if (loadedInventory != null) {
             player.setInventory(loadedInventory);
+            start();
         }
     }
 
