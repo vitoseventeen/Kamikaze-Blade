@@ -19,6 +19,7 @@ public class Controller {
     private GameManager gameManager;
     private Inventory inventory;
     private int COLLISION_RADIUS = 1;
+    private boolean isLevelChanged = false;
 
 
     public Controller(Player player, GamePanel gamePanel, Level level, List<Enemy> enemies, GameManager gameManager) {
@@ -129,8 +130,11 @@ public class Controller {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
 
-        checkLevelTeleport(newX,newY);
 
+        if (level.getTile(newX / TILE_SIZE, newY / TILE_SIZE).getSurfaceType().equals(SurfaceType.LEVELTILE)) {
+            goToNextLevel();
+            return;
+        }
         // Check collision with enemies
         for (Enemy enemy : enemies) {
             if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
@@ -160,19 +164,51 @@ public class Controller {
         }
     }
 
-    private void checkLevelTeleport(int newX, int newY) {
-        for (GameObject object : gamePanel.getObjects()) {
-            if (object.getType().equals(GameObjectType.LEVELDOOR)) {
-                LevelDoor levelDoor = (LevelDoor) object;
-                if (levelDoor.checkCollision(newX, newY, player.getWidth(), player.getHeight())) {
-                    if (levelDoor.isOpened()) {
-                        levelDoor.interact(player);
-                        gamePanel.repaint();
-                    }
-                }
-            }
+    private void goToNextLevel() {
+
+        gamePanel.clearObjects();
+        level.clearTiles();
+
+        // Toggle the level
+        if (!isLevelChanged()) {
+            level = Level.loadLevelFromJson("level2.json");
+            isLevelChanged = true;
+        } else {
+            level = Level.loadLevelFromJson("level1.json");
+            isLevelChanged = false;
+        }
+
+
+        // Set player position for the new level
+        player.setX(500);
+        player.setY(100);
+
+        // Update game panel with new level
+        gamePanel.setLevel(level);
+
+        // Add new objects for the new level
+        List<GameObject> newObjects = level.getObjects();
+        for (GameObject object : newObjects) {
+            gamePanel.addObject(object);
+        }
+
+        // Repaint the game panel to reflect changes
+        gamePanel.repaint();
+    }
+
+    private void spawnEnemiesForLevel() {
+        Random random = new Random();
+        for (int i = 0; i < NUMBER_OF_ENEMIES; i++) {
+            int x, y;
+            do {
+                x = random.nextInt(level.getWidth() * TILE_SIZE);
+                y = random.nextInt(level.getHeight() * TILE_SIZE);
+            } while (isCollision(x, y, PLAYER_WIDTH, PLAYER_HEIGHT));
+            Enemy enemy = new Enemy("Enemy" + i, x, y, PLAYER_HEIGHT, PLAYER_WIDTH);
+            enemies.add(enemy);
         }
     }
+
 
     public boolean isPlayerInEnemyRadius(Enemy enemy, int radius) {
         int playerX = player.getX();
@@ -189,6 +225,7 @@ public class Controller {
             return;
         }
         Random random = new Random();
+        List<Enemy> enemiesToRemove = new ArrayList<>(); // To hold enemies that need to be removed
         for (Enemy enemy : enemies) {
             if (enemy.isDead()) {
                 // If the enemy is dead, it shouldn't move
@@ -275,7 +312,8 @@ public class Controller {
                     }
                 }
             }
-// Set the direction based on movement
+
+            // Set the direction based on movement
             if (enemy.getDx() < 0) {
                 enemy.setDirection(Enemy.Direction.LEFT);
             } else if (enemy.getDx() > 0) {
@@ -294,6 +332,7 @@ public class Controller {
                     enemy.setLastAttackTime(System.currentTimeMillis());
                 }
             }
+
             // Check collision with other enemies
             boolean collisionWithOtherEnemy = false;
             for (Enemy otherEnemy : enemies) {
@@ -330,6 +369,10 @@ public class Controller {
             }
         }
         return nearbyEnemies;
+    }
+
+    public boolean isLevelChanged() {
+        return isLevelChanged;
     }
 
     public List<Enemy> getEnemies() {

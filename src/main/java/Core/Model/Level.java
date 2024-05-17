@@ -138,6 +138,14 @@ public class Level {
         return tiles[0].length;
     }
 
+    public void clearTiles() {
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                tiles[x][y] = new Tile(SurfaceType.EMPTY);
+            }
+        }
+    }
+
     // for level doors x - 24 y - 46
 
 

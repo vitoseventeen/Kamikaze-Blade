@@ -75,4 +75,8 @@ public class Enemy extends Player {
     public void setLastAttackTime(long l) {
         this.lastAttackTime = l;
     }
+
+    public void setDead(boolean b) {
+        this.health = 0;
+    }
 }

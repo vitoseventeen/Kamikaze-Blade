@@ -1,6 +1,5 @@
 package Core.View;
 
-import Core.Controller.Controller;
 import Core.Model.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,7 +22,7 @@ public class GamePanel extends JPanel {
     private Player player;
     private Level level;
     private List<Enemy> enemies = new ArrayList<>();
-    private List<GameObject> objects = new ArrayList<>();
+    private static List<GameObject> objects = new ArrayList<>();
     private JsonArray objectsArray;
     private AnimationManager animationManager = new AnimationManager();
     private Map<String, BufferedImage> imageCache = new HashMap<>();
@@ -104,6 +103,8 @@ public class GamePanel extends JPanel {
         // Загрузить объекты
         loadObjects(objectsArray, objects);
     }
+
+
 
     public static void loadObjects(JsonArray objectsArray, List<GameObject> objects) {
         for (JsonElement objElement : objectsArray) {
@@ -360,5 +361,22 @@ public class GamePanel extends JPanel {
 
     public void removeObject(GameObject object) {
         objects.remove(object);
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+
+    public void addObject(GameObject object) {
+        objects.add(object);
+    }
+
+    public void clearObjects() {
+        objects.clear();
+    }
+
+    public void clearEnemies() {
+        enemies.clear();
     }
 }

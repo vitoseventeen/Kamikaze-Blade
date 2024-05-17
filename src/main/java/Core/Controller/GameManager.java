@@ -64,7 +64,9 @@ public class GameManager implements Runnable {
         }
     }
 
-    private void spawnEnemies() {
+    protected void spawnEnemies() {
+        enemies.clear(); // Clear existing enemies
+
         Random random = new Random();
         for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
             int x, y;
@@ -118,6 +120,7 @@ public class GameManager implements Runnable {
         stop();
     }
 
+
     private void updateGame() {
         long lastTime = System.nanoTime();
         double nsPerTick = 1000000000.0 / Constants.TARGET_FPS;
@@ -126,9 +129,7 @@ public class GameManager implements Runnable {
         while (running) {
             if (player.isDead()) {
                 showDeathMenu();
-            }
-            else {
-
+            } else {
                 long now = System.nanoTime();
                 delta += (now - lastTime) / nsPerTick;
                 lastTime = now;
@@ -138,6 +139,7 @@ public class GameManager implements Runnable {
                 }
             }
         }
+
     }
 
     public void saveInventory() {
@@ -225,4 +227,5 @@ public class GameManager implements Runnable {
                     new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
         }
     }
+
 }

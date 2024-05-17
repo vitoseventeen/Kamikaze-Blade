@@ -17,6 +17,10 @@ public class Player {
         return name;
     }
 
+    public void setScore(int i) {
+        this.score = i;
+    }
+
     public enum Direction {
         UP,
         DOWN,
