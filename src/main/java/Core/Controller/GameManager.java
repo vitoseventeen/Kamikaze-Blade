@@ -36,11 +36,14 @@ public class GameManager implements Runnable {
     private boolean paused = false;
 
     public GameManager() {
-        Inventory playerInventory = new Inventory(10);
+        Inventory playerInventory = new Inventory(14);
         player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH, playerInventory);
         level = Level.loadLevelFromJson("level1.json");
         enemies = new ArrayList<>();
+    }
 
+    public void setInventory(Inventory playerInventory) {
+        player.setInventory(playerInventory);
     }
 
     public void start() {
@@ -138,25 +141,23 @@ public class GameManager implements Runnable {
     }
 
     public void saveInventory() {
-        System.out.println("Saving inventory");
-
+        player.getInventory().saveInventory("inventory.dat");
     }
 
     public void loadInventory() {
-        System.out.println("Loading inventory");
-
+        Inventory loadedInventory = Inventory.loadInventory("inventory.dat");
+        if (loadedInventory != null) {
+            player.setInventory(loadedInventory);
+        }
     }
-
 
     public void togglePause() {
         if (!isInMenu) {
             if (pauseMenu == null) {
-
                 pauseMenu = new PauseMenu(this);
                 pauseMenu.setOpaque(false);
                 pauseMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
                 view.getFrame().getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
-
             }
             paused = !paused;
             pauseMenu.setVisible(paused);
@@ -191,11 +192,10 @@ public class GameManager implements Runnable {
             inventoryMenu.setOpaque(false);
             inventoryMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
             view.getFrame().getLayeredPane().add(inventoryMenu, JLayeredPane.POPUP_LAYER);
-
             inventoryMenu.setVisible(true);
             isInMenu = true;
         } else {
-           inventoryMenu.setVisible(!inventoryMenu.isVisible());
+            inventoryMenu.setVisible(!inventoryMenu.isVisible());
             isInMenu = !isInMenu;
         }
         paused = !paused;

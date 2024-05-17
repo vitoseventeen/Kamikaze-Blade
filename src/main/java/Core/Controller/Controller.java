@@ -382,7 +382,7 @@ public class Controller {
 
                 if (distance <= INTERACTION_RADIUS + (COLLISION_RADIUS + 5)) {
                     npc.interact(player);
-                    if (inventory.isQuestFinished()) {
+                    if (inventory.isQuestFinished() && !inventory.isFull()) {
                         player.getInventory().removeCoinFromBalance(3);
                         player.getInventory().addItem(new QuestKey(0, 0));
                         npc.setTask1Complete(true);
@@ -410,6 +410,11 @@ public class Controller {
                 }
                 if (object.getType().equals(GameObjectType.KEY)) {
                     Key key = (Key) object;
+                    if (inventory.isFull()) {
+                        System.out.println("Inventory is full");
+
+                        return;
+                    }
                     key.interact(player);
                     inventory.printInventory();
                     gamePanel.repaint();
@@ -423,19 +428,34 @@ public class Controller {
                     gamePanel.repaint();
                 }
                 if (object.getType().equals(GameObjectType.POTION)) {
+
                     Potion potion = (Potion) object;
+                    if (inventory.isFull()) {
+                        System.out.println("Inventory is full");
+
+                        return;
+                    }
                     potion.interact(player);
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
                 }
                 if (object.getType().equals(GameObjectType.HEAL)) {
                     Heal heal = (Heal) object;
+                    if (inventory.isFull()) {
+                        System.out.println("Inventory is full");
+
+                        return;
+                    }
                     heal.interact(player);
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
                 }
                 if (object.getType().equals(GameObjectType.QUEST_KEY)) {
                     QuestKey questKey = (QuestKey) object;
+                    if (inventory.isFull()) {
+                        System.out.println("Inventory is full");
+                        return;
+                    }
                     questKey.interact(player);
                     gamePanel.removeObject(object);
                     gamePanel.repaint();

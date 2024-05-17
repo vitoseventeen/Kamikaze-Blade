@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class QuestKey extends GameObject{
     private boolean isTaken;
-    private Image keyImage;
+    private transient Image keyImage;
     private static final int KEY_WIDTH = 16;
     private static final int KEY_HEIGHT = 16;
 

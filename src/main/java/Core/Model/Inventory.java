@@ -1,10 +1,11 @@
 package Core.Model;
 
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory {
+public class Inventory implements Serializable {
     private int capacity;
     private List<GameObject> items;
     private int coinBalance;
@@ -30,6 +31,27 @@ public class Inventory {
             items.add(item);
         } else {
             System.out.println("Inventory is full");
+        }
+    }
+
+    public void saveInventory(String fileName) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            outputStream.writeObject(this);
+            System.out.println("Inventory saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving inventory: " + e.getMessage());
+        }
+    }
+
+    // Статический метод для загрузки инвентаря из файла
+    public static Inventory loadInventory(String fileName) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            Inventory inventory = (Inventory) inputStream.readObject();
+            System.out.println("Inventory loaded successfully.");
+            return inventory;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading inventory: " + e.getMessage());
+            return null;
         }
     }
 
@@ -99,5 +121,9 @@ public class Inventory {
     public boolean isQuestFinished() {
         System.out.println("Checking if quest is finished");
         return getCoinBalance() >= 3;
+    }
+
+    public boolean isFull() {
+        return items.size() == capacity;
     }
 }

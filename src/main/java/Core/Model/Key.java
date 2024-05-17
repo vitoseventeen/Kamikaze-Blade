@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class Key extends GameObject {
     private boolean isTaken;
-    private Image keyImage;
+    private transient Image keyImage;
     private static final int KEY_WIDTH = 16;
     private static final int KEY_HEIGHT = 16;
 
@@ -58,7 +58,7 @@ public class Key extends GameObject {
 
     @Override
     public boolean interact(Player player) {
-        if (!isTaken) {
+        if (!isTaken && !player.getInventory().isFull()) {
             take();
             player.getInventory().addItem(this);
         }

@@ -8,7 +8,7 @@ import java.net.URL;
 public class Heal extends GameObject{
 
     private boolean isTaken;
-    private Image healImage;
+    private transient Image healImage;
 
     private static final int HEAL_WIDTH = 10;
     private static final int HEAL_HEIGHT = 10;
@@ -58,7 +58,7 @@ public class Heal extends GameObject{
 
     @Override
     public boolean interact(Player player) {
-        if (!isTaken) {
+        if (!isTaken && !player.getInventory().isFull()) {
             take();
             player.getInventory().addItem(this);
         }

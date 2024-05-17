@@ -8,7 +8,7 @@ import java.net.URL;
 public class Potion extends GameObject{
 
     private boolean isTaken;
-    private Image potionImage;
+    private transient Image potionImage;
 
     private static final int POTION_WIDTH = 9;
     private static final int POTION_HEIGHT = 11;
@@ -56,7 +56,7 @@ public class Potion extends GameObject{
 
     @Override
     public boolean interact(Player player) {
-        if (!isTaken) {
+        if (!isTaken && !player.getInventory().isFull()) {
             take();
             player.getInventory().addItem(this);
         }

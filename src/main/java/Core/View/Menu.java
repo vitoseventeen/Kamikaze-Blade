@@ -52,7 +52,6 @@ public class Menu  extends JPanel implements ActionListener {
                 startButton.setIcon(new ImageIcon("assets/startPressed.png"));
                 Timer timer = new Timer(1, e1 -> {
                     try {
-                        GameManager gameManager = new GameManager();
                         gameManager.start();
                     } catch (Exception ex) {
                         ex.printStackTrace();

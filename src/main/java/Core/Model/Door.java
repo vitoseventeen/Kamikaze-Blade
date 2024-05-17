@@ -10,8 +10,8 @@ import static Core.Util.Constants.TILE_SIZE;
 
 public class Door extends GameObject {
     private boolean isOpened = false;
-    private Image closedDoorImage;
-    private Image openedDoorImage;
+    private transient Image closedDoorImage;
+    private transient Image  openedDoorImage;
     private static final int DOOR_WIDTH = 64;
     private static final int DOOR_HEIGHT = 64;
 

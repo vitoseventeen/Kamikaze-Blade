@@ -8,7 +8,7 @@ import java.net.URL;
 public class Coin extends GameObject {
     private final int value;
     private boolean isCollected;
-    private Image coinImage;
+    private transient Image coinImage;
     private static final int COIN_WIDTH = 10;
     private static final int COIN_HEIGHT = 10;
 

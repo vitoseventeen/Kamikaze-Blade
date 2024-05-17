@@ -1,12 +1,14 @@
 package Core.Model;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 import static Core.Util.Constants.PLAYER_HEIGHT;
 import static Core.Util.Constants.PLAYER_WIDTH;
 
 
-public abstract class GameObject {
+public abstract class GameObject implements Serializable {
     protected int x;
     protected int y;
     private boolean isInteracted = false;
