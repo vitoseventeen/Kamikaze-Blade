@@ -44,7 +44,6 @@ public class Potion extends GameObject {
      * @param y the y-coordinate to draw at
      */
     public void drawTaken(Graphics g, int x, int y) {
-        // TODO: remove from screen and add to inventory
     }
 
     /**

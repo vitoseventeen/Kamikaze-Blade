@@ -65,7 +65,6 @@ public class Heal extends GameObject {
      * @param y The y-coordinate to draw the heal item.
      */
     public void drawTaken(Graphics g, int x, int y) {
-        // TODO: Remove from screen and add to inventory
     }
 
     /**
