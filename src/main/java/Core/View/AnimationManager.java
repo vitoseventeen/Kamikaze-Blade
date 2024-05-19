@@ -27,11 +27,11 @@
             setAnimationSpeed("idle", 20);
             setAnimationSpeed("open", 20);
             setAnimationSpeed("walk", 20);
-            setAnimationSpeed("enemyWalk",20);
+            setAnimationSpeed("enemyWalk",30);
             setAnimationSpeed("attack", 20);
-            setAnimationSpeed("enemyAttack",20);
+            setAnimationSpeed("enemyAttack",30);
             setAnimationSpeed("death", 20);
-            setAnimationSpeed("enemyDeath",20);
+            setAnimationSpeed("enemyDeath",30);
             setAnimationSpeed("interact", 20);
 
             addAnimations("enemyIdle", "/enemyIdle.png", 16, 16, 1, 4);

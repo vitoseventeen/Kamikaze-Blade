@@ -17,6 +17,7 @@ public class Controller {
     private Inventory inventory;
     private int COLLISION_RADIUS = 1;
     private boolean isLevelChanged = false;
+    private Timer timer;
 
 
     public Controller(Player player, GamePanel gamePanel, Level level, List<Enemy> enemies, GameManager gameManager) {
@@ -26,6 +27,7 @@ public class Controller {
         this.enemies = enemies;
         this.gameManager = gameManager;
         this.inventory = player.getInventory();
+
     }
 
     protected synchronized void spawnEnemies() {
@@ -141,10 +143,6 @@ public class Controller {
 
         // Проверяем коллизии с новым уровнем сразу после загрузки нового уровня
 
-        if (level.getTile(newX / TILE_SIZE, newY / TILE_SIZE).getSurfaceType().equals(SurfaceType.LEVELTILE)) {
-            loadNextLevel();
-            return;
-        }
         // Check collision with enemies
         for (Enemy enemy : enemies) {
             if (!enemy.isDead() && enemy.checkCollisionWithEnemy(newX, newY, player.getWidth(), player.getHeight())) {
@@ -152,10 +150,16 @@ public class Controller {
             }
         }
 
+        if (level.getTile(newX / TILE_SIZE, newY / TILE_SIZE).getSurfaceType().equals(SurfaceType.LEVELTILE)) {
+            loadNextLevel();
+        }
+
         // Check collision with level
         if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
             player.setX(newX);
             player.setY(newY);
+
+
 
             if (deltaX < 0) {
                 player.setDirection(Player.Direction.LEFT);
@@ -170,35 +174,37 @@ public class Controller {
             if (player.getAnimationType() != Player.AnimationType.ATTACK) {
                 player.setAnimationType(Player.AnimationType.WALK);
             }
+
+
+
             gamePanel.repaint();
         }
+
     }
 
     private void loadNextLevel() {
         gamePanel.clearObjects();
-        if (!isLevelChanged()) {
+
+        player.setX(500);
+        player.setY(500);
+
+        if (!isLevelChanged) {
             this.level = Level.loadLevelFromJson("level2.json");
-            gamePanel.setLevel(level);
-            isLevelChanged = true;
         } else {
             this.level = Level.loadLevelFromJson("level1.json");
-            gamePanel.setLevel(level);
-            isLevelChanged = false;
         }
-
+        gamePanel.setLevel(level);
+        isLevelChanged = !isLevelChanged;
 
         List<GameObject> newObjects = level.getObjects();
         for (GameObject object : newObjects) {
             gamePanel.addObject(object);
         }
-
         spawnEnemies();
-
-        player.setX(500);
-        player.setY(100);
         gamePanel.repaint();
-
     }
+
+
 
 
 
@@ -238,8 +244,8 @@ public class Controller {
                 int dx = Integer.compare(playerX, enemyX);
                 int dy = Integer.compare(playerY, enemyY);
 
-                enemy.setDx(dx * enemy.getSpeed());
-                enemy.setDy(dy * enemy.getSpeed());
+                enemy.setDx((int) (dx * enemy.getSpeed()));
+                enemy.setDy((int) (dy * enemy.getSpeed()));
                 enemy.setAnimationType(Enemy.AnimationType.WALK);
             } else {
                 // If the player is not in the enemy's attack radius
@@ -283,11 +289,11 @@ public class Controller {
                         player.takeDamage(1);
 
                         enemy.setLastAttackTime(System.currentTimeMillis());
-//                        try {
-//                            Thread.sleep(200); // Adjust the time as needed
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
+                        try {
+                            Thread.sleep(200); // Adjust the time as needed
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         enemy.setAnimationType(Enemy.AnimationType.IDLE);
                     }
             } else {
@@ -337,13 +343,6 @@ public class Controller {
             if (collisionWithOtherEnemy) {
                 continue;
             }
-
-            // Small delay for smooth animation
-//            try {
-//                Thread.sleep(10);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
 
         // Update the rendering
