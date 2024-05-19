@@ -17,7 +17,7 @@ public class Controller {
     private Inventory inventory;
     private int COLLISION_RADIUS = 1;
     private boolean isLevelChanged = false;
-    private Timer timer;
+    private long lastUpdateTime = System.currentTimeMillis();
 
 
     public Controller(Player player, GamePanel gamePanel, Level level, List<Enemy> enemies, GameManager gameManager) {
@@ -222,130 +222,136 @@ public class Controller {
         if (player.isDead()) {
             return;
         }
-        Random random = new Random();
-        Iterator<Enemy> enemyIterator = enemies.iterator();
-        while (enemyIterator.hasNext()) {
-            Enemy enemy = enemyIterator.next();
-            if (enemy.isDead()) {
-                // If the enemy is dead, it shouldn't move
-                enemy.setDx(0);
-                enemy.setDy(0);
-                enemy.setAnimationType(Enemy.AnimationType.DEATH);
-                continue;
-            }
 
-            if (isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
-                // If the player is within the enemy's attack radius
-                int playerX = player.getX();
-                int playerY = player.getY();
-                int enemyX = enemy.getX();
-                int enemyY = enemy.getY();
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - lastUpdateTime;
 
-                int dx = Integer.compare(playerX, enemyX);
-                int dy = Integer.compare(playerY, enemyY);
-
-                enemy.setDx((int) (dx * enemy.getSpeed()));
-                enemy.setDy((int) (dy * enemy.getSpeed()));
-                enemy.setAnimationType(Enemy.AnimationType.WALK);
-            } else {
-                // If the player is not in the enemy's attack radius
-                if (random.nextInt(100) < 5) { // 5% chance to change direction
-                    int direction = random.nextInt(4);
-                    switch (direction) {
-                        case 0: // Move up
-                            enemy.setDy(-enemy.getSpeed());
-                            enemy.setDx(0);
-                            enemy.setDirection(Enemy.Direction.UP);
-                            break;
-                        case 1: // Move down
-                            enemy.setDy(enemy.getSpeed());
-                            enemy.setDx(0);
-                            enemy.setDirection(Enemy.Direction.DOWN);
-                            break;
-                        case 2: // Move left
-                            enemy.setDx(-enemy.getSpeed());
-                            enemy.setDy(0);
-                            enemy.setDirection(Enemy.Direction.LEFT);
-                            break;
-                        case 3: // Move right
-                            enemy.setDx(enemy.getSpeed());
-                            enemy.setDy(0);
-                            enemy.setDirection(Enemy.Direction.RIGHT);
-                            break;
-                    }
-                    enemy.setAnimationType(Enemy.AnimationType.WALK);
+        if (elapsedTime >= MOVEMENT_DELAY) {
+            Random random = new Random();
+            for (Enemy enemy : enemies) {
+                if (enemy.isDead()) {
+                    // Если враг мертв, он не должен двигаться
+                    enemy.setDx(0);
+                    enemy.setDy(0);
+                    enemy.setAnimationType(Enemy.AnimationType.DEATH);
+                    continue;
                 }
-            }
 
-            // Move the enemy
-            int newX = enemy.getX() + enemy.getDx();
-            int newY = enemy.getY() + enemy.getDy();
+                if (isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
+                    // Если игрок в радиусе атаки врага
+                    int playerX = player.getX();
+                    int playerY = player.getY();
+                    int enemyX = enemy.getX();
+                    int enemyY = enemy.getY();
 
-            if (!isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                // Check collision with the player
+                    int dx = Integer.compare(playerX, enemyX);
+                    int dy = Integer.compare(playerY, enemyY);
+
+                    enemy.setDx((int) (dx * enemy.getSpeed()));
+                    enemy.setDy((int) (dy * enemy.getSpeed()));
+                    enemy.setAnimationType(Enemy.AnimationType.WALK);
+                } else {
+                    // Если игрок не в радиусе атаки врага
+                    if (random.nextInt(100) < 5) { // 5% шанс изменить направление
+                        int direction = random.nextInt(4);
+                        switch (direction) {
+                            case 0: // Движение вверх
+                                enemy.setDy(-enemy.getSpeed());
+                                enemy.setDx(0);
+                                enemy.setDirection(Enemy.Direction.UP);
+                                break;
+                            case 1: // Движение вниз
+                                enemy.setDy(enemy.getSpeed());
+                                enemy.setDx(0);
+                                enemy.setDirection(Enemy.Direction.DOWN);
+                                break;
+                            case 2: // Движение влево
+                                enemy.setDx(-enemy.getSpeed());
+                                enemy.setDy(0);
+                                enemy.setDirection(Enemy.Direction.LEFT);
+                                break;
+                            case 3: // Движение вправо
+                                enemy.setDx(enemy.getSpeed());
+                                enemy.setDy(0);
+                                enemy.setDirection(Enemy.Direction.RIGHT);
+                                break;
+                        }
+                        enemy.setAnimationType(Enemy.AnimationType.WALK);
+                    }
+                }
+
+                // Движение врага
+                int newX = enemy.getX() + enemy.getDx();
+                int newY = enemy.getY() + enemy.getDy();
+
+                if (!isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                    // Проверка столкновения с игроком
+                    if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                        if (enemy.canAttack()) {
+                            enemy.setAnimationType(Enemy.AnimationType.ATTACK);
+                            player.takeDamage(1);
+
+                            enemy.setLastAttackTime(System.currentTimeMillis());
+                            try {
+                                Thread.sleep(200); // Задержка в 200 миллисекунд
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            enemy.setAnimationType(Enemy.AnimationType.IDLE);
+                        }
+                    } else {
+                        // Проверка столкновения с другими врагами
+                        boolean collisionWithOtherEnemy = false;
+                        for (Enemy otherEnemy : enemies) {
+                            if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                                collisionWithOtherEnemy = true;
+                                break;
+                            }
+                        }
+                        if (!collisionWithOtherEnemy) {
+                            enemy.setX(newX);
+                            enemy.setY(newY);
+                        }
+                    }
+                }
+
+                // Установка направления на основе движения
+                if (enemy.getDx() < 0) {
+                    enemy.setDirection(Enemy.Direction.LEFT);
+                } else if (enemy.getDx() > 0) {
+                    enemy.setDirection(Enemy.Direction.RIGHT);
+                } else if (enemy.getDy() < 0) {
+                    enemy.setDirection(Enemy.Direction.DOWN);
+                } else if (enemy.getDy() > 0) {
+                    enemy.setDirection(Enemy.Direction.UP);
+                }
+
+                // Проверка столкновения с игроком
                 if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                     if (enemy.canAttack()) {
                         enemy.setAnimationType(Enemy.AnimationType.ATTACK);
                         player.takeDamage(1);
-
                         enemy.setLastAttackTime(System.currentTimeMillis());
-                        try {
-                            Thread.sleep(200); // Adjust the time as needed
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        enemy.setAnimationType(Enemy.AnimationType.IDLE);
                     }
-            } else {
-                    // Check collision with other enemies
-                    boolean collisionWithOtherEnemy = false;
-                    for (Enemy otherEnemy : enemies) {
-                        if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                            collisionWithOtherEnemy = true;
-                            break;
-                        }
+                }
+
+                // Проверка столкновения с другими врагами
+                boolean collisionWithOtherEnemy = false;
+                for (Enemy otherEnemy : enemies) {
+                    if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                        collisionWithOtherEnemy = true;
+                        break;
                     }
-                    if (!collisionWithOtherEnemy) {
-                        enemy.setX(newX);
-                        enemy.setY(newY);
-                    }
+                }
+                if (collisionWithOtherEnemy) {
+                    continue;
                 }
             }
 
-            // Set the direction based on movement
-            if (enemy.getDx() < 0) {
-                enemy.setDirection(Enemy.Direction.LEFT);
-            } else if (enemy.getDx() > 0) {
-                enemy.setDirection(Enemy.Direction.RIGHT);
-            } else if (enemy.getDy() < 0) {
-                enemy.setDirection(Enemy.Direction.DOWN);
-            } else if (enemy.getDy() > 0) {
-                enemy.setDirection(Enemy.Direction.UP);
-            }
-
-            // Check collision with the player
-            if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                if (enemy.canAttack()) {
-                    enemy.setAnimationType(Enemy.AnimationType.ATTACK);
-                    player.takeDamage(1);
-                    enemy.setLastAttackTime(System.currentTimeMillis());
-                }
-            }
-
-            // Check collision with other enemies
-            boolean collisionWithOtherEnemy = false;
-            for (Enemy otherEnemy : enemies) {
-                if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                    collisionWithOtherEnemy = true;
-                    break;
-                }
-            }
-            if (collisionWithOtherEnemy) {
-                continue;
-            }
+            lastUpdateTime = currentTime; // Обновляем время последнего обновления
         }
 
-        // Update the rendering
+        // Обновление отображения
         gamePanel.repaint();
     }
 
