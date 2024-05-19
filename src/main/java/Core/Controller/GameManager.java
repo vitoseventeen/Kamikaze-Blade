@@ -250,6 +250,10 @@ public class GameManager implements Runnable {
         }
     }
 
+    /**
+     * Displays the win menu when the player wins the game. ( find a book in mysterious chest )
+     */
+
     public void showWinMenu() {
         if (winMenu == null) {
             winMenu = new WinMenu(this);
