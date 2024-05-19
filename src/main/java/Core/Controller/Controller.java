@@ -503,6 +503,8 @@ public class Controller {
                     chest.interact(player);
                     player.setAnimationType(Player.AnimationType.OPEN);
                     if (chest.isOpened()) {
+                        //WIN GAME
+                        gameManager.showWinMenu();
                         gamePanel.repaint();
                     }
                 }

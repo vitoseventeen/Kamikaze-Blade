@@ -5,10 +5,7 @@ import Core.Model.Inventory;
 import Core.Model.Level;
 import Core.Model.Player;
 import Core.Util.Constants;
-import Core.View.DeathMenu;
-import Core.View.InventoryMenu;
-import Core.View.PauseMenu;
-import Core.View.View;
+import Core.View.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +29,7 @@ public class GameManager implements Runnable {
     private Controller controller;
     private PauseMenu pauseMenu;
     private DeathMenu deathMenu;
+    private WinMenu winMenu;
     private InventoryMenu inventoryMenu;
     private boolean isInMenu = false;
     private boolean paused = false;
@@ -250,5 +248,18 @@ public class GameManager implements Runnable {
                     new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
             logger.info("Inventory menu hidden.");
         }
+    }
+
+    public void showWinMenu() {
+        if (winMenu == null) {
+            winMenu = new WinMenu(this);
+            winMenu.setOpaque(false);
+            winMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            view.getFrame().getLayeredPane().add(winMenu, JLayeredPane.POPUP_LAYER);
+            logger.info("Win menu created.");
+        }
+        winMenu.setVisible(true);
+        paused = true;
+        view.getFrame().setCursor(Cursor.getDefaultCursor());
     }
 }
