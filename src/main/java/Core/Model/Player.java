@@ -45,7 +45,7 @@ public class Player {
         this.width = width;
         this.inventory = inventory;
         this.name = name;
-        this.health = 311;
+        this.health = 3;
         this.score = 0;
         this.speed = 3;
         this.direction = Direction.DOWN;

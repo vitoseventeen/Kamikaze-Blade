@@ -20,7 +20,6 @@ public class Potion extends GameObject{
     }
 
 
-
     public void take() {
         isTaken = true;
     }

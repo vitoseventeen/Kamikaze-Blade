@@ -1,6 +1,7 @@
 package Core;
 
 import Core.Controller.GameManager;
+import Core.Controller.GameManager;
 import Core.View.Menu;
 
 public class Main {
@@ -9,5 +10,3 @@ public class Main {
         new Menu(gameManager);
     }
 }
-
-
