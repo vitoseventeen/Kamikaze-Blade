@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -58,26 +59,12 @@ public class GameManager implements Runnable {
             // zoom game
             view.getPanel().setZoomFactor(ZOOM_FACTOR);
 
-            spawnEnemies();
+            controller.spawnEnemies();
 
             view.getPanel().setEnemies(enemies);
         }
     }
 
-    protected void spawnEnemies() {
-        enemies.clear(); // Clear existing enemies
-
-        Random random = new Random();
-        for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
-            int x, y;
-            do {
-                x = random.nextInt(level.getWidth() * Constants.TILE_SIZE);
-                y = random.nextInt(level.getHeight() * Constants.TILE_SIZE);
-            } while (controller.isCollision(x, y, PLAYER_WIDTH, PLAYER_HEIGHT));
-            Enemy enemy = new Enemy("Enemy" + i, x, y, PLAYER_HEIGHT, PLAYER_WIDTH);
-            enemies.add(enemy);
-        }
-    }
 
     public void stop() {
         running = false;
@@ -97,7 +84,9 @@ public class GameManager implements Runnable {
     @Override
     public void run() {
         while (running) {
-            for (Enemy enemy : enemies) {
+            Iterator<Enemy> enemyIterator = enemies.iterator();
+            while (enemyIterator.hasNext()) {
+                Enemy enemy = enemyIterator.next();
                 if (!enemy.isDead()) {
                     if (controller.isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
                         enemy.setAnimationType(Enemy.AnimationType.ATTACK);
@@ -134,12 +123,15 @@ public class GameManager implements Runnable {
                 delta += (now - lastTime) / nsPerTick;
                 lastTime = now;
                 while (delta >= 1 && !paused) {
-                    controller.moveEnemies();
+                    controller.moveEnemies(); // Call controller method
                     delta--;
                 }
             }
         }
+    }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     public void saveInventory() {

@@ -1,13 +1,10 @@
 package Core.Controller;
 
 import Core.Model.*;
+import Core.Util.Constants;
 import Core.View.GamePanel;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static Core.Util.Constants.*;
 
@@ -31,8 +28,22 @@ public class Controller {
         this.inventory = player.getInventory();
     }
 
+    protected synchronized void spawnEnemies() {
+        enemies.clear(); // Clear existing enemies
 
-    // Check for collision with level boundaries and tiles
+        Random random = new Random();
+        for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
+            int x, y;
+            do {
+                x = random.nextInt(level.getWidth() * Constants.TILE_SIZE);
+                y = random.nextInt(level.getHeight() * Constants.TILE_SIZE);
+            } while (isCollision(x, y, PLAYER_WIDTH, PLAYER_HEIGHT));
+            Enemy enemy = new Enemy("Enemy" + i, x, y, PLAYER_HEIGHT, PLAYER_WIDTH);
+            enemies.add(enemy);
+        }
+    }
+
+
     public boolean isCollision(int x, int y, int width, int height) {
         int TILE_SIZE = Core.Util.Constants.TILE_SIZE;
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
@@ -52,9 +63,7 @@ public class Controller {
             }
         }
 
-        // Check collision with objects
         for (GameObject object : gamePanel.getObjects()) {
-            // Проверяем, имеет ли объект коллизию
             if (object.hasCollision() && object.checkCollision(x, y, width, height)) {
                 return true;
             }
@@ -71,7 +80,8 @@ public class Controller {
                     }
 
                 }
-            } if (object.getType().equals(GameObjectType.LEVELDOOR)) {
+            }
+            if (object.getType().equals(GameObjectType.LEVELDOOR)) {
                 LevelDoor levelDoor = (LevelDoor) object;
                 if (!levelDoor.isOpened()) {
                     int levelDoorCollisionX = Integer.parseInt(levelDoor.getX()) - COLLISION_RADIUS;
@@ -119,7 +129,6 @@ public class Controller {
 
 
 
-    // Update player movement
     public void updatePlayerMovement(int deltaX, int deltaY) {
         if (player.isDead()) {
             return;
@@ -130,9 +139,10 @@ public class Controller {
         int newX = player.getX() + deltaX;
         int newY = player.getY() + deltaY;
 
+        // Проверяем коллизии с новым уровнем сразу после загрузки нового уровня
 
         if (level.getTile(newX / TILE_SIZE, newY / TILE_SIZE).getSurfaceType().equals(SurfaceType.LEVELTILE)) {
-            goToNextLevel();
+            loadNextLevel();
             return;
         }
         // Check collision with enemies
@@ -164,50 +174,32 @@ public class Controller {
         }
     }
 
-    private void goToNextLevel() {
-
+    private void loadNextLevel() {
         gamePanel.clearObjects();
-        level.clearTiles();
-
-        // Toggle the level
         if (!isLevelChanged()) {
-            level = Level.loadLevelFromJson("level2.json");
+            this.level = Level.loadLevelFromJson("level2.json");
+            gamePanel.setLevel(level);
             isLevelChanged = true;
         } else {
-            level = Level.loadLevelFromJson("level1.json");
+            this.level = Level.loadLevelFromJson("level1.json");
+            gamePanel.setLevel(level);
             isLevelChanged = false;
         }
 
 
-        // Set player position for the new level
-        player.setX(500);
-        player.setY(100);
-
-        // Update game panel with new level
-        gamePanel.setLevel(level);
-
-        // Add new objects for the new level
         List<GameObject> newObjects = level.getObjects();
         for (GameObject object : newObjects) {
             gamePanel.addObject(object);
         }
 
-        // Repaint the game panel to reflect changes
+        spawnEnemies();
+
+        player.setX(500);
+        player.setY(100);
         gamePanel.repaint();
+
     }
 
-    private void spawnEnemiesForLevel() {
-        Random random = new Random();
-        for (int i = 0; i < NUMBER_OF_ENEMIES; i++) {
-            int x, y;
-            do {
-                x = random.nextInt(level.getWidth() * TILE_SIZE);
-                y = random.nextInt(level.getHeight() * TILE_SIZE);
-            } while (isCollision(x, y, PLAYER_WIDTH, PLAYER_HEIGHT));
-            Enemy enemy = new Enemy("Enemy" + i, x, y, PLAYER_HEIGHT, PLAYER_WIDTH);
-            enemies.add(enemy);
-        }
-    }
 
 
     public boolean isPlayerInEnemyRadius(Enemy enemy, int radius) {
@@ -220,13 +212,14 @@ public class Controller {
     }
 
     // Move enemies on the game board
-    public void moveEnemies() {
+    public synchronized void moveEnemies() {
         if (player.isDead()) {
             return;
         }
         Random random = new Random();
-        List<Enemy> enemiesToRemove = new ArrayList<>(); // To hold enemies that need to be removed
-        for (Enemy enemy : enemies) {
+        Iterator<Enemy> enemyIterator = enemies.iterator();
+        while (enemyIterator.hasNext()) {
+            Enemy enemy = enemyIterator.next();
             if (enemy.isDead()) {
                 // If the enemy is dead, it shouldn't move
                 enemy.setDx(0);
@@ -290,14 +283,14 @@ public class Controller {
                         player.takeDamage(1);
 
                         enemy.setLastAttackTime(System.currentTimeMillis());
-                        try {
-                            Thread.sleep(200); // Adjust the time as needed
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            Thread.sleep(200); // Adjust the time as needed
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
                         enemy.setAnimationType(Enemy.AnimationType.IDLE);
                     }
-                } else {
+            } else {
                     // Check collision with other enemies
                     boolean collisionWithOtherEnemy = false;
                     for (Enemy otherEnemy : enemies) {
@@ -346,16 +339,17 @@ public class Controller {
             }
 
             // Small delay for smooth animation
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
 
         // Update the rendering
         gamePanel.repaint();
     }
+
 
 
 

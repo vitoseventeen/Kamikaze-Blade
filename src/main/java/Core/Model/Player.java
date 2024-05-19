@@ -21,6 +21,8 @@ public class Player {
         this.score = i;
     }
 
+
+
     public enum Direction {
         UP,
         DOWN,
@@ -43,7 +45,7 @@ public class Player {
         this.width = width;
         this.inventory = inventory;
         this.name = name;
-        this.health = 3;
+        this.health = 311;
         this.score = 0;
         this.speed = 3;
         this.direction = Direction.DOWN;

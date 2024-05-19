@@ -1,7 +1,5 @@
 package Core.Model;
 
-import Core.Controller.Controller;
-
 import static Core.Util.Constants.ATTACK_COOLDOWN;
 
 public class Enemy extends Player {
@@ -10,29 +8,27 @@ public class Enemy extends Player {
     private int speed;
     private int health;
     private long lastAttackTime;
-
+    private boolean collision;
 
     public Enemy(String name, int x, int y, int height, int width) {
         super(name, x, y, height, width, null);
         this.speed = 1;
         this.health = 3;
+        this.collision = false;
     }
 
     public boolean canAttack() {
         return System.currentTimeMillis() - lastAttackTime >= ATTACK_COOLDOWN;
     }
 
-
     public boolean isDead() {
         return health <= 0;
-
     }
-
 
     public void takeDamage(int damage) {
         this.health -= damage;
         if (health <= 0) {
-            isDead();
+            setDead(true);
         }
     }
 
@@ -47,8 +43,6 @@ public class Enemy extends Player {
     public int getHealth() {
         return health;
     }
-
-
 
     public int getDx() {
         return dx;
@@ -65,6 +59,7 @@ public class Enemy extends Player {
     public void setDy(int dy) {
         this.dy = dy;
     }
+
     public boolean checkCollision(int x, int y, int width, int height) {
         return this.getX() < x + width &&
                 this.getX() + this.getWidth() > x &&
@@ -72,11 +67,21 @@ public class Enemy extends Player {
                 this.getY() + this.getHeight() > y;
     }
 
-    public void setLastAttackTime(long l) {
-        this.lastAttackTime = l;
+    public void setLastAttackTime(long lastAttackTime) {
+        this.lastAttackTime = lastAttackTime;
     }
 
-    public void setDead(boolean b) {
-        this.health = 0;
+    public void setDead(boolean isDead) {
+        if (isDead) {
+            this.health = 0;
+        }
+    }
+
+    public boolean hasCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
     }
 }
