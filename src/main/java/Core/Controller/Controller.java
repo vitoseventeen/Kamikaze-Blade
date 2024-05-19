@@ -134,10 +134,10 @@ public class Controller {
         for (Enemy enemy : nearbyEnemies) {
             enemy.takeDamage(1);
             if (enemy.getHealth() > 0 ) {
-                logger.info(STR."\{enemy.getName()} took damage.");
+                logger.info(enemy.getName() + " took damage");
             } else if (enemy.getHealth() == 0 ) {
                 player.addScore();
-                logger.info(STR."\{enemy.getName()} is dead. Player score increased.");
+                logger.info(enemy.getName() + " is dead. Player score increased");
             }
         }
         gamePanel.repaint();
@@ -174,6 +174,7 @@ public class Controller {
 
         if (level.getTile(newX / TILE_SIZE, newY / TILE_SIZE).getSurfaceType().equals(SurfaceType.LEVELTILE)) {
             loadNextLevel();
+            logger.info("Player moved to next level.");
         }
 
         if (!isCollision(newX, newY, player.getWidth(), player.getHeight())) {
@@ -265,8 +266,8 @@ public class Controller {
                     int enemyY = enemy.getY();
                     int dx = Integer.compare(playerX, enemyX);
                     int dy = Integer.compare(playerY, enemyY);
-                    enemy.setDx((int) (dx * enemy.getSpeed()));
-                    enemy.setDy((int) (dy * enemy.getSpeed()));
+                    enemy.setDx(dx * enemy.getSpeed());
+                    enemy.setDy(dy * enemy.getSpeed());
                     enemy.setAnimationType(Enemy.AnimationType.WALK);
                 } else {
                     if (random.nextInt(100) < 5) {
@@ -481,6 +482,7 @@ public class Controller {
                     if (inventory.isQuestFinished() && !inventory.isFull()) {
                         player.getInventory().removeCoinFromBalance(3);
                         player.getInventory().addItem(new QuestKey(0, 0));
+                        logger.info("Player finished quest and received Quest Key.");
                         npc.setTask1Complete(true);
                     }
                     gamePanel.repaint();
@@ -510,13 +512,13 @@ public class Controller {
                         return;
                     }
                     key.interact(player);
-                    inventory.printInventory();
                     gamePanel.repaint();
                     gamePanel.removeObject(object);
                 }
                 if (object.getType().equals(GameObjectType.COIN)) {
                     Coin coin = (Coin) object;
                     coin.interact(player);
+                    logger.info("Player score increased");
                     gamePanel.removeObject(object);
                     gamePanel.repaint();
                 }

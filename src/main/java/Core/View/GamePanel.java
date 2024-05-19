@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,14 +17,16 @@ import java.util.List;
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 import static Core.Util.Constants.TILE_SIZE;
 
+/**
+ * A JPanel subclass for displaying the game graphics.
+ */
 public class GamePanel extends JPanel {
-    private Player player;
+    private final Player player;
     private Level level;
     private List<Enemy> enemies = new ArrayList<>();
-    private static List<GameObject> objects = new ArrayList<>();
-    private JsonArray objectsArray;
-    private AnimationManager animationManager = new AnimationManager();
-    private Map<String, BufferedImage> imageCache = new HashMap<>();
+    private static final List<GameObject> objects = new ArrayList<>();
+    private final AnimationManager animationManager = new AnimationManager();
+    private final Map<String, BufferedImage> imageCache = new HashMap<>();
     private final int frameWidth = 16;
     private final int frameHeight = 16;
     private BufferedImage heartImage;
@@ -35,6 +36,12 @@ public class GamePanel extends JPanel {
     private int offsetX;
     private int offsetY;
 
+    /**
+     * Constructs a GamePanel with the specified player and level.
+     *
+     * @param player The player object.
+     * @param level  The level object.
+     */
     public GamePanel(Player player, Level level) {
         this.player = player;
         this.level = level;
@@ -42,14 +49,22 @@ public class GamePanel extends JPanel {
         setPreferredSize(SCREEN_SIZE_DIMENSION);
         setMaximumSize(SCREEN_SIZE_DIMENSION);
         loadLevelObjects(level.getLevelJson());
-
-        loadHeartImage(); // Load heart image
+        loadHeartImage();
     }
 
+    /**
+     * Loads the heart image.
+     */
     private void loadHeartImage() {
         heartImage = loadImage("/heart.png");
     }
 
+    /**
+     * Loads an image from the given path.
+     *
+     * @param path The path of the image file.
+     * @return The loaded image.
+     */
     private BufferedImage loadImage(String path) {
         try (InputStream is = getClass().getResourceAsStream(path)) {
             if (is != null) {
@@ -65,15 +80,30 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Sets the zoom factor of the panel.
+     *
+     * @param zoomFactor The zoom factor to set.
+     */
     public void setZoomFactor(double zoomFactor) {
         this.zoomFactor = zoomFactor;
         repaint();
     }
 
+    /**
+     * Gets the current zoom factor of the panel.
+     *
+     * @return The current zoom factor.
+     */
     public double getZoomFactor() {
         return zoomFactor;
     }
 
+    /**
+     * Centers the camera on the player.
+     *
+     * @param g2d The Graphics2D object.
+     */
     private void centerCameraOnPlayer(Graphics2D g2d) {
         int playerX = player.getX();
         int playerY = player.getY();
@@ -96,23 +126,28 @@ public class GamePanel extends JPanel {
         g2d.translate(offsetX, offsetY);
     }
 
+    /**
+     * Loads objects from the level JSON.
+     *
+     * @param levelJson The JSON object representing the level.
+     */
     private void loadLevelObjects(JsonObject levelJson) {
-        // Загрузить массив объектов из JSON
-        objectsArray = levelJson.getAsJsonArray("objects");
-
-        // Загрузить объекты
+        JsonArray objectsArray = levelJson.getAsJsonArray("objects");
         loadObjects(objectsArray, objects);
     }
 
-
-
+    /**
+     * Loads objects from a JSON array.
+     *
+     * @param objectsArray The JSON array of objects.
+     * @param objects      The list to which objects will be added.
+     */
     public static void loadObjects(JsonArray objectsArray, List<GameObject> objects) {
         for (JsonElement objElement : objectsArray) {
             JsonObject objJson = objElement.getAsJsonObject();
             GameObjectType type = GameObjectType.valueOf(objJson.get("type").getAsString().toUpperCase());
             int x = objJson.get("x").getAsInt();
             int y = objJson.get("y").getAsInt();
-            // Создать объекты на основе типа
             GameObject gameObject = switch (type) {
                 case CHEST -> new Chest(x, y);
                 case KEY -> new Key(x, y);
@@ -131,15 +166,11 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public int getAbsoluteX(int x) {
-        return x - offsetX;
-    }
-
-    public int getAbsoluteY(int y) {
-        return y - offsetY;
-    }
-
-
+    /**
+     * Paints the game graphics.
+     *
+     * @param g The Graphics object.
+     */
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -223,70 +254,76 @@ public class GamePanel extends JPanel {
             int objectY = Integer.parseInt(object.getY()) + offsetY;
             String GameObjectType = String.valueOf(object.getType());
 
-            if (Objects.equals(GameObjectType, "CHEST")) {
-                Chest chest = (Chest) object;
-                if (chest.isOpened()) {
-                    chest.drawOpened(g, objectX, objectY);
-                } else {
-                    chest.draw(g, objectX, objectY);
-                }
-            } else if (Objects.equals(GameObjectType, "KEY")) {
-                Key key = (Key) object;
-                if (key.isTaken()) {
-                    key.drawTaken(g, objectX, objectY);
-                } else {
-                    key.draw(g, objectX, objectY);
-                }
-            } else if (Objects.equals(GameObjectType, "COIN")) {
-                Coin coin = (Coin) object;
-                if (coin.isCollected()) {
-                    coin.drawCollected(g, objectX, objectY);
-                } else {
-                    coin.draw(g, objectX, objectY);
-                }
-            } else if (Objects.equals(GameObjectType, "DOOR")) {
-                Door door = (Door) object;
-                if (door.isOpened()) {
-                    door.drawOpened(g, objectX, objectY);
-                } else {
-                    door.draw(g, objectX, objectY);
-                }
-            } else if (Objects.equals(GameObjectType, "LEVELDOOR")) {
-                LevelDoor levelDoor = (LevelDoor) object;
-                if (levelDoor.isOpened()) {
-                    levelDoor.drawOpened(g, objectX, objectY);
-                } else {
-                    levelDoor.draw(g, objectX, objectY);
-                }
-            }
-             else if (Objects.equals(GameObjectType, "NPC")) {
-                NPC npc = (NPC) object;
-                npc.draw(g, objectX, objectY);
-                if (npc.isTalking()) {
-                    g.drawImage(npc.getTask1(), objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7, null);
-                    if (npc.isTask1Complete()) {
-                        g.clearRect(objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7);
-                        npc.drawAfterQuest(g, objectX, objectY);
-                        g.drawImage(npc.getTaskCompleted(), objectX + 20, objectY - 30, npc.getTaskCompleted().getWidth(null) / 7, npc.getTaskCompleted().getHeight(null) / 7, null);
+            switch (GameObjectType) {
+                case "CHEST" -> {
+                    Chest chest = (Chest) object;
+                    if (chest.isOpened()) {
+                        chest.drawOpened(g, objectX, objectY);
+                    } else {
+                        chest.draw(g, objectX, objectY);
                     }
                 }
-            }   else if (Objects.equals(GameObjectType, "POTION")) {
-                Potion potion = (Potion) object;
-                if (potion.isTaken()) {
-                    potion.drawTaken(g, objectX, objectY);
-                } else {
-                    potion.draw(g, objectX, objectY);
+                case "KEY" -> {
+                    Key key = (Key) object;
+                    if (key.isTaken()) {
+                        key.drawTaken(g, objectX, objectY);
+                    } else {
+                        key.draw(g, objectX, objectY);
+                    }
                 }
-            } else if (Objects.equals(GameObjectType, "HEAL")) {
-                Heal heal = (Heal) object;
-                if (heal.isTaken()) {
-                    heal.drawTaken(g, objectX, objectY);
-                } else {
-                    heal.draw(g, objectX, objectY);
+                case "COIN" -> {
+                    Coin coin = (Coin) object;
+                    if (coin.isCollected()) {
+                        coin.drawCollected(g, objectX, objectY);
+                    } else {
+                        coin.draw(g, objectX, objectY);
+                    }
                 }
-            }
-            else {
-                    object.draw(g, objectX, objectY);
+                case "DOOR" -> {
+                    Door door = (Door) object;
+                    if (door.isOpened()) {
+                        door.drawOpened(g, objectX, objectY);
+                    } else {
+                        door.draw(g, objectX, objectY);
+                    }
+                }
+                case "LEVELDOOR" -> {
+                    LevelDoor levelDoor = (LevelDoor) object;
+                    if (levelDoor.isOpened()) {
+                        levelDoor.drawOpened(g, objectX, objectY);
+                    } else {
+                        levelDoor.draw(g, objectX, objectY);
+                    }
+                }
+                case "NPC" -> {
+                    NPC npc = (NPC) object;
+                    npc.draw(g, objectX, objectY);
+                    if (npc.isTalking()) {
+                        g.drawImage(npc.getTask1(), objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7, null);
+                        if (npc.isTask1Complete()) {
+                            g.clearRect(objectX + 20, objectY - 30, npc.getTask1().getWidth(null) / 7, npc.getTask1().getHeight(null) / 7);
+                            npc.drawAfterQuest(g, objectX, objectY);
+                            g.drawImage(npc.getTaskCompleted(), objectX + 20, objectY - 30, npc.getTaskCompleted().getWidth(null) / 7, npc.getTaskCompleted().getHeight(null) / 7, null);
+                        }
+                    }
+                }
+                case "POTION" -> {
+                    Potion potion = (Potion) object;
+                    if (potion.isTaken()) {
+                        potion.drawTaken(g, objectX, objectY);
+                    } else {
+                        potion.draw(g, objectX, objectY);
+                    }
+                }
+                case "HEAL" -> {
+                    Heal heal = (Heal) object;
+                    if (heal.isTaken()) {
+                        heal.drawTaken(g, objectX, objectY);
+                    } else {
+                        heal.draw(g, objectX, objectY);
+                    }
+                }
+                case null, default -> object.draw(g, objectX, objectY);
             }
         }
 
@@ -295,7 +332,7 @@ public class GamePanel extends JPanel {
         int spacing = 2;
 
         int playerHealth = player.getHealth();
-        int heartCount = (int) Math.ceil((double) playerHealth);
+        int heartCount = (int) (double) playerHealth;
 
         for (int i = 0; i < heartCount; i++) {
             int heartY = 2;
@@ -307,13 +344,14 @@ public class GamePanel extends JPanel {
         g.translate(-offsetX, -offsetY);
     }
 
-    public int getOffsetX() {
-        return offsetX;
-    }
-
-    public int getOffsetY() {
-        return offsetY;
-    }
+    /**
+     * Draws a tile at the specified position.
+     *
+     * @param g   The Graphics object.
+     * @param tile The tile to draw.
+     * @param x    The x-coordinate of the tile.
+     * @param y    The y-coordinate of the tile.
+     */
 
     private void drawTile(Graphics g, Tile tile, int x, int y) {
         BufferedImage image = getImageForSurfaceType(tile.getSurfaceType());
@@ -324,10 +362,23 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Retrieves an image for a surface type.
+     *
+     * @param surfaceType The surface type.
+     * @return The image for the surface type.
+     */
+
     private BufferedImage getImageForSurfaceType(SurfaceType surfaceType) {
         String imagePath = surfaceType.getTexturePath();
         return getImageFromCache(imagePath);
     }
+    /**
+     * Retrieves an image from the cache.
+     *
+     * @param path The path of the image.
+     * @return The image from the cache.
+     */
 
     private BufferedImage getImageFromCache(String path) {
         if (imageCache.containsKey(path)) {
@@ -350,33 +401,63 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Sets the enemies in the level.
+     *
+     * @param enemies The list of enemies.
+     */
+
     public void setEnemies(List<Enemy> enemies) {
         this.enemies = enemies;
     }
 
+    /**
+     * Retrieves the objects in the level.
+     *
+     * @return The objects in the level.
+     */
 
     public GameObject[] getObjects() {
         return objects.toArray(new GameObject[0]);
     }
 
+    /**
+     * Removes an object from the level.
+     *
+     * @param object The object to remove.
+     */
+
     public void removeObject(GameObject object) {
         objects.remove(object);
     }
+
+    /**
+     * Sets the level of the game.
+     *
+     * @param level The level to set.
+     */
 
     public void setLevel(Level level) {
         this.level = level;
     }
 
 
+    /**
+     * Adds an object to the level.
+     *
+     * @param object The object to add.
+     */
+
     public void addObject(GameObject object) {
         objects.add(object);
     }
+
+    /**
+     * Clears all objects from the level.
+     */
 
     public void clearObjects() {
         objects.clear();
     }
 
-    public void clearEnemies() {
-        enemies.clear();
-    }
 }

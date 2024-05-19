@@ -10,55 +10,31 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * The DeathMenu class represents the panel displayed upon the player's death.
+ * It allows the player to exit the game.
+ */
 public class DeathMenu extends JPanel implements ActionListener {
 
-    private GameManager gameManager;
-    // private final JButton menuButton;
     private final JButton exitButton;
-    private Menu menu;
 
+    /**
+     * Constructs a DeathMenu with the specified GameManager.
+     *
+     * @param gameManager The GameManager controlling the game.
+     */
     public DeathMenu(GameManager gameManager) {
-        this.gameManager = gameManager;
         setLayout(null);
         setBounds(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-        // menuButton = new JButton();
-         exitButton = new JButton();
-        // menuButton.setIcon(new ImageIcon("assets/menuDefault.png"));
-//        addButton(menuButton, 453, 440, 430, 120);
+        exitButton = new JButton();
         exitButton.setIcon(new ImageIcon("assets/exitDefault2.png"));
         addButton(exitButton, 453, 580, 430, 120);
 
-//        menuButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                menuButton.setIcon(new ImageIcon("assets/menuPressed.png"));
-//                Timer timer = new Timer(2, e1 -> {
-//                    new Menu();
-//                    // Close the current window
-//                    Window window = SwingUtilities.getWindowAncestor(menuButton);
-//                    if (window instanceof JFrame) {
-//                        ((JFrame) window).dispose();
-//                    }
-//                });
-//
-//                timer.setRepeats(false);
-//                timer.start();
-//            }
-//        });
-//
-//        menuButton.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//                menuButton.setIcon(new ImageIcon("assets/menuHover.png"));
-//            }
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//                menuButton.setIcon(new ImageIcon("assets/menuDefault.png"));
-//            }
-//        });
+        // Add mouse listener to exitButton
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                // Change button icon and exit the game
                 new Thread(() -> {
                     exitButton.setIcon(new ImageIcon("assets/exitHover2.png"));
                     try {
@@ -72,28 +48,44 @@ public class DeathMenu extends JPanel implements ActionListener {
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                // Change button icon when mouse enters
                 exitButton.setIcon(new ImageIcon("assets/exitHover2.png"));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+                // Change button icon when mouse exits
                 exitButton.setIcon(new ImageIcon("assets/exitDefault2.png"));
             }
         });
-//        menuButton.addActionListener(this);
-        exitButton.addActionListener(this);
+        exitButton.addActionListener(this); // Add action listener to exitButton
     }
 
+    /**
+     * Paints the background image of the DeathMenu.
+     *
+     * @param g The Graphics context.
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Image background = new ImageIcon("assets/deathMenu.png").getImage();
         g.drawImage(background, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, null);
     }
+
+    /**
+     * Adds a button to the DeathMenu panel.
+     *
+     * @param button The button to add.
+     * @param x      The x-coordinate of the button.
+     * @param y      The y-coordinate of the button.
+     * @param width  The width of the button.
+     * @param height The height of the button.
+     */
     public void addButton(JButton button, int x, int y, int width, int height) {
-        // Calculate new x coordinate to center horizontally
         int newX = (Constants.GAME_WIDTH - width) / 2;
 
+        // Set button properties
         button.setOpaque(false);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
@@ -106,10 +98,6 @@ public class DeathMenu extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // Action performed when button is clicked (currently empty)
     }
 }
-
-
-
-

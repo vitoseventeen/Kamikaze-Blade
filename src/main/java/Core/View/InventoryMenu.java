@@ -14,23 +14,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-import static Core.Util.Constants.*;
 
 public class InventoryMenu extends JPanel {
-    private Inventory inventory;
-    private Player player;
-    private GameManager gameManager;
+    private final Inventory inventory;
+    private final Player player;
 
-    private Image defaultCell;
-    private Image selectedCell;
+    private final Image defaultCell;
+    private final Image selectedCell;
     private int selectedSlotX = -1;
     private int selectedSlotY = -1;
-    private boolean itemSelected = false; // Флаг для отслеживания выбранного предмета
-    private Map<String, Image> itemImages; // Map to store item images
+    private boolean itemSelected = false;
+    private final Map<String, Image> itemImages;
+
+
+    /**
+     * Constructor for InventoryMenu
+     * @param gameManager GameManager object
+     * @param player Player object
+     */
 
     public InventoryMenu(GameManager gameManager, Player player) {
-        this.gameManager = gameManager;
         this.player = player;
         setLayout(null);
         this.inventory = player.getInventory();
@@ -42,7 +47,7 @@ public class InventoryMenu extends JPanel {
         selectedSlotY = 0;
 
         itemImages = new HashMap<>();
-        loadItemImages(); // Load item images into the map
+        loadItemImages();
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -140,6 +145,10 @@ public class InventoryMenu extends JPanel {
 
     }
 
+    /**
+     * Method to use the selected item
+     */
+
     private void useSelectedItem() {
         if (inventory.getItems().size() > selectedSlotY * Constants.INVENTORY_COLUMNS + selectedSlotX) {
             GameObject selectedItem = inventory.getItems().get(selectedSlotY * Constants.INVENTORY_COLUMNS + selectedSlotX);
@@ -153,6 +162,9 @@ public class InventoryMenu extends JPanel {
         }
     }
 
+    /**
+     * Method to load item images
+     */
 
     private void loadItemImages() {
         itemImages.put("KEY", new ImageIcon("assets/key.png").getImage());
@@ -163,6 +175,11 @@ public class InventoryMenu extends JPanel {
         // Add other items similarly
     }
 
+/**
+     * Method to paint the component
+     * @param g Graphics object
+     */
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -172,11 +189,11 @@ public class InventoryMenu extends JPanel {
         Font customFont = null;
         try {
             InputStream fontStream = getClass().getResourceAsStream("/upheavtt.ttf");
-            customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+            customFont = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(fontStream));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
-        g.setFont(customFont.deriveFont(Font.BOLD, 62));
+        g.setFont(Objects.requireNonNull(customFont).deriveFont(Font.BOLD, 62));
         g.setColor(Color.RED);
 
         String name = player.getName();
@@ -202,6 +219,15 @@ public class InventoryMenu extends JPanel {
             }
         }
     }
+
+    /**
+     * Method to draw item in cell
+     * @param g Graphics object
+     * @param cellX x-coordinate of cell
+     * @param cellY y-coordinate of cell
+     * @param cellIndexX x-coordinate of cell index
+     * @param cellIndexY y-coordinate of cell index
+     */
 
     private void drawItemInCell(Graphics g, int cellX, int cellY, int cellIndexX, int cellIndexY) {
         int index = cellIndexY * Constants.INVENTORY_COLUMNS + cellIndexX;

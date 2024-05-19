@@ -10,13 +10,16 @@ import Core.Controller.GameManager;
 import Core.Util.Constants;
 
 public class PauseMenu extends JPanel implements ActionListener{
-    private JButton resumeButton;
-    private JButton exitButton;
-    private JButton saveButton;
-    private GameManager gameManager;
+    private final JButton resumeButton;
+    private final JButton exitButton;
+    private final JButton saveButton;
+
+    /**
+     * Constructor for the PauseMenu class
+     * @param gameManager GameManager object
+     */
 
     public PauseMenu(GameManager gameManager) {
-        this.gameManager = gameManager;
 
         setLayout(null);
 
@@ -105,12 +108,27 @@ public class PauseMenu extends JPanel implements ActionListener{
         exitButton.addActionListener(this);
     }
 
+    /**
+     * Paints the pause menu
+     * @param g Graphics object
+     */
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Image pauseMenuImage = new ImageIcon("assets/pauseMenu.png").getImage();
         g.drawImage(pauseMenuImage, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, this);
     }
+
+    /**
+     * Adds a button to the pause menu
+     * @param button JButton object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param width width of the button
+     * @param height height of the button
+     */
+
     public void addButton(JButton button, int x, int y, int width, int height) {
         int newX = (Constants.GAME_WIDTH - width) / 2;
 
@@ -123,6 +141,12 @@ public class PauseMenu extends JPanel implements ActionListener{
         button.setBounds(newX, y, width, height);
         add(button);
     }
+
+    /**
+     * Action performed method
+     * @param e ActionEvent object
+     */
+
     @Override
     public void actionPerformed(ActionEvent e) {
 

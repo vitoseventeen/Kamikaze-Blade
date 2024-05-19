@@ -6,10 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.text.ParseException;
 
-import Core.Controller.GameManager;
 import Core.Util.Constants;
 import Core.Controller.GameManager;
 
@@ -17,10 +14,13 @@ public class Menu  extends JPanel implements ActionListener {
     private final JButton startButton;
     private final JButton exitButton;
     private final JButton loadButton;
-    private  GameManager gameManager;
+
+    /**
+     * Constructor for the Menu class
+     * @param gameManager GameManager object
+     */
 
     public Menu(GameManager gameManager) {
-        this.gameManager = gameManager;
 
         JFrame jFrame = new JFrame("Kamikaze Blade");
         jFrame.setIconImage(new ImageIcon("assets/icon.png").getImage());
@@ -134,6 +134,11 @@ public class Menu  extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Paints the background image
+     * @param g Graphics object
+     */
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -141,8 +146,17 @@ public class Menu  extends JPanel implements ActionListener {
         g.drawImage(background, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, null);
 
     }
+
+    /**
+     * Adds a button to the menu
+     * @param button JButton object
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param width width of the button
+     * @param height height of the button
+     */
+
     public void addButton(JButton button, int x, int y, int width, int height) {
-        // Calculate new x coordinate to center horizontally
         int newX = (Constants.GAME_WIDTH - width) / 2;
 
         button.setOpaque(false);
@@ -155,6 +169,10 @@ public class Menu  extends JPanel implements ActionListener {
         add(button);
     }
 
+    /**
+     * Action performed method
+     * @param e ActionEvent object
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {

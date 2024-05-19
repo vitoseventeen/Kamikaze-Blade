@@ -15,11 +15,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Logger;
+
 
 import static Core.Util.Constants.*;
+
 
 public class GameManager implements Runnable {
     private volatile boolean running = false;
@@ -27,15 +28,18 @@ public class GameManager implements Runnable {
     private final Player player;
     private final List<Enemy> enemies;
     private View view;
-    private Level level;
-    private InputHandler inputHandler;
+    private final Level level;
     private Controller controller;
     private PauseMenu pauseMenu;
     private DeathMenu deathMenu;
     private InventoryMenu inventoryMenu;
     private boolean isInMenu = false;
     private boolean paused = false;
+    private static final Logger logger = Logger.getLogger(GameManager.class.getName());
 
+    /**
+     * Initializes the game manager with a player, level, and empty enemy list.
+     */
     public GameManager() {
         Inventory playerInventory = new Inventory(14);
         player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH, playerInventory);
@@ -43,50 +47,47 @@ public class GameManager implements Runnable {
         enemies = new ArrayList<>();
     }
 
-    public void setInventory(Inventory playerInventory) {
-        player.setInventory(playerInventory);
-    }
-
+    /**
+     * Starts the game loop, initializes the view and controller.
+     */
     public void start() {
         this.view = new View(player, level, enemies, this);
         controller = new Controller(player, view.getPanel(), level, enemies, this);
-        inputHandler = new InputHandler(controller);
+        new InputHandler(controller);
         if (!running) {
             running = true;
             gameThread = new Thread(this);
             gameThread.start();
-
-            // zoom game
             view.getPanel().setZoomFactor(ZOOM_FACTOR);
-
             controller.spawnEnemies();
-
             view.getPanel().setEnemies(enemies);
         }
+        logger.info("Game started.");
     }
 
-
-    public void stop() {
+    /**
+     * Stops the game loop.
+     */
+    protected void stop() {
         running = false;
         if (gameThread != null) {
             try {
                 gameThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException _) {
             }
         }
+        logger.info("Game stopped.");
     }
 
-    public boolean isRunning() {
-        return running;
-    }
+
+    /**
+     * Runs the game loop.
+     */
 
     @Override
     public void run() {
         while (running) {
-            Iterator<Enemy> enemyIterator = enemies.iterator();
-            while (enemyIterator.hasNext()) {
-                Enemy enemy = enemyIterator.next();
+            for (Enemy enemy : enemies) {
                 if (!enemy.isDead()) {
                     if (controller.isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
                         enemy.setAnimationType(Enemy.AnimationType.ATTACK);
@@ -102,14 +103,15 @@ public class GameManager implements Runnable {
             }
             try {
                 Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException _) {
             }
         }
         stop();
     }
 
-
+    /**
+     * Updates the game state.
+     */
     private void updateGame() {
         long lastTime = System.nanoTime();
         double nsPerTick = 1000000000.0 / Constants.TARGET_FPS;
@@ -123,29 +125,38 @@ public class GameManager implements Runnable {
                 delta += (now - lastTime) / nsPerTick;
                 lastTime = now;
                 while (delta >= 1 && !paused) {
-                    controller.moveEnemies(); // Call controller method
+                    controller.moveEnemies();
                     delta--;
                 }
             }
         }
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
-
+    /**
+     * Saves the player's inventory to a file.
+     */
     public void saveInventory() {
         player.getInventory().saveInventory("inventory.dat");
+        logger.info("Player inventory saved.");
     }
 
+    /**
+     * Loads the player's inventory from a file.
+     */
     public void loadInventory() {
         Inventory loadedInventory = Inventory.loadInventory("inventory.dat");
         if (loadedInventory != null) {
             player.setInventory(loadedInventory);
             start();
+            logger.info("Player inventory loaded.");
+        } else {
+            logger.warning("Failed to load player inventory.");
         }
     }
 
+    /**
+     * Toggles the game pause state.
+     */
     public void togglePause() {
         if (!isInMenu) {
             if (pauseMenu == null) {
@@ -153,6 +164,7 @@ public class GameManager implements Runnable {
                 pauseMenu.setOpaque(false);
                 pauseMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
                 view.getFrame().getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
+                logger.info("Pause menu created.");
             }
             paused = !paused;
             pauseMenu.setVisible(paused);
@@ -165,23 +177,34 @@ public class GameManager implements Runnable {
         }
     }
 
-    public void showDeathMenu() {
+    /**
+     * Displays the death menu when the player dies.
+     */
+    protected void showDeathMenu() {
         if (deathMenu == null) {
             deathMenu = new DeathMenu(this);
             deathMenu.setOpaque(false);
             deathMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
             view.getFrame().getLayeredPane().add(deathMenu, JLayeredPane.POPUP_LAYER);
+            logger.info("Death menu created.");
         }
         deathMenu.setVisible(true);
         paused = true;
         view.getFrame().setCursor(Cursor.getDefaultCursor());
     }
 
-    public boolean isPaused() {
+    /**
+     * Checks if the game is paused.
+     * @return true if the game is paused, false otherwise.
+     */
+    protected boolean isPaused() {
         return paused;
     }
 
-    public void showInventoryMenu() {
+    /**
+     * Displays or hides the inventory menu.
+     */
+    protected void showInventoryMenu() {
         if(player.isDead()) {
             hideInventoryMenu();
             return;
@@ -193,6 +216,7 @@ public class GameManager implements Runnable {
             view.getFrame().getLayeredPane().add(inventoryMenu, JLayeredPane.POPUP_LAYER);
             inventoryMenu.setVisible(true);
             isInMenu = true;
+            logger.info("Inventory menu created.");
         } else {
             inventoryMenu.setVisible(!inventoryMenu.isVisible());
             isInMenu = !isInMenu;
@@ -206,18 +230,25 @@ public class GameManager implements Runnable {
         }
     }
 
-    public boolean showingInventory() {
+    /**
+     * Checks if the inventory menu is currently displayed.
+     * @return true if the inventory menu is visible, false otherwise.
+     */
+    protected boolean showingInventory() {
         return inventoryMenu != null && inventoryMenu.isVisible();
     }
 
-    public void hideInventoryMenu() {
+    /**
+     * Hides the inventory menu.
+     */
+    protected void hideInventoryMenu() {
         if (inventoryMenu != null) {
             inventoryMenu.setVisible(false);
             isInMenu = false;
             paused = false;
             view.getFrame().setCursor(view.getFrame().getToolkit().createCustomCursor(
                     new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null"));
+            logger.info("Inventory menu hidden.");
         }
     }
-
 }

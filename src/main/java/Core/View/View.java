@@ -15,20 +15,20 @@ import java.util.List;
 import static Core.Util.Constants.SCREEN_SIZE_DIMENSION;
 
 public class View {
-    private JFrame frame;
-    private GamePanel gamePanel;
-    private final Level level;
-    private final Player player;
-    private final List<Enemy> enemies;
-    private GameManager gameManager;
+    private final JFrame frame;
+    private final GamePanel gamePanel;
+
+    /**
+     * Constructor for the View class
+     * @param player Player object
+     * @param level Level object
+     * @param enemies List of Enemy objects
+     * @param gameManager GameManager object
+     */
 
     public View(Player player, Level level, List<Enemy> enemies, GameManager gameManager) {
         frame = new JFrame("Kamikaze Blade");
         gamePanel = new GamePanel(player, level);
-        this.level = level;
-        this.player = player;
-        this.enemies = enemies;
-        this.gameManager = gameManager;
         Controller controller = new Controller(player, gamePanel, level, enemies, gameManager);
         InputHandler inputHandler = new InputHandler(controller);
 
@@ -54,9 +54,19 @@ public class View {
         frame.setVisible(true);
     }
 
+    /**
+     * Getter for the GamePanel object
+     * @return GamePanel object
+     */
+
     public GamePanel getPanel() {
         return gamePanel;
     }
+
+    /**
+     * Getter for the JFrame object
+     * @return JFrame object
+     */
 
     public JFrame getFrame() {
         return frame;

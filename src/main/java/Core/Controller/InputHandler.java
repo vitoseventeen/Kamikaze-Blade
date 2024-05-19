@@ -1,28 +1,30 @@
 package Core.Controller;
 
-import Core.Model.Enemy;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLOutput;
 
 import javax.swing.*;
 
+/**
+ * Handles user input from the keyboard.
+ */
 public class InputHandler implements KeyListener {
-    private Controller controller;
+    private final Controller controller;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean upPressed = false;
     private boolean downPressed = false;
 
-    private Timer inputTimer;
-
+    /**
+     * Constructs an InputHandler object.
+     * @param controller The controller to handle input for.
+     */
     public InputHandler(Controller controller) {
         this.controller = controller;
 
-        inputTimer = new Timer(8, e -> updatePlayerMovement());
+        // Set up a timer to continuously update player movement based on key presses
+        Timer inputTimer = new Timer(8, e -> updatePlayerMovement());
         inputTimer.start();
     }
 
@@ -51,8 +53,7 @@ public class InputHandler implements KeyListener {
                 downPressed = true;
                 break;
             case KeyEvent.VK_F:
-                    controller.interact();
-                System.out.println("Interact");
+                controller.interact();
                 break;
             case KeyEvent.VK_ENTER:
                 controller.attack();
@@ -62,7 +63,6 @@ public class InputHandler implements KeyListener {
                 break;
             default:
                 break;
-                // U = USE ITEM IN InventoryMenu
         }
     }
 
@@ -90,27 +90,20 @@ public class InputHandler implements KeyListener {
                 if(controller.showingInventory()) {
                     controller.hideInventory();
                 } else {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            controller.togglePause();
-                        }
-                    });
+                    SwingUtilities.invokeLater(controller::togglePause);
                 }
                 break;
             case KeyEvent.VK_E:
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        controller.showInventory();
-                    }
-                });
+                SwingUtilities.invokeLater(controller::showInventory);
                 break;
             default:
                 break;
         }
     }
 
+    /**
+     * Updates the player's movement based on the current key presses.
+     */
     private void updatePlayerMovement() {
 
         int deltaX = 0;
