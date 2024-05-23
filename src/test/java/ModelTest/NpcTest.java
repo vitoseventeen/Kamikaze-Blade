@@ -25,7 +25,7 @@ public class NpcTest {
         assertFalse(npc.isTalking());
         assertTrue(npc.interact(player));
         assertTrue(npc.isTalking());
-        assertFalse(npc.interact(player)); // Should not interact if already talking
+        assertFalse(npc.interact(player));
     }
 
     @Test

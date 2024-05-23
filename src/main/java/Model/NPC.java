@@ -13,8 +13,7 @@ public class NPC extends GameObject {
     private boolean isTalking = false;
     private Image task1;
     private Image taskCompleted;
-    private static final int NPC_WIDTH = 17;
-    private static final int NPC_HEIGHT = 17;
+
     private boolean task1Complete = false;
 
     /**

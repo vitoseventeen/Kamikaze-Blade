@@ -15,8 +15,6 @@ public class Door extends GameObject {
     private boolean isOpened = false;
     private transient Image closedDoorImage;
     private transient Image openedDoorImage;
-    private static final int DOOR_WIDTH = 64;
-    private static final int DOOR_HEIGHT = 64;
 
     /**
      * Constructs a door object at the specified position.
@@ -30,25 +28,6 @@ public class Door extends GameObject {
         this.setHasCollision(true);
     }
 
-    /**
-     * Gets the width of the door.
-     *
-     * @return The width of the door.
-     */
-    @Override
-    public int getWidth() {
-        return DOOR_WIDTH;
-    }
-
-    /**
-     * Gets the height of the door.
-     *
-     * @return The height of the door.
-     */
-    @Override
-    public int getHeight() {
-        return DOOR_HEIGHT;
-    }
 
     /**
      * Loads images for the closed and opened door.

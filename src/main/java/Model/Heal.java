@@ -15,8 +15,6 @@ public class Heal extends GameObject {
     private boolean isTaken; // Flag indicating whether the heal item has been taken
     private transient Image healImage; // Image representing the heal item
 
-    private static final int HEAL_WIDTH = 10; // Width of the heal item
-    private static final int HEAL_HEIGHT = 10; // Height of the heal item
 
     /**
      * Constructs a heal item at the specified position.
@@ -30,15 +28,6 @@ public class Heal extends GameObject {
         loadImages();
     }
 
-    @Override
-    public int getWidth() {
-        return HEAL_WIDTH;
-    }
-
-    @Override
-    public int getHeight() {
-        return HEAL_HEIGHT;
-    }
 
     /**
      * Checks if the heal item has been taken.

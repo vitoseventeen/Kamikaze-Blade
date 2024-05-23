@@ -10,8 +10,6 @@ import java.net.URL;
  */
 public class QuestKey extends GameObject {
     private transient Image keyImage;
-    private static final int KEY_WIDTH = 16;
-    private static final int KEY_HEIGHT = 16;
 
     /**
      * Constructs a quest key object at the specified position.
@@ -36,26 +34,6 @@ public class QuestKey extends GameObject {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Retrieves the width of the quest key.
-     *
-     * @return the width of the quest key
-     */
-    @Override
-    public int getWidth() {
-        return KEY_WIDTH;
-    }
-
-    /**
-     * Retrieves the height of the quest key.
-     *
-     * @return the height of the quest key
-     */
-    @Override
-    public int getHeight() {
-        return KEY_HEIGHT;
     }
 
     /**

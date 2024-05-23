@@ -14,9 +14,6 @@ public class Potion extends GameObject {
     private boolean isTaken;
     private transient Image potionImage;
 
-    private static final int POTION_WIDTH = 9;
-    private static final int POTION_HEIGHT = 11;
-
     /**
      * Constructs a potion object at the specified position.
      *
@@ -44,26 +41,6 @@ public class Potion extends GameObject {
      * @param y the y-coordinate to draw at
      */
     public void drawTaken(Graphics g, int x, int y) {
-    }
-
-    /**
-     * Retrieves the width of the potion.
-     *
-     * @return the width of the potion
-     */
-    @Override
-    public int getWidth() {
-        return POTION_WIDTH;
-    }
-
-    /**
-     * Retrieves the height of the potion.
-     *
-     * @return the height of the potion
-     */
-    @Override
-    public int getHeight() {
-        return POTION_HEIGHT;
     }
 
     /**

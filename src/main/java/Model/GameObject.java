@@ -128,23 +128,4 @@ public abstract class GameObject implements Serializable {
         return String.valueOf(y);
     }
 
-    /**
-     * Gets the width of the game object.
-     * This method should be overridden by subclasses if applicable.
-     *
-     * @return The width of the game object.
-     */
-    public int getWidth() {
-        return 0;
-    }
-
-    /**
-     * Gets the height of the game object.
-     * This method should be overridden by subclasses if applicable.
-     *
-     * @return The height of the game object.
-     */
-    public int getHeight() {
-        return 0;
-    }
 }

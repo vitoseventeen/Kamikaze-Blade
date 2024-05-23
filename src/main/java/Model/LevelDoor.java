@@ -30,26 +30,6 @@ public class LevelDoor extends GameObject {
     }
 
     /**
-     * Retrieves the width of the level door.
-     *
-     * @return the width of the level door
-     */
-    @Override
-    public int getWidth() {
-        return LEVEL_DOOR_WIDTH;
-    }
-
-    /**
-     * Retrieves the height of the level door.
-     *
-     * @return the height of the level door
-     */
-    @Override
-    public int getHeight() {
-        return LEVEL_DOOR_HEIGHT;
-    }
-
-    /**
      * Loads images for the closed and opened level doors.
      */
     private void loadImages() {

@@ -21,7 +21,6 @@ public class InputHandlerTest {
         inputHandler = new InputHandler(mockController);
     }
 
-
     @Test
     void testKeyPressed_F() {
         KeyEvent mockKeyEvent = mock(KeyEvent.class);
@@ -34,7 +33,6 @@ public class InputHandlerTest {
         verify(mockController, never()).craftHeal();
         verify(mockController, never()).updatePlayerMovement(anyInt(), anyInt());
     }
-
 
     @Test
     void testKeyPressed_C() {

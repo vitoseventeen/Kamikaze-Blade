@@ -97,8 +97,8 @@ public class Controller {
                 if (!door.isOpened()) {
                     int doorCollisionX = Integer.parseInt(door.getX()) - radiusOfCollision;
                     int doorCollisionY = Integer.parseInt(door.getY()) - radiusOfCollision;
-                    int doorCollisionWidth = door.getWidth() + 2 * radiusOfCollision;
-                    int doorCollisionHeight = door.getHeight() + 2 * radiusOfCollision;
+                    int doorCollisionWidth = DOOR_WIDTH + 2 * radiusOfCollision;
+                    int doorCollisionHeight = DOOR_HEIGHT + 2 * radiusOfCollision;
                     if (x + width > doorCollisionX && x < doorCollisionX + doorCollisionWidth &&
                             y + height > doorCollisionY && y < doorCollisionY + doorCollisionHeight) {
                         return true;
@@ -110,8 +110,8 @@ public class Controller {
                 if (!levelDoor.isOpened()) {
                     int levelDoorCollisionX = Integer.parseInt(levelDoor.getX()) - radiusOfCollision;
                     int levelDoorCollisionY = Integer.parseInt(levelDoor.getY()) - radiusOfCollision;
-                    int levelDoorCollisionWidth = levelDoor.getWidth() + 2 * radiusOfCollision;
-                    int levelDoorCollisionHeight = levelDoor.getHeight() + 2 * radiusOfCollision;
+                    int levelDoorCollisionWidth = DOOR_WIDTH + 2 * radiusOfCollision;
+                    int levelDoorCollisionHeight = DOOR_HEIGHT + 2 * radiusOfCollision;
                     if (x + width > levelDoorCollisionX && x < levelDoorCollisionX + levelDoorCollisionWidth &&
                             y + height > levelDoorCollisionY && y < levelDoorCollisionY + levelDoorCollisionHeight) {
                         return true;
@@ -439,8 +439,8 @@ public class Controller {
         for (GameObject object : gamePanel.getObjects()) {
             if (object.getType().equals(GameObjectType.DOOR)) {
                 Door door = (Door) object;
-                int doorCenterX = Integer.parseInt(door.getX()) + door.getWidth() / 2;
-                int doorCenterY = Integer.parseInt(door.getY()) + door.getHeight() / 2;
+                int doorCenterX = Integer.parseInt(door.getX()) + DOOR_WIDTH / 2;
+                int doorCenterY = Integer.parseInt(door.getY()) + DOOR_HEIGHT / 2;
 
                 double distance = Math.sqrt(Math.pow(playerCenterX - doorCenterX, 2) + Math.pow(playerCenterY - doorCenterY, 2));
 
@@ -456,8 +456,8 @@ public class Controller {
             }
             if (object.getType().equals(GameObjectType.LEVELDOOR)) {
                 LevelDoor levelDoor = (LevelDoor) object;
-                int levelDoorCenterX = Integer.parseInt(levelDoor.getX()) + levelDoor.getWidth() / 2;
-                int levelDoorCenterY = Integer.parseInt(levelDoor.getY()) + levelDoor.getHeight() / 2;
+                int levelDoorCenterX = Integer.parseInt(levelDoor.getX()) + DOOR_WIDTH / 2;
+                int levelDoorCenterY = Integer.parseInt(levelDoor.getY()) + DOOR_HEIGHT / 2;
 
                 double distance = Math.sqrt(Math.pow(playerCenterX - levelDoorCenterX, 2) + Math.pow(playerCenterY - levelDoorCenterY, 2));
                 if (distance <= INTERACTION_RADIUS + (radiusOfCollision + 20)) {
@@ -472,8 +472,8 @@ public class Controller {
             }
             if (object.getType().equals(GameObjectType.NPC)) {
                 NPC npc = (NPC) object;
-                int npcCenterX = Integer.parseInt(npc.getX()) + npc.getWidth() / 2;
-                int npcCenterY = Integer.parseInt(npc.getY()) + npc.getHeight() / 2;
+                int npcCenterX = Integer.parseInt(npc.getX()) + NPC_WIDTH / 2;
+                int npcCenterY = Integer.parseInt(npc.getY()) + NPC_HEIGHT / 2;
 
                 double distance = Math.sqrt(Math.pow(playerCenterX - npcCenterX, 2) + Math.pow(playerCenterY - npcCenterY, 2));
 
@@ -491,8 +491,8 @@ public class Controller {
                 }
             }
 
-            int objectCenterX = Integer.parseInt(object.getX()) + object.getWidth() / 2;
-            int objectCenterY = Integer.parseInt(object.getY()) + object.getHeight() / 2;
+            int objectCenterX = Integer.parseInt(object.getX()) + OBJECT_HEIGHT / 2;
+            int objectCenterY = Integer.parseInt(object.getY()) + OBJECT_WIDTH / 2;
 
             double distance = Math.sqrt(Math.pow(playerCenterX - objectCenterX, 2) + Math.pow(playerCenterY - objectCenterY, 2));
 

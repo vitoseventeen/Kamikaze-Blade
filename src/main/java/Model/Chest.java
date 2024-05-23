@@ -27,23 +27,6 @@ public class Chest extends GameObject {
         loadImages();
     }
 
-    /**
-     * Gets the width of the chest.
-     * @return The width of the chest.
-     */
-    @Override
-    public int getWidth() {
-        return CHEST_WIDTH;
-    }
-
-    /**
-     * Gets the height of the chest.
-     * @return The height of the chest.
-     */
-    @Override
-    public int getHeight() {
-        return CHEST_HEIGHT;
-    }
 
     /**
      * Loads images for the closed and opened chest.

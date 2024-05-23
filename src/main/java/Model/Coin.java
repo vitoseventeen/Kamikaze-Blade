@@ -13,8 +13,7 @@ public class Coin extends GameObject {
     private final int value;
     private boolean isCollected;
     private transient Image coinImage;
-    private static final int COIN_WIDTH = 10;
-    private static final int COIN_HEIGHT = 10;
+
 
     /**
      * Constructs a coin object at the specified position.
@@ -39,26 +38,6 @@ public class Coin extends GameObject {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Gets the width of the coin.
-     *
-     * @return The width of the coin.
-     */
-    @Override
-    public int getWidth() {
-        return COIN_WIDTH;
-    }
-
-    /**
-     * Gets the height of the coin.
-     *
-     * @return The height of the coin.
-     */
-    @Override
-    public int getHeight() {
-        return COIN_HEIGHT;
     }
 
     /**

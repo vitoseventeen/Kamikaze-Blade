@@ -62,4 +62,12 @@ public class Constants {
 
     /** The cooldown duration for player attacks in milliseconds. */
     public static final long ATTACK_COOLDOWN = 800;
+
+
+    public static final int OBJECT_WIDTH = 16;
+    public static final int OBJECT_HEIGHT = 16;
+    public static final int DOOR_WIDTH = 64;
+    public static final int DOOR_HEIGHT = 64;
+    public static final int NPC_WIDTH = 17;
+    public static final int NPC_HEIGHT = 17;
 }

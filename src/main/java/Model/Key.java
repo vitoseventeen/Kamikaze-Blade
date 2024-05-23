@@ -13,8 +13,7 @@ import java.util.Objects;
 public class Key extends GameObject {
     private boolean isTaken; // Indicates whether the key has been taken by the player
     private transient Image keyImage; // The image representing the key
-    private static final int KEY_WIDTH = 16; // The width of the key image
-    private static final int KEY_HEIGHT = 16; // The height of the key image
+
 
     /**
      * Constructs a new Key object at the specified position.
@@ -27,26 +26,6 @@ public class Key extends GameObject {
         this.isTaken = false;
         this.setHasCollision(true);
         loadImages();
-    }
-
-    /**
-     * Retrieves the width of the key.
-     *
-     * @return The width of the key.
-     */
-    @Override
-    public int getWidth() {
-        return KEY_WIDTH;
-    }
-
-    /**
-     * Retrieves the height of the key.
-     *
-     * @return The height of the key.
-     */
-    @Override
-    public int getHeight() {
-        return KEY_HEIGHT;
     }
 
     /**
