@@ -564,29 +564,43 @@ public class Controller {
     }
 
     /**
-     * Crafts a heal item by combining two potions in the inventory.
+     * Crafts a item by combining two items in the inventory.
      */
-    public void craftHeal() {
-        int potionCount = 0;
-        List<GameObject> potionsToRemove = new ArrayList<>();
+    public void craftItem(GameObjectType itemTypeToCombine, GameObjectType resultItemType) {
+        int itemCount = 0;
+        List<GameObject> itemsToRemove = new ArrayList<>();
         for (GameObject item : inventory.getItems()) {
-            if (item.getType().equals(GameObjectType.POTION)) {
-                potionsToRemove.add(item);
-                potionCount++;
-                if (potionCount == 2) {
+            if (item.getType().equals(itemTypeToCombine)) {
+                itemsToRemove.add(item);
+                itemCount++;
+                if (itemCount == 2) {
                     break;
                 }
             }
         }
 
-        if (potionCount == 2) {
-            for (GameObject potion : potionsToRemove) {
-                inventory.removeItem(potion);
+        if (itemCount == 2) {
+            for (GameObject item : itemsToRemove) {
+                inventory.removeItem(item);
             }
-            inventory.addItem(new Heal(0, 0));
-            logger.info("Crafted Heal item from two Potions.");
+            GameObject newItem;
+            if (Objects.requireNonNull(resultItemType) == GameObjectType.HEAL) {
+                newItem = new Heal(0, 0);
+            } else {
+                throw new IllegalArgumentException("Unknown item type: " + resultItemType);
+            }
+            inventory.addItem(newItem);
+            logger.info("Crafted " + resultItemType + " item from two " + itemTypeToCombine + " items.");
         }
         gamePanel.repaint();
+    }
+
+    /**
+     * Crafts a HEAL by combining two POTIONS in the inventory.
+     */
+
+    public void craftHeal() {
+        craftItem(GameObjectType.POTION, GameObjectType.HEAL);
     }
 
     /**
