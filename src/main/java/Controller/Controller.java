@@ -257,118 +257,102 @@ public class Controller {
         long elapsedTime = currentTime - lastUpdateTime;
         if (elapsedTime >= MOVEMENT_DELAY) {
             for (Enemy enemy : enemies) {
-                if (enemy.isDead()) {
-                    enemy.setDx(0);
-                    enemy.setDy(0);
-                    enemy.setAnimationType(Enemy.AnimationType.DEATH);
-                    continue;
-                }
-                if (isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
-                    int playerX = player.getX();
-                    int playerY = player.getY();
-                    int enemyX = enemy.getX();
-                    int enemyY = enemy.getY();
-                    int dx = Integer.compare(playerX, enemyX);
-                    int dy = Integer.compare(playerY, enemyY);
-                    enemy.setDx(dx * enemy.getSpeed());
-                    enemy.setDy(dy * enemy.getSpeed());
+                moveEnemy(enemy);
+            }
+            lastUpdateTime = currentTime;
+        }
+        gamePanel.repaint();
+    }
+
+    private synchronized void moveEnemy(Enemy enemy) {
+        if (enemy.isDead()) {
+            enemy.setDx(0);
+            enemy.setDy(0);
+            enemy.setAnimationType(Enemy.AnimationType.DEATH);
+        } else {
+            if (isPlayerInEnemyRadius(enemy, ATTACK_RADIUS)) {
+                int playerX = player.getX();
+                int playerY = player.getY();
+                int enemyX = enemy.getX();
+                int enemyY = enemy.getY();
+                int dx = Integer.compare(playerX, enemyX);
+                int dy = Integer.compare(playerY, enemyY);
+                enemy.setDx(dx * enemy.getSpeed());
+                enemy.setDy(dy * enemy.getSpeed());
+                enemy.setAnimationType(Enemy.AnimationType.WALK);
+            } else {
+                if (random.nextInt(100) < 5) {
+                    int direction = random.nextInt(4);
+                    switch (direction) {
+                        case 0:
+                            enemy.setDy(-enemy.getSpeed());
+                            enemy.setDx(0);
+                            enemy.setDirection(Enemy.Direction.UP);
+                            break;
+                        case 1:
+                            enemy.setDy(enemy.getSpeed());
+                            enemy.setDx(0);
+                            enemy.setDirection(Enemy.Direction.DOWN);
+                            break;
+                        case 2:
+                            enemy.setDx(-enemy.getSpeed());
+                            enemy.setDy(0);
+                            enemy.setDirection(Enemy.Direction.LEFT);
+                            break;
+                        case 3:
+                            enemy.setDx(enemy.getSpeed());
+                            enemy.setDy(0);
+                            enemy.setDirection(Enemy.Direction.RIGHT);
+                            break;
+                    }
                     enemy.setAnimationType(Enemy.AnimationType.WALK);
-                } else {
-                    if (random.nextInt(100) < 5) {
-                        int direction = random.nextInt(4);
-                        switch (direction) {
-                            case 0:
-                                enemy.setDy(-enemy.getSpeed());
-                                enemy.setDx(0);
-                                enemy.setDirection(Enemy.Direction.UP);
-                                break;
-                            case 1:
-                                enemy.setDy(enemy.getSpeed());
-                                enemy.setDx(0);
-                                enemy.setDirection(Enemy.Direction.DOWN);
-                                break;
-                            case 2:
-                                enemy.setDx(-enemy.getSpeed());
-                                enemy.setDy(0);
-                                enemy.setDirection(Enemy.Direction.LEFT);
-                                break;
-                            case 3:
-                                enemy.setDx(enemy.getSpeed());
-                                enemy.setDy(0);
-                                enemy.setDirection(Enemy.Direction.RIGHT);
-                                break;
-                        }
-                        enemy.setAnimationType(Enemy.AnimationType.WALK);
-                    }
                 }
+            }
 
-                int newX = enemy.getX() + enemy.getDx();
-                int newY = enemy.getY() + enemy.getDy();
+            int newX = enemy.getX() + enemy.getDx();
+            int newY = enemy.getY() + enemy.getDy();
 
-                if (!isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                    if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                        if (enemy.canAttack()) {
-                            enemy.setAnimationType(Enemy.AnimationType.ATTACK);
-                            player.takeDamage(1);
-                            logger.info( enemy.getName() + " attacked the player.");
-                            enemy.setLastAttackTime(System.currentTimeMillis());
-                            try {
-                                Thread.sleep(200);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            enemy.setAnimationType(Enemy.AnimationType.IDLE);
-                        }
-                    } else {
-                        boolean collisionWithOtherEnemy = false;
-                        for (Enemy otherEnemy : enemies) {
-                            if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                                collisionWithOtherEnemy = true;
-                                break;
-                            }
-                        }
-                        if (!collisionWithOtherEnemy) {
-                            enemy.setX(newX);
-                            enemy.setY(newY);
-                        }
-                    }
-                }
-
-                if (enemy.getDx() < 0) {
-                    enemy.setDirection(Enemy.Direction.LEFT);
-                } else if (enemy.getDx() > 0) {
-                    enemy.setDirection(Enemy.Direction.RIGHT);
-                } else if (enemy.getDy() < 0) {
-                    enemy.setDirection(Enemy.Direction.DOWN);
-                } else if (enemy.getDy() > 0) {
-                    enemy.setDirection(Enemy.Direction.UP);
-                }
-
+            if (!isCollision(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                 if (player.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
                     if (enemy.canAttack()) {
                         enemy.setAnimationType(Enemy.AnimationType.ATTACK);
                         player.takeDamage(1);
+                        logger.info( enemy.getName() + " attacked the player.");
                         enemy.setLastAttackTime(System.currentTimeMillis());
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        enemy.setAnimationType(Enemy.AnimationType.IDLE);
                     }
-                }
-
-                boolean collisionWithOtherEnemy = false;
-                for (Enemy otherEnemy : enemies) {
-                    if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
-                        collisionWithOtherEnemy = true;
-                        break;
+                } else {
+                    boolean collisionWithOtherEnemy = false;
+                    for (Enemy otherEnemy : enemies) {
+                        if (otherEnemy != enemy && otherEnemy.checkCollisionWithEnemy(newX, newY, enemy.getWidth(), enemy.getHeight())) {
+                            collisionWithOtherEnemy = true;
+                            break;
+                        }
                     }
-                }
-                if (collisionWithOtherEnemy) {
-                    continue;
+                    if (!collisionWithOtherEnemy) {
+                        enemy.setX(newX);
+                        enemy.setY(newY);
+                    }
                 }
             }
 
-            lastUpdateTime = currentTime;
+            if (enemy.getDx() < 0) {
+                enemy.setDirection(Enemy.Direction.LEFT);
+            } else if (enemy.getDx() > 0) {
+                enemy.setDirection(Enemy.Direction.RIGHT);
+            } else if (enemy.getDy() < 0) {
+                enemy.setDirection(Enemy.Direction.DOWN);
+            } else if (enemy.getDy() > 0) {
+                enemy.setDirection(Enemy.Direction.UP);
+            }
         }
-
-        gamePanel.repaint();
     }
+
 
     /**
      * Returns a list of nearby enemies within a specified radius of the player.
