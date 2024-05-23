@@ -377,14 +377,14 @@ public class Controller {
      * @return the list of nearby enemies
      */
 
-    protected List<Enemy> getNearbyEnemies(int x, int y, int width, int height) {
+    protected  List<Enemy>  getNearbyEnemies(int x, int y, int width, int height) {
         List<Enemy> nearbyEnemies = new ArrayList<>();
         for (Enemy enemy : enemies) {
             if (Math.abs(enemy.getX() - x) <= width && Math.abs(enemy.getY() - y) <= height) {
                 nearbyEnemies.add(enemy);
             }
         }
-        return nearbyEnemies;
+        return Collections.unmodifiableList(nearbyEnemies);
     }
 
 
