@@ -25,6 +25,7 @@ public class Controller {
     private int radiusOfCollision = 1;
     private boolean isLevelChanged = false;
     private long lastUpdateTime = System.currentTimeMillis();
+    private Random random;
 
     /**
      * Constructs a Controller with the specified player, game panel, level, enemies, and game manager.
@@ -42,6 +43,8 @@ public class Controller {
         this.enemies = enemies;
         this.gameManager = gameManager;
         this.inventory = player.getInventory();
+        this.random = new Random();
+
     }
 
     /**
@@ -49,7 +52,6 @@ public class Controller {
      */
     protected synchronized void spawnEnemies() {
         enemies.clear();
-        Random random = new Random();
         for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
             int x, y;
             do {
@@ -92,28 +94,9 @@ public class Controller {
             if (object.hasCollision() && object.checkCollision(x, y, width, height)) {
                 return true;
             }
-            if (object.getType().equals(GameObjectType.DOOR)) {
-                Door door = (Door) object;
-                if (!door.isOpened()) {
-                    int doorCollisionX = Integer.parseInt(door.getX()) - radiusOfCollision;
-                    int doorCollisionY = Integer.parseInt(door.getY()) - radiusOfCollision;
-                    int doorCollisionWidth = DOOR_WIDTH + 2 * radiusOfCollision;
-                    int doorCollisionHeight = DOOR_HEIGHT + 2 * radiusOfCollision;
-                    if (x + width > doorCollisionX && x < doorCollisionX + doorCollisionWidth &&
-                            y + height > doorCollisionY && y < doorCollisionY + doorCollisionHeight) {
-                        return true;
-                    }
-                }
-            }
-            if (object.getType().equals(GameObjectType.LEVELDOOR)) {
-                LevelDoor levelDoor = (LevelDoor) object;
-                if (!levelDoor.isOpened()) {
-                    int levelDoorCollisionX = Integer.parseInt(levelDoor.getX()) - radiusOfCollision;
-                    int levelDoorCollisionY = Integer.parseInt(levelDoor.getY()) - radiusOfCollision;
-                    int levelDoorCollisionWidth = DOOR_WIDTH + 2 * radiusOfCollision;
-                    int levelDoorCollisionHeight = DOOR_HEIGHT + 2 * radiusOfCollision;
-                    if (x + width > levelDoorCollisionX && x < levelDoorCollisionX + levelDoorCollisionWidth &&
-                            y + height > levelDoorCollisionY && y < levelDoorCollisionY + levelDoorCollisionHeight) {
+            if (object.getType().equals(GameObjectType.DOOR) || object.getType().equals(GameObjectType.LEVELDOOR)) {
+                if (!isDoorOpened(object)) {
+                    if (isCollisionWithDoor(object, x, y, width, height)) {
                         return true;
                     }
                 }
@@ -121,6 +104,27 @@ public class Controller {
         }
         return false;
     }
+
+    private boolean isDoorOpened(GameObject object) {
+        if (object.getType().equals(GameObjectType.DOOR)) {
+            Door door = (Door) object;
+            return door.isOpened();
+        } else if (object.getType().equals(GameObjectType.LEVELDOOR)) {
+            LevelDoor levelDoor = (LevelDoor) object;
+            return levelDoor.isOpened();
+        }
+        return false;
+    }
+
+    private boolean isCollisionWithDoor(GameObject object, int x, int y, int width, int height) {
+        int doorCollisionX = Integer.parseInt(object.getX()) - radiusOfCollision;
+        int doorCollisionY = Integer.parseInt(object.getY()) - radiusOfCollision;
+        int doorCollisionWidth = DOOR_WIDTH + 2 * radiusOfCollision;
+        int doorCollisionHeight = DOOR_HEIGHT + 2 * radiusOfCollision;
+        return x + width > doorCollisionX && x < doorCollisionX + doorCollisionWidth &&
+                y + height > doorCollisionY && y < doorCollisionY + doorCollisionHeight;
+    }
+
 
     /**
      * Initiates the player's attack and handles damage to nearby enemies.
@@ -252,7 +256,6 @@ public class Controller {
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - lastUpdateTime;
         if (elapsedTime >= MOVEMENT_DELAY) {
-            Random random = new Random();
             for (Enemy enemy : enemies) {
                 if (enemy.isDead()) {
                     enemy.setDx(0);
