@@ -28,7 +28,7 @@ public class ControllerTest {
     private Controller controller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Inventory playerInventory = new Inventory(14);
         player = new Player("Ninja", 640, 512, Constants.PLAYER_HEIGHT, Constants.PLAYER_WIDTH, playerInventory);
         level = mock(Level.class);
@@ -48,7 +48,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testUpdatePlayerMovement() {
+    void testUpdatePlayerMovement() {
         // Test moving right
         controller.updatePlayerMovement(1, 0);
         assertEquals(641, player.getX());
@@ -71,7 +71,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testSpawnEnemies() {
+    void testSpawnEnemies() {
         controller.spawnEnemies();
         assertEquals(Constants.NUMBER_OF_ENEMIES, enemies.size());
         for (Enemy enemy : enemies) {
@@ -80,7 +80,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testCraftHeal() {
+    void testCraftHeal() {
         Potion potion1 = new Potion(0, 0);
         Potion potion2 = new Potion(0, 0);
         player.getInventory().addItem(potion1);
@@ -91,7 +91,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testAttack() {
+    void testAttack() {
         Enemy enemy = new Enemy("enemy", 640, 512, 16, 16);
         enemies.add(enemy);
         for (int i = 0; i < 4; i++) {
@@ -102,7 +102,7 @@ public class ControllerTest {
 
 
     @Test
-    public void testInteractWithChest() {
+    void testInteractWithChest() {
         Chest chest = new Chest(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(chest);
@@ -113,7 +113,7 @@ public class ControllerTest {
 
 
     @Test
-    public void testOpenDoorWithoutFalse() {
+    void testOpenDoorWithoutFalse() {
         Door door = new Door(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(door);
@@ -123,7 +123,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testPlayerPickUpCoin() {
+    void testPlayerPickUpCoin() {
         Coin coin = new Coin(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(coin);
@@ -133,7 +133,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testPlayerPickUpKey() {
+    void testPlayerPickUpKey() {
         Key key = new Key(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(key);
@@ -144,7 +144,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testPlayerPickUpPotion() {
+    void testPlayerPickUpPotion() {
         Potion potion = new Potion(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(potion);
@@ -155,7 +155,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testPlayerPickUpHeal() {
+    void testPlayerPickUpHeal() {
         Heal heal = new Heal(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(heal);
@@ -166,20 +166,20 @@ public class ControllerTest {
     }
 
     @Test
-    public void testLevelTransition() {
+    void testLevelTransition() {
         when(level.getTile(anyInt(), anyInt())).thenReturn(new Tile(SurfaceType.LEVELTILE));
         controller.updatePlayerMovement(1, 0);
         verify(level, times(1)).getTile(anyInt(), anyInt());
     }
 
     @Test
-    public void testPlayerDeath() {
+    void testPlayerDeath() {
         player.takeDamage(player.getHealth());
         assertTrue(player.isDead());
     }
 
     @Test
-    public void testOpenDoorWithoutKey() {
+    void testOpenDoorWithoutKey() {
         Door door = new Door(640, 512);
         List<GameObject> objects = new ArrayList<>();
         objects.add(door);
@@ -191,7 +191,7 @@ public class ControllerTest {
 
 
     @Test
-    public void testLoadNextLevel() {
+    void testLoadNextLevel() {
         // Simulate player reaching the next level
         player.setX(0);
         player.setY(0);
@@ -206,14 +206,14 @@ public class ControllerTest {
     }
 
     @Test
-    public void testTogglePause() {
+    void testTogglePause() {
         when(gameManager.isPaused()).thenReturn(false);
         controller.togglePause();
         verify(gameManager, times(1)).togglePause();
     }
 
     @Test
-    public void testMoveEnemyRandomly() {
+    void testMoveEnemyRandomly() {
         Enemy enemy = new Enemy("enemy", 640, 512, 16, 16);
         enemies.add(enemy);
 
@@ -226,7 +226,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testShowHideInventory() {
+    void testShowHideInventory() {
         controller.showInventory();
         verify(gameManager, times(1)).showInventoryMenu();
 
@@ -236,7 +236,7 @@ public class ControllerTest {
 
 
     @Test
-    public void testNearbyEnemy() {
+    void testNearbyEnemy() {
         Enemy enemy = new Enemy("enemy", 640, 512, 16, 16);
         enemies.add(enemy);
 
@@ -244,7 +244,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testNearbyEnemyFalse() {
+    void testNearbyEnemyFalse() {
         Enemy enemy = new Enemy("enemy", 640, 512, 16, 16);
         enemies.add(enemy);
 
