@@ -4,10 +4,13 @@ import Model.NPC;
 import Model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.awt.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class NpcTest {
 
@@ -50,5 +53,31 @@ public class NpcTest {
         } catch (IOException e) {
             fail("Failed to load images");
         }
+    }
+
+    @Test
+    void testDrawNpc() {
+        Graphics g = mock(Graphics.class);
+        npc.draw(g, 100, 100);
+    }
+
+    @Test
+    void testDrawAfterQuest() {
+        Graphics g = mock(Graphics.class);
+        npc.drawAfterQuest(g, 100, 100);
+    }
+
+
+    @Test
+    void testInteractWhenTaskComplete() {
+        npc.setTask1Complete(true);
+        assertFalse(npc.interact(player));
+    }
+
+    @Test
+    void testInteractWhenAlreadyTalking() {
+        npc.interact(player);
+        assertTrue(npc.isTalking());
+        assertFalse(npc.interact(player));
     }
 }

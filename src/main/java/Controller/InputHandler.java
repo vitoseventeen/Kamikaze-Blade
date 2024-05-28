@@ -104,7 +104,7 @@ public class InputHandler implements KeyListener {
     /**
      * Updates the player's movement based on the current key presses.
      */
-    private void updatePlayerMovement() {
+    public void updatePlayerMovement() {
 
         int deltaX = 0;
         int deltaY = 0;

@@ -1,15 +1,18 @@
 package ModelTest;
 
 import Model.GameObject;
+import Model.GameObjectType;
 import Model.Inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -21,6 +24,9 @@ public class InventoryTest {
     @Mock
     private GameObject mockItem;
 
+    @Mock
+    private GameObject mockKeyItem;
+
     private Inventory inventory;
 
     @BeforeEach
@@ -28,6 +34,7 @@ public class InventoryTest {
         MockitoAnnotations.openMocks(this);
         inventory = new Inventory(5);
         inventory.setCoinBalance(10);
+        when(mockKeyItem.getType()).thenReturn(GameObjectType.KEY);
         inventory.addItem(mockItem);
     }
 
@@ -35,13 +42,6 @@ public class InventoryTest {
     void testSaveAndLoadInventory() throws IOException, ClassNotFoundException {
         // Arrange
         String fileName = "testInventory.dat";
-        ObjectOutputStream mockOutputStream = mock(ObjectOutputStream.class);
-        ObjectInputStream mockInputStream = mock(ObjectInputStream.class);
-
-        // Stubbing ObjectOutputStream
-        doNothing().when(mockOutputStream).writeObject(any());
-        // Stubbing ObjectInputStream
-        when(mockInputStream.readObject()).thenReturn(inventory);
 
         // Act
         inventory.saveInventory(fileName);
@@ -51,6 +51,9 @@ public class InventoryTest {
         assertNotNull(loadedInventory);
         assertEquals(loadedInventory.getCoinBalance(), inventory.getCoinBalance());
         assertEquals(loadedInventory.getItems().size(), inventory.getItems().size());
+
+        // Clean up
+        new File(fileName).delete();
     }
 
     @Test
@@ -83,47 +86,74 @@ public class InventoryTest {
         assertTrue(inventory.getItems().contains(anotherMockItem));
     }
 
+
     @Test
-    void testSetAndGetItems() {
+    void testIsQuestFinished() {
+        // Act
+        boolean isFinished = inventory.isQuestFinished();
+        // Assert
+        assertTrue(isFinished);
+    }
+
+    @Test
+    void testAddAndRemoveCoins() {
+        // Act
+        inventory.addCoinToBalance(10);
+        inventory.removeCoinFromBalance(5);
+
+        // Assert
+        assertEquals(15, inventory.getCoinBalance());
+    }
+
+    @Test
+    void testIsFull() {
         // Arrange
-        List<GameObject> newItems = new ArrayList<>();
-        newItems.add(mock(GameObject.class));
-        newItems.add(mock(GameObject.class));
+        Inventory smallInventory = new Inventory(1);
+        smallInventory.addItem(mockItem);
 
         // Act
-        inventory.setItems(newItems);
+        boolean isFull = smallInventory.isFull();
 
         // Assert
-        assertEquals(newItems, inventory.getItems());
+        assertTrue(isFull);
     }
 
+
+
     @Test
-    void testSetAndGetCoinBalance() {
+    void testIntegration_AddMultipleItemsAndCheckSize() {
+        // Arrange
+        Inventory newInventory = new Inventory(3);
+        GameObject item1 = mock(GameObject.class);
+        GameObject item2 = mock(GameObject.class);
+
         // Act
-        inventory.setCoinBalance(20);
+        newInventory.addItem(item1);
+        newInventory.addItem(item2);
 
         // Assert
-        assertEquals(20, inventory.getCoinBalance());
+        assertEquals(2, newInventory.getInventorySize());
+        assertTrue(newInventory.getItems().contains(item1));
+        assertTrue(newInventory.getItems().contains(item2));
     }
 
     @Test
-    void testGetInventorySizeEmpty() {
+    void testProcess_FullInventory() {
         // Arrange
-        Inventory emptyInventory = new Inventory(14);
+        Inventory processInventory = new Inventory(2);
+        GameObject item1 = mock(GameObject.class);
+        GameObject item2 = mock(GameObject.class);
+        GameObject item3 = mock(GameObject.class);
+
+        // Act
+        processInventory.addItem(item1);
+        processInventory.addItem(item2);
+        processInventory.addItem(item3); // Should not be added
 
         // Assert
-        assertEquals(0, emptyInventory.getInventorySize());
+        assertEquals(2, processInventory.getInventorySize());
+        assertTrue(processInventory.getItems().contains(item1));
+        assertTrue(processInventory.getItems().contains(item2));
+        assertFalse(processInventory.getItems().contains(item3));
     }
-
-    @Test
-    void testGetInventorySizeFull() {
-        // Arrange
-        Inventory fullInventory = new Inventory(1);
-        fullInventory.addItem(mockItem);
-
-        // Assert
-        assertEquals(1, fullInventory.getInventorySize());
-    }
-
-
 }

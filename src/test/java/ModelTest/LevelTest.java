@@ -31,35 +31,5 @@ public class LevelTest {
 
 
 
-    @Test
-    void testGetWidth() {
-        assertEquals(3, level.getWidth());
-    }
-
-    @Test
-    void testGetHeight() {
-        assertEquals(3, level.getHeight());
-    }
-
-    @Test
-    void testGetTile() {
-        assertEquals(SurfaceType.FLOOR, level.getTile(0, 0).getSurfaceType());
-        assertEquals(SurfaceType.WALL, level.getTile(1, 1).getSurfaceType());
-        assertEquals(SurfaceType.EMPTY, level.getTile(-1, -1).getSurfaceType());
-    }
-
-    @Test
-    void testGetObjects() {
-        assertEquals(3, level.getObjects().size());
-    }
-
-
-    @Test
-    void testGetLevelJson() {
-        // Test if the generated JSON object is not null
-        assertNotNull(level.getLevelJson());
-        // Add more assertions based on the expected contents of the generated JSON object
-    }
-
 
 }

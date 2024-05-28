@@ -407,7 +407,7 @@ public class Controller {
     /**
      * Toggles the pause state of the game.
      */
-    protected void togglePause() {
+    public void togglePause() {
         gameManager.togglePause();
         logger.info("Game pause state toggled.");
     }
@@ -593,7 +593,7 @@ public class Controller {
     /**
      * Shows the inventory menu.
      */
-    protected void showInventory() {
+    public void showInventory() {
         gameManager.showInventoryMenu();
         logger.info("Inventory menu shown.");
     }
@@ -603,14 +603,14 @@ public class Controller {
      *
      * @return true if the inventory menu is shown, false otherwise
      */
-    protected boolean showingInventory() {
+    public boolean showingInventory() {
         return gameManager.showingInventory();
     }
 
     /**
      * Hides the inventory menu.
      */
-    protected void hideInventory() {
+    public void hideInventory() {
         gameManager.hideInventoryMenu();
         logger.info("Inventory menu hidden.");
     }

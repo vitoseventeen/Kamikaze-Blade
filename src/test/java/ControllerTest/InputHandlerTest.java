@@ -22,7 +22,7 @@ public class InputHandlerTest {
     }
 
     @Test
-    void testKeyPressed_F() {
+    void testKeyPressedF() {
         KeyEvent mockKeyEvent = mock(KeyEvent.class);
         when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_F);
 
@@ -35,7 +35,7 @@ public class InputHandlerTest {
     }
 
     @Test
-    void testKeyPressed_C() {
+    void testKeyPressedC() {
         KeyEvent mockKeyEvent = mock(KeyEvent.class);
         when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_C);
 
@@ -46,18 +46,58 @@ public class InputHandlerTest {
         verify(mockController, times(1)).craftHeal();
     }
 
-
     @Test
-    void testKeyPressed_OtherKeys() {
+    void testKeyPressedEnter() {
         KeyEvent mockKeyEvent = mock(KeyEvent.class);
-        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_Z);
+        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_ENTER);
 
         inputHandler.keyPressed(mockKeyEvent);
 
         verify(mockController, never()).interact();
-        verify(mockController, never()).attack();
+        verify(mockController, times(1)).attack();
         verify(mockController, never()).craftHeal();
-        verify(mockController, never()).updatePlayerMovement(anyInt(), anyInt());
     }
+
+
+
+    @Test
+    void testEscape_HideInventory() {
+        KeyEvent mockKeyEvent = mock(KeyEvent.class);
+        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_ESCAPE);
+
+        when(mockController.showingInventory()).thenReturn(true);
+
+        inputHandler.keyReleased(mockKeyEvent);
+
+        verify(mockController, times(1)).hideInventory();
+        verify(mockController, never()).togglePause();
+    }
+
+    @Test
+    void testEscape_NotHidingInventory() {
+        KeyEvent mockKeyEvent = mock(KeyEvent.class);
+        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_ESCAPE);
+
+        when(mockController.showingInventory()).thenReturn(false);
+
+        inputHandler.keyReleased(mockKeyEvent);
+
+        verify(mockController, never()).hideInventory();
+        verify(mockController, times(1)).togglePause();
+    }
+
+    @Test
+    void testKeyReleased_E() {
+        KeyEvent mockKeyEvent = mock(KeyEvent.class);
+        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_E);
+
+        inputHandler.keyReleased(mockKeyEvent);
+
+        verify(mockController, times(1)).showInventory();
+        verify(mockController, never()).hideInventory();
+        verify(mockController, never()).togglePause();
+
+    }
+
 
 }

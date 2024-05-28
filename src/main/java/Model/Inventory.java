@@ -186,13 +186,13 @@ public class Inventory implements Serializable {
      * @return The number of keys in the inventory.
      */
     public int countKeys() {
-        int count = 0;
-        for (GameObject i : items) {
-            if (i.getType().equals(GameObjectType.KEY)) {
-                count++;
+        int keyCount = 0;
+        for (GameObject item : items) {
+            if (item.getType().equals(GameObjectType.KEY)) {
+                keyCount++;
             }
         }
-        return count;
+        return keyCount;
     }
 
     /**
