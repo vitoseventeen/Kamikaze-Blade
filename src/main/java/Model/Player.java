@@ -34,6 +34,8 @@ public class Player {
         this.score = score;
     }
 
+
+
     /**
      * Enumeration representing the direction of the player character.
      */

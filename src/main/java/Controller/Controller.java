@@ -50,7 +50,7 @@ public class Controller {
     /**
      * Spawns enemies at random positions within the level.
      */
-    protected synchronized void spawnEnemies() {
+    public synchronized void spawnEnemies() {
         enemies.clear();
         for (int i = 0; i < Constants.NUMBER_OF_ENEMIES; i++) {
             int x, y;
@@ -73,7 +73,7 @@ public class Controller {
      * @param height the height of the object
      * @return true if a collision is detected, false otherwise
      */
-    protected boolean isCollision(int x, int y, int width, int height) {
+    public boolean isCollision(int x, int y, int width, int height) {
         int TILE_SIZE = Constants.TILE_SIZE;
         if (x < 0 || y < 0 || x + width > level.getWidth() * TILE_SIZE || y + height > level.getHeight() * TILE_SIZE) {
             return true;
@@ -248,7 +248,7 @@ public class Controller {
     /**
      * Moves the enemies based on their AI and the player's position.
      */
-    protected synchronized void moveEnemies() {
+    public synchronized void moveEnemies() {
         if (player.isDead()) {
             logger.info("Player is dead. Enemies will not move.");
             return;
