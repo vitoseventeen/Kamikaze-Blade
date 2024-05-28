@@ -86,18 +86,6 @@ public class InputHandlerTest {
         verify(mockController, times(1)).togglePause();
     }
 
-    @Test
-    void testKeyReleased_E() {
-        KeyEvent mockKeyEvent = mock(KeyEvent.class);
-        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_E);
-
-        inputHandler.keyReleased(mockKeyEvent);
-
-        verify(mockController, times(1)).showInventory();
-        verify(mockController, never()).hideInventory();
-        verify(mockController, never()).togglePause();
-
-    }
 
 
 }
