@@ -106,4 +106,24 @@ public class InventoryTest {
         assertEquals(20, inventory.getCoinBalance());
     }
 
+    @Test
+    void testGetInventorySizeEmpty() {
+        // Arrange
+        Inventory emptyInventory = new Inventory(14);
+
+        // Assert
+        assertEquals(0, emptyInventory.getInventorySize());
+    }
+
+    @Test
+    void testGetInventorySizeFull() {
+        // Arrange
+        Inventory fullInventory = new Inventory(1);
+        fullInventory.addItem(mockItem);
+
+        // Assert
+        assertEquals(1, fullInventory.getInventorySize());
+    }
+
+
 }

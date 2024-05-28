@@ -213,4 +213,13 @@ public class Inventory implements Serializable {
     public boolean isFull() {
         return items.size() == capacity;
     }
+
+    /**
+     * Retrieves the size of the inventory.
+     *
+     * @return The size of the inventory.
+     */
+    public int getInventorySize() {
+        return items.size();
+    }
 }

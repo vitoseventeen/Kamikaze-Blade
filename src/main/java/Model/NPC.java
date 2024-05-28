@@ -123,4 +123,8 @@ public class NPC extends GameObject {
     public void setTask1Complete(boolean complete) {
         this.task1Complete = complete;
     }
+
+    public Image getNpcImage() {
+        return npcImage;
+    }
 }

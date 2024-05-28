@@ -46,4 +46,18 @@ public class InputHandlerTest {
         verify(mockController, times(1)).craftHeal();
     }
 
+
+    @Test
+    void testKeyPressed_OtherKeys() {
+        KeyEvent mockKeyEvent = mock(KeyEvent.class);
+        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_Z);
+
+        inputHandler.keyPressed(mockKeyEvent);
+
+        verify(mockController, never()).interact();
+        verify(mockController, never()).attack();
+        verify(mockController, never()).craftHeal();
+        verify(mockController, never()).updatePlayerMovement(anyInt(), anyInt());
+    }
+
 }
