@@ -614,4 +614,13 @@ public class Controller {
         gameManager.hideInventoryMenu();
         logger.info("Inventory menu hidden.");
     }
+
+    public boolean isNearbyEnemy(int x, int y, int x1, int y1) {
+        for (Enemy enemy : enemies) {
+            if (enemy.checkCollisionWithEnemy(x, y, x1, y1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

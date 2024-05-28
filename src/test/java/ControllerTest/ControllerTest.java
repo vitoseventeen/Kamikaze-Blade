@@ -235,5 +235,20 @@ public class ControllerTest {
     }
 
 
+    @Test
+    public void testNearbyEnemy() {
+        Enemy enemy = new Enemy("enemy", 640, 512, 16, 16);
+        enemies.add(enemy);
+
+        assertTrue(controller.isNearbyEnemy(player.getX(), player.getY(), enemy.getX(), enemy.getY()));
+    }
+
+    @Test
+    public void testNearbyEnemyFalse() {
+        Enemy enemy = new Enemy("enemy", 640, 512, 16, 16);
+        enemies.add(enemy);
+
+        assertFalse(controller.isNearbyEnemy(player.getX() + 100, player.getY() + 100, enemy.getX(), enemy.getY()));
+    }
 
 }
