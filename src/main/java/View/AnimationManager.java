@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -142,5 +143,9 @@ public class AnimationManager {
      */
     public void setAnimationSpeed(String name, int speed) {
         animationSpeeds.put(name, speed);
+    }
+
+    public Map<String, Integer> getAnimationSpeeds() {
+        return animationSpeeds;
     }
 }

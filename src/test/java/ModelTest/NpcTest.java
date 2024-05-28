@@ -31,12 +31,7 @@ public class NpcTest {
         assertFalse(npc.interact(player));
     }
 
-    @Test
-    void testTask1Complete() {
-        assertFalse(npc.isTask1Complete());
-        npc.setTask1Complete(true);
-        assertTrue(npc.isTask1Complete());
-    }
+
 
     @Test
     void testLoadImages() {

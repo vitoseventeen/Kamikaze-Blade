@@ -236,7 +236,7 @@ public class Controller {
      * @param radius the radius to check
      * @return true if the player is within the radius, false otherwise
      */
-    protected boolean isPlayerInEnemyRadius(Enemy enemy, int radius) {
+    public boolean isPlayerInEnemyRadius(Enemy enemy, int radius) {
         int playerX = player.getX();
         int playerY = player.getY();
         int enemyX = enemy.getX();
@@ -264,7 +264,7 @@ public class Controller {
         gamePanel.repaint();
     }
 
-    private synchronized void moveEnemy(Enemy enemy) {
+    public synchronized void moveEnemy(Enemy enemy) {
         if (enemy.isDead()) {
             enemy.setDx(0);
             enemy.setDy(0);
@@ -382,7 +382,7 @@ public class Controller {
      *
      * @return true if the level has changed, false otherwise
      */
-    protected boolean isLevelChanged() {
+    public boolean isLevelChanged() {
         return isLevelChanged;
     }
 

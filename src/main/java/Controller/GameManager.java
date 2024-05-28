@@ -26,18 +26,20 @@ import static Util.Constants.*;
 /* GameManager class is responsible for managing the game state, including the player, enemies, level, and menus. */
 
 public class GameManager implements Runnable {
-    private volatile boolean running = false;
+    public volatile boolean running = false;
     private Thread gameThread;
     private final Player player;
     private final List<Enemy> enemies;
-    private View view;
+    public View view;
     private final Level level;
-    private Controller controller;
-    private DeathMenu deathMenu;
-    private WinMenu winMenu;
+    public Controller controller;
+    public DeathMenu deathMenu;
+    public WinMenu winMenu;
     private InventoryMenu inventoryMenu;
     private PauseMenu pauseMenu;
     private boolean isInMenu = false;
+    private boolean isShowingDeathMenu = false;
+    private boolean isShowingWinMenu = false;
     private boolean paused = false;
     private static final Logger logger = Logger.getLogger(GameManager.class.getName());
 
@@ -72,7 +74,7 @@ public class GameManager implements Runnable {
     /**
      * Stops the game loop.
      */
-    protected void stop() {
+    public void stop() {
         running = false;
         if (gameThread != null) {
             try {
@@ -87,6 +89,7 @@ public class GameManager implements Runnable {
     /**
      * Runs the game loop.
      */
+
 
     @Override
     public void run() {
@@ -191,6 +194,7 @@ public class GameManager implements Runnable {
             deathMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
             view.getFrame().getLayeredPane().add(deathMenu, JLayeredPane.POPUP_LAYER);
             logger.info("Death menu created.");
+            isShowingDeathMenu = true;
         }
         deathMenu.setVisible(true);
         paused = true;
@@ -199,6 +203,7 @@ public class GameManager implements Runnable {
 
     /**
      * Checks if the game is paused.
+     *
      * @return true if the game is paused, false otherwise.
      */
     public boolean isPaused() {
@@ -209,7 +214,7 @@ public class GameManager implements Runnable {
      * Displays or hides the inventory menu.
      */
     public void showInventoryMenu() {
-        if(player.isDead()) {
+        if (player.isDead()) {
             hideInventoryMenu();
             return;
         }
@@ -236,6 +241,7 @@ public class GameManager implements Runnable {
 
     /**
      * Checks if the inventory menu is currently displayed.
+     *
      * @return true if the inventory menu is visible, false otherwise.
      */
     public boolean showingInventory() {
@@ -267,9 +273,18 @@ public class GameManager implements Runnable {
             winMenu.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
             view.getFrame().getLayeredPane().add(winMenu, JLayeredPane.POPUP_LAYER);
             logger.info("Win menu created.");
+            isShowingWinMenu = true;
         }
         winMenu.setVisible(true);
         paused = true;
         view.getFrame().setCursor(Cursor.getDefaultCursor());
+    }
+
+    public boolean showingDeathMenu() {
+        return isShowingDeathMenu;
+    }
+
+    public boolean showingWinMenu() {
+        return isShowingWinMenu;
     }
 }

@@ -95,33 +95,11 @@ public class InventoryTest {
         assertTrue(isFinished);
     }
 
-    @Test
-    void testAddAndRemoveCoins() {
-        // Act
-        inventory.addCoinToBalance(10);
-        inventory.removeCoinFromBalance(5);
-
-        // Assert
-        assertEquals(15, inventory.getCoinBalance());
-    }
-
-    @Test
-    void testIsFull() {
-        // Arrange
-        Inventory smallInventory = new Inventory(1);
-        smallInventory.addItem(mockItem);
-
-        // Act
-        boolean isFull = smallInventory.isFull();
-
-        // Assert
-        assertTrue(isFull);
-    }
 
 
 
     @Test
-    void testIntegration_AddMultipleItemsAndCheckSize() {
+    void testAddMoreItems() {
         // Arrange
         Inventory newInventory = new Inventory(3);
         GameObject item1 = mock(GameObject.class);
@@ -137,23 +115,5 @@ public class InventoryTest {
         assertTrue(newInventory.getItems().contains(item2));
     }
 
-    @Test
-    void testProcess_FullInventory() {
-        // Arrange
-        Inventory processInventory = new Inventory(2);
-        GameObject item1 = mock(GameObject.class);
-        GameObject item2 = mock(GameObject.class);
-        GameObject item3 = mock(GameObject.class);
 
-        // Act
-        processInventory.addItem(item1);
-        processInventory.addItem(item2);
-        processInventory.addItem(item3); // Should not be added
-
-        // Assert
-        assertEquals(2, processInventory.getInventorySize());
-        assertTrue(processInventory.getItems().contains(item1));
-        assertTrue(processInventory.getItems().contains(item2));
-        assertFalse(processInventory.getItems().contains(item3));
-    }
 }

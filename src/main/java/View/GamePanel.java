@@ -173,7 +173,7 @@ public class GamePanel extends JPanel {
      */
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -353,7 +353,7 @@ public class GamePanel extends JPanel {
      * @param y    The y-coordinate of the tile.
      */
 
-    private void drawTile(Graphics g, Tile tile, int x, int y) {
+    public void drawTile(Graphics g, Tile tile, int x, int y) {
         BufferedImage image = getImageForSurfaceType(tile.getSurfaceType());
         if (image != null) {
             int newTileWidth = TILE_SIZE;

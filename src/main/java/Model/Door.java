@@ -15,6 +15,7 @@ public class Door extends GameObject {
     private boolean isOpened = false;
     private transient Image closedDoorImage;
     private transient Image openedDoorImage;
+    private boolean isInteracted = false;
 
     /**
      * Constructs a door object at the specified position.
@@ -32,7 +33,7 @@ public class Door extends GameObject {
     /**
      * Loads images for the closed and opened door.
      */
-    private void loadImages() {
+    public void loadImages() {
         try {
             URL closedDoorURL = getClass().getResource("/doorClosed.png");
             URL openedDoorURL = getClass().getResource("/doorOpened.png");
@@ -100,5 +101,13 @@ public class Door extends GameObject {
             }
         }
         return false;
+    }
+
+    public boolean isInteracting() {
+        return isInteracted;
+    }
+
+    public Object getDoorImage() {
+        return closedDoorImage;
     }
 }

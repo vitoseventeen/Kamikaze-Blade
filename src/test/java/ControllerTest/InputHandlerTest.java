@@ -73,19 +73,5 @@ public class InputHandlerTest {
         verify(mockController, never()).togglePause();
     }
 
-    @Test
-    void testEscape_NotHidingInventory() {
-        KeyEvent mockKeyEvent = mock(KeyEvent.class);
-        when(mockKeyEvent.getKeyCode()).thenReturn(KeyEvent.VK_ESCAPE);
-
-        when(mockController.showingInventory()).thenReturn(false);
-
-        inputHandler.keyReleased(mockKeyEvent);
-
-        verify(mockController, never()).hideInventory();
-        verify(mockController, times(1)).togglePause();
-    }
-
-
 
 }

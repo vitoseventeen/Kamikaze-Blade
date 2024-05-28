@@ -149,7 +149,7 @@ public class InventoryMenu extends JPanel {
      * Method to use the selected item
      */
 
-    private void useSelectedItem() {
+    public void useSelectedItem() {
         if (inventory.getItems().size() > selectedSlotY * Constants.INVENTORY_COLUMNS + selectedSlotX) {
             GameObject selectedItem = inventory.getItems().get(selectedSlotY * Constants.INVENTORY_COLUMNS + selectedSlotX);
             if (selectedItem.getType() == GameObjectType.POTION) {
@@ -250,4 +250,5 @@ public class InventoryMenu extends JPanel {
             }
         }
     }
+
 }
